@@ -28,6 +28,9 @@ public class Main {
                 case Command.SIGNIN:
                     processSignIn();
                     break;
+                case Command.SIGNUP:
+                    processSignUp();
+                    break;
                 case Command.HELP:
                     printCommandList();
                     break;
@@ -60,6 +63,30 @@ public class Main {
         else
             System.out.println("Wellcome to the Agency, " + username + ".");
     }
+    
+    private static void processSignUp(){
+        Scanner sc = new Scanner(System.in);
+        String username, password, passwordConfirmation, name;
+        boolean result;
+        
+        System.out.println("Username:");
+        username = sc.nextLine();
+        System.out.println("Password:");
+        password = sc.nextLine();
+        System.out.println("Password Confirmation:");
+        passwordConfirmation = sc.nextLine();
+        System.out.println("Name:");
+        name = sc.nextLine();
+        
+        
+
+        result = sAgencyManager.signUp(username, password, passwordConfirmation, name);
+        if(!result)
+            System.out.println("Username already exists or passwords are different.");
+        else
+            System.out.println("Sign up with sucess! Now you can sign in, " + name + ".");
+    }
+    
     private static void printCommandList(){
         System.out.println("\n-- Help --");
         System.out.println("signin - Sign in");

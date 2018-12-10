@@ -14,5 +14,5 @@ import javax.ejb.Local;
 @Local
 public interface UsersManagerLocal {
     boolean signIn(String username, String password);
-    boolean signUp(String username, String password, String confirmPassword, String name);
+    boolean signUp(String username, String password, String passwordConfirmation, String name);
 }

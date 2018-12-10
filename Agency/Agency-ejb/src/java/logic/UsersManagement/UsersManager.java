@@ -39,14 +39,14 @@ public class UsersManager implements UsersManagerLocal {
     }
 
     @Override
-    public boolean signUp(String username, String password, String confirmPassword, String name) {
+    public boolean signUp(String username, String password, String passwordConfirmation, String name) {
         
         User useraux = getUserByUsername(username);
         
         if(useraux!=null)
             return false;
         
-        if(!password.equals(confirmPassword))
+        if(!password.equals(passwordConfirmation))
             return false;
         
         User newUser = new Client(username, password, name);

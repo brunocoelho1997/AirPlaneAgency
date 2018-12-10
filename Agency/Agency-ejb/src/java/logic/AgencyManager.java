@@ -21,7 +21,8 @@ public class AgencyManager implements AgencyManagerRemote {
         return result;
     }
 
-    
-
-    // TODO bean to use in a session context
+    @Override
+    public boolean signUp(String username, String password, String confirmPassword, String name) {
+        return usersManagerLocal.signUp(username, password, confirmPassword, name);
+    }
 }
