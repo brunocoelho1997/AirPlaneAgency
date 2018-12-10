@@ -22,20 +22,34 @@ public class Main {
 
         while (listenCommand) {
             System.out.println("TODO: Listen command....");
-
+            System.out.print(">");
             String command = sc.nextLine();
             switch (command) {
+                case Command.HELP:
+                    printCommandList();
+                    break;
+                    
                 case Command.EXIT:
                     listenCommand = false;
                     break;
                     
                 default:
+                    System.out.println("Command not found. Type help to get a command list.");
+
                     break;
                     
             }            
         }
     }
 
+    private static void printCommandList(){
+        System.out.println("\n-- Help --");
+        System.out.println("signin - Sign in");
+        System.out.println("signup - Sign up");
+        System.out.println("asguest - Enter as guest");
+        System.out.println("exit - Exit");
+        System.out.println("----------------");
+    }
     private static void initRemoteReferences() {
         Properties prop = new Properties();
 
