@@ -25,10 +25,12 @@ public class Main {
             System.out.print(">");
             String command = sc.nextLine();
             switch (command) {
+                case Command.SIGNIN:
+                    processSignIn();
+                    break;
                 case Command.HELP:
                     printCommandList();
                     break;
-                    
                 case Command.EXIT:
                     listenCommand = false;
                     break;
@@ -42,6 +44,22 @@ public class Main {
         }
     }
 
+    private static void processSignIn(){
+        Scanner sc = new Scanner(System.in);
+        String username, password;
+        boolean result;
+        
+        System.out.println("Username:");
+        username = sc.nextLine();
+        System.out.println("Password:");
+        password = sc.nextLine();
+
+        result = sAgencyManager.signIn(username, password);
+        if(!result)
+            System.out.println("Username or Password wrong.");
+        else
+            System.out.println("Wellcome to the Agency, " + username + ".");
+    }
     private static void printCommandList(){
         System.out.println("\n-- Help --");
         System.out.println("signin - Sign in");
