@@ -9,6 +9,8 @@ public class Command {
     public static final String SIGNIN = "signin";
     public static final String SIGNUP = "signup";
     public static final String GUEST = "asguest";
+    public static final String ACCEPTUSER = "acceptuser";
+    
     
     //planes
     public static final String FINDALLPLANES = "findallplanes";

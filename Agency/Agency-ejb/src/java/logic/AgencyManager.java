@@ -6,27 +6,7 @@ import javax.ejb.Stateful;
 import logic.TripsManagement.TripsManagerLocal;
 import logic.UsersManagement.UsersManagerLocal;
 
-/*
 
-SQL COMMANDS
-
-
--Plane
-
-drop sequence if exists plane_seq;
-
-create sequence plane_seq;
-
-drop table if exists t_plane;
-
-create table t_plane(
-    id int primary key default nextval('plane_seq'),
-    planename varchar(30) not null,
-    planelimit int not null default 50
-);
-
-
-*/
 
 @Stateful
 public class AgencyManager implements AgencyManagerRemote {
@@ -35,7 +15,6 @@ public class AgencyManager implements AgencyManagerRemote {
     UsersManagerLocal usersManagerLocal;
     @EJB
     TripsManagerLocal tripsManagerLocal;
-    
     
     String username;
 
@@ -48,10 +27,14 @@ public class AgencyManager implements AgencyManagerRemote {
             this.username = username;
         return result;
     }
+    @Override
+    public boolean signUp(TUserDTO userDTO) {
+        return usersManagerLocal.signUp(userDTO);
+    }
 
     @Override
-    public boolean signUp(String username, String password, String confirmPassword, String name) {
-        return usersManagerLocal.signUp(username, password, confirmPassword, name);
+    public boolean acceptUser(TUserDTO userDTO) {
+        return usersManagerLocal.acceptUser(userDTO);
     }
 
     
@@ -81,5 +64,6 @@ public class AgencyManager implements AgencyManagerRemote {
         return tripsManagerLocal.removePlane(planeDTO);
     }
 
+    
     
 }

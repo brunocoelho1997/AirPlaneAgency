@@ -7,7 +7,10 @@ package logic.UsersManagement;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Singleton;
+import logic.Config;
+import logic.TUserDTO;
 
 /**
  *
@@ -16,18 +19,16 @@ import javax.ejb.Singleton;
 @Singleton
 public class UsersManager implements UsersManagerLocal {
 
-    private List<User> usersList;
-
-    public UsersManager() {
-        this.usersList = new ArrayList();
-        this.usersList.add(new User("admin", "admin"));
+    @EJB
+    TUserFacadeLocal userFacade;
+    
+    public UsersManager() {      
+        
     }
-    
-    
     
     @Override
     public boolean signIn(String username, String password) {
-        User user = getUserByUsername(username);
+        TUser user = getTUserByUsername(username);
         
         if(user == null)
             return false;
@@ -37,33 +38,74 @@ public class UsersManager implements UsersManagerLocal {
         
         return true;
     }
-
+    
     @Override
-    public boolean signUp(String username, String password, String passwordConfirmation, String name) {
+    public boolean signUp(TUserDTO userDTO) {
         
-        User useraux = getUserByUsername(username);
+        verifyIfAdminExist();
+        
+        TUser useraux = getTUserByUsername(userDTO.getUsername());
         
         if(useraux!=null)
             return false;
         
-        if(!password.equals(passwordConfirmation))
+        if(userDTO.getUsertype() != Config.CLIENT && userDTO.getUsertype() != Config.OPERATOR)
             return false;
         
-        User newUser = new Client(username, password, name);
-        this.usersList.add(newUser);
+        TUser newUser = new TUser();
+        
+        newUser.setUsername(userDTO.getUsername());
+        newUser.setPassword(userDTO.getPassword());
+        newUser.setUsertype(userDTO.getUsertype());
+        newUser.setAccepted(false);
+        
+        if(userDTO.getUsertype()==Config.CLIENT)
+        {
+            newUser.setBalance(userDTO.getBalance());
+            newUser.setClientname(userDTO.getClientName());
+        }
+        
+        userFacade.create(newUser);
         return true;
     }
     
+    @Override
+    public boolean acceptUser(TUserDTO userDTO) {
+        TUser user = getTUserByUsername(userDTO.getUsername());
+        if(user == null)
+            return false;
+        user.setAccepted(true);
+        return true;
+        
+    }
     
     //Auxiliary methoths
     
-    private User getUserByUsername(String username)
+    private TUser getTUserByUsername(String username)
     {
-        for(User user : usersList)
+        for(TUser user : userFacade.findAll())
         {
             if(user.getUsername().equals(username))
                 return user;
         }
         return null;
     }
+
+    //TODO: este metodo nao esta' a ser chamado. Tinha no construtor e bugava
+    private void verifyIfAdminExist() {
+        if(getTUserByUsername("admin")==null)
+        {
+            TUser admin = new TUser();
+            admin.setAccepted(true);
+            admin.setUsername("admin");
+            admin.setPassword("admin");
+            admin.setUsertype(Config.OPERATOR);
+            
+            userFacade.create(admin);
+        }
+    }
+
+    
+
+    
 }

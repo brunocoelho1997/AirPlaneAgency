@@ -5,7 +5,9 @@ import java.util.Scanner;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import logic.AgencyManagerRemote;
+import logic.Config;
 import logic.TPlaneDTO;
+import logic.TUserDTO;
 
 public class Main {
     
@@ -38,7 +40,9 @@ public class Main {
                 case Command.EXIT:
                     listenCommand = false;
                     break;
-                
+                case Command.ACCEPTUSER:
+                    processAcceptUser();
+                    break;
                 case Command.FINDALLPLANES:
                     processPlanesFindAll();
                     break;
@@ -80,25 +84,54 @@ public class Main {
     
     private static void processSignUp(){
         Scanner sc = new Scanner(System.in);
-        String username, password, passwordConfirmation, name;
+        TUserDTO userDTO = new TUserDTO();
         boolean result;
         
+        do{
+            System.out.println("Type of the User:");
+            System.out.println("0- Operator");
+            System.out.println("1- Client");
+            System.out.print("Type: ");
+            userDTO.setUsertype(Integer.parseInt(sc.nextLine()));
+        }while(userDTO.getUsertype() != Config.CLIENT && userDTO.getUsertype() != Config.OPERATOR);
+        
         System.out.println("Username:");
-        username = sc.nextLine();
+        userDTO.setUsername(sc.nextLine());
         System.out.println("Password:");
-        password = sc.nextLine();
-        System.out.println("Password Confirmation:");
-        passwordConfirmation = sc.nextLine();
-        System.out.println("Name:");
-        name = sc.nextLine();
-        
-        
+        userDTO.setPassword(sc.nextLine());
 
-        result = sAgencyManager.signUp(username, password, passwordConfirmation, name);
+        if(userDTO.getUsertype()==Config.CLIENT)
+        {
+            System.out.println("Name:");
+            userDTO.setClientName(sc.nextLine());
+        }
+        
+        result = sAgencyManager.signUp(userDTO);
         if(!result)
             System.out.println("Username already exists or passwords are different.");
         else
-            System.out.println("Sign up with sucess! Now you can sign in, " + name + ".");
+            System.out.println("Sign up with sucess! Now you can sign in, " + userDTO.getUsername() + ".");
+    }
+    
+    private static void processAcceptUser() {
+        Scanner sc = new Scanner(System.in);
+        TUserDTO userDTO;
+        boolean result;
+        
+        System.out.println("Username:");
+        
+        
+        /*
+        
+        sAgencyManager.acceptUser(userDTO);
+        
+        result = sAgencyManager.signUp(userDTO);
+        if(!result)
+            System.out.println("Username already exists or passwords are different.");
+        else
+            System.out.println("Sign up with sucess! Now you can sign in, " + userDTO.getUsername() + ".");
+
+        */
     }
     
     private static void processPlanesFindAll(){
@@ -251,5 +284,7 @@ public class Main {
            System.out.println(e.getMessage());
         }
     }
+
+    
     
 }

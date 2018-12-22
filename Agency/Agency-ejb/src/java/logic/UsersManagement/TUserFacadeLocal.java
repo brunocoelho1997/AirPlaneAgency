@@ -5,18 +5,28 @@
  */
 package logic.UsersManagement;
 
+import java.util.List;
 import javax.ejb.Local;
-import logic.TUserDTO;
 
 /**
  *
  * @author bruno
  */
 @Local
-public interface UsersManagerLocal {
-    boolean signIn(String username, String password);
-    boolean signUp(TUserDTO userDTO);
-    boolean acceptUser(TUserDTO userDTO);
-    
+public interface TUserFacadeLocal {
+
+    void create(TUser tUser);
+
+    void edit(TUser tUser);
+
+    void remove(TUser tUser);
+
+    TUser find(Object id);
+
+    List<TUser> findAll();
+
+    List<TUser> findRange(int[] range);
+
+    int count();
     
 }
