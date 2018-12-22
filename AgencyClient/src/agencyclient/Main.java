@@ -5,6 +5,7 @@ import java.util.Scanner;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import logic.AgencyManagerRemote;
+import logic.TPlaneDTO;
 
 public class Main {
     
@@ -37,7 +38,20 @@ public class Main {
                 case Command.EXIT:
                     listenCommand = false;
                     break;
-                    
+                
+                case Command.FINDALLPLANES:
+                    processPlanesFindAll();
+                    break;
+                case Command.ADDPLANE:
+                    processAddPlane();
+                    break;
+                case Command.EDITPLANE:
+                    processEditPlane();
+                    break;
+                case Command.REMOVEPLANE:
+                    processRemovePlane();
+                    break;
+                
                 default:
                     System.out.println("Command not found. Type help to get a command list.");
 
@@ -87,14 +101,123 @@ public class Main {
             System.out.println("Sign up with sucess! Now you can sign in, " + name + ".");
     }
     
+    private static void processPlanesFindAll(){
+        
+        System.out.println("All planes in the system:");
+        
+        for(TPlaneDTO planeDTO : sAgencyManager.findAll())
+            System.out.println(planeDTO);
+    }
+    
+    private static void processAddPlane(){
+        Scanner sc = new Scanner(System.in);
+        TPlaneDTO planeDTO = new TPlaneDTO();
+        boolean result;
+        
+        System.out.println("Plane Name:");
+        planeDTO.setPlaneName(sc.nextLine());
+        System.out.println("Plane Limit:");
+        planeDTO.setPlaneLimit(Integer.parseInt(sc.nextLine()));
+        
+        result = sAgencyManager.addPlane(planeDTO);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't add the plane.");
+        else
+            System.out.println("Plane added with sucess!");
+    }
+    
+    private static void processEditPlane(){
+        Scanner sc = new Scanner(System.in);
+        TPlaneDTO planeDTO;
+        boolean result;
+        int id;
+        
+        try
+        {
+            System.out.println("Plane Id:");
+            id = Integer.parseInt(sc.nextLine());
+            planeDTO = sAgencyManager.findPlane(id);
+            
+            if(planeDTO == null)
+            {
+                System.out.println("Not found a plane with that id. Try again.");
+                return;
+            }
+            
+            System.out.println("Plane: " + planeDTO);
+            
+            System.out.println("New plane Name:");
+            planeDTO.setPlaneName(sc.nextLine());
+            System.out.println("New plane Limit:");
+            planeDTO.setPlaneLimit(Integer.parseInt(sc.nextLine()));
+            
+            result = sAgencyManager.editPlane(planeDTO);
+            if(!result)
+                System.out.println("A problem occurred. The system didn't edit the plane.");
+            else
+                System.out.println("Plane edited with success!");
+        
+        }catch(Exception e){
+            System.err.println("Error - " + e);
+        }
+    }
+    
+    private static void processRemovePlane(){
+        Scanner sc = new Scanner(System.in);
+        TPlaneDTO planeDTO;
+        boolean result;
+        int id;
+        int op;
+        
+        try
+        {
+            System.out.println("Plane Id:");
+            id = Integer.parseInt(sc.nextLine());
+            planeDTO = sAgencyManager.findPlane(id);
+            
+            if(planeDTO == null)
+            {
+                System.out.println("Not found a plane with that id. Try again.");
+                return;
+            }
+            
+            
+            System.out.println("Do you want remove the plane: " + planeDTO + "? [1/0]");
+            op = Integer.parseInt(sc.nextLine());
+            
+            if(op == 0)
+                return;
+            
+            result = sAgencyManager.removePlane(planeDTO);
+            if(!result)
+                System.out.println("A problem occurred. The system didn't remove the plane.");
+            else
+                System.out.println("Plane removed with success!");
+        
+        }catch(Exception e){
+            System.err.println("Error - " + e);
+        }
+    }
+    
     private static void printCommandList(){
         System.out.println("\n-- Help --");
+        
+        //users
         System.out.println("signin - Sign in");
         System.out.println("signup - Sign up");
         System.out.println("asguest - Enter as guest");
+
+        //planes        
+        System.out.println("findallplanes - List All Planes");
+        System.out.println("addplane - Add a new plane");
+        System.out.println("editplane - Edit a plane");
+        System.out.println("removeplane - Remove a plane");
+        
         System.out.println("exit - Exit");
         System.out.println("----------------");
     }
+    
+    
     private static void initRemoteReferences() {
         Properties prop = new Properties();
 

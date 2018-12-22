@@ -4,9 +4,18 @@ public class Command {
     
     public static final String EXIT = "exit";
     public static final String HELP = "help";
+    
+    //users
     public static final String SIGNIN = "signin";
     public static final String SIGNUP = "signup";
     public static final String GUEST = "asguest";
+    
+    //planes
+    public static final String FINDALLPLANES = "findallplanes";
+    public static final String ADDPLANE = "addplane";
+    public static final String EDITPLANE = "editplane";
+    public static final String REMOVEPLANE = "removeplane";
+    
     
     
 }
