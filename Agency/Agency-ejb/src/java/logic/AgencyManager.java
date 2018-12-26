@@ -37,6 +37,11 @@ public class AgencyManager implements AgencyManagerRemote {
         return usersManagerLocal.acceptTUser(userDTO, username);
     }
 
+    @Override
+    public boolean logout() {
+        this.username = null;
+        return true;
+    }
     
     //Planes
     @Override
@@ -63,6 +68,8 @@ public class AgencyManager implements AgencyManagerRemote {
     public boolean removePlane(TPlaneDTO planeDTO) {
         return tripsManagerLocal.removePlane(planeDTO, username);
     }
+
+    
 
     
     

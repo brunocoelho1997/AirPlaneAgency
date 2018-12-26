@@ -9,6 +9,7 @@ public interface AgencyManagerRemote {
     //users
     boolean signIn(String username, String password);
     boolean signUp(TUserDTO userDTO);
+    boolean logout();
     boolean acceptUser(TUserDTO userDTO);
     
     //planes

@@ -38,6 +38,9 @@ public class Main {
                     case Command.SIGNUP:
                         processSignUp();
                         break;
+                    case Command.LOGOUT:
+                        processLogout();
+                        break;
                     case Command.HELP:
                         printCommandList();
                         break;
@@ -120,6 +123,16 @@ public class Main {
             System.out.println("Sign up with sucess! Now you can sign in, " + userDTO.getUsername() + ".");
     }
     
+    private static void processLogout(){
+        boolean result;
+
+        result = sAgencyManager.logout();
+        if(!result)
+            System.out.println("A problem occurred. The system didn't finish de task.");
+        else
+            System.out.println("You have done logout with success!");
+    }
+            
     private static void processAcceptUser() {
         Scanner sc = new Scanner(System.in);
         TUserDTO userDTO;
@@ -237,17 +250,18 @@ public class Main {
         System.out.println("\n-- Help --");
         
         //users
-        System.out.println("signin - Sign in");
-        System.out.println("signup - Sign up");
+        System.out.println(Command.SIGNIN + " - Sign in");
+        System.out.println(Command.SIGNUP + " - Sign up");
+        System.out.println(Command.LOGOUT + " - Logout");
         System.out.println("asguest - Enter as guest");
 
         //planes        
-        System.out.println("findallplanes - List All Planes");
-        System.out.println("addplane - Add a new plane");
-        System.out.println("editplane - Edit a plane");
-        System.out.println("removeplane - Remove a plane");
+        System.out.println(Command.FINDALLPLANES + " - List All Planes");
+        System.out.println(Command.ADDPLANE + " - Add a new plane");
+        System.out.println(Command.EDITPLANE + " - Edit a plane");
+        System.out.println(Command.REMOVEPLANE + " - Remove a plane");
         
-        System.out.println("exit - Exit");
+        System.out.println(Command.EXIT + " - Exit");
         System.out.println("----------------");
     }
     
