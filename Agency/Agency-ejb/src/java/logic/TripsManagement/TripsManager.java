@@ -7,9 +7,16 @@ package logic.TripsManagement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
+import logic.Config;
+import logic.NoPermissionException;
 import logic.TPlaneDTO;
+import logic.TUserDTO;
+import logic.UsersManagement.TUserFacadeLocal;
+import logic.UsersManagement.UsersManagerLocal;
 
 /**
  *
@@ -21,8 +28,16 @@ public class TripsManager implements TripsManagerLocal {
     @EJB
     TPlaneFacadeLocal planeFacade;
     
+    @EJB
+    UsersManagerLocal userManager;
+
+    
     @Override
-    public List<TPlaneDTO> findAll() {
+    public List<TPlaneDTO> findAllPlanes(String username) throws NoPermissionException {
+        
+        
+        verifyPermission(username, Config.OPERATOR);
+        
         List<TPlaneDTO> tPlaneDTOList = new ArrayList<>();
         for(TPlane tplane : planeFacade.findAll())
         {
@@ -32,7 +47,7 @@ public class TripsManager implements TripsManagerLocal {
     }
 
     @Override
-    public TPlaneDTO findPlane(int id) {
+    public TPlaneDTO findPlane(int id, String username) {
         for(TPlane tplane : planeFacade.findAll())
         {
             if(tplane.getId()==id)
@@ -42,7 +57,7 @@ public class TripsManager implements TripsManagerLocal {
     }
     
     @Override
-    public boolean addPlane(TPlaneDTO planeDTO) {
+    public boolean addPlane(TPlaneDTO planeDTO, String username) {
         TPlane tplane = new TPlane();
         
         if(planeDTO.getPlaneName()== null || planeDTO.getPlaneName().isEmpty())
@@ -58,7 +73,7 @@ public class TripsManager implements TripsManagerLocal {
     }
 
     @Override
-    public boolean editPlane(TPlaneDTO planeDTO) {
+    public boolean editPlane(TPlaneDTO planeDTO, String username) {
         TPlane tplane = planeFacade.find(planeDTO.getId());
         
         if(tplane == null)
@@ -77,7 +92,7 @@ public class TripsManager implements TripsManagerLocal {
     }
 
     @Override
-    public boolean removePlane(TPlaneDTO planeDTO) {
+    public boolean removePlane(TPlaneDTO planeDTO, String username) {
         TPlane tplane = planeFacade.find(planeDTO.getId());
         
         if(tplane == null)
@@ -97,6 +112,19 @@ public class TripsManager implements TripsManagerLocal {
     }
     */
 
+    
+    private void verifyPermission(String username, int permissionType) throws NoPermissionException{
+        if(username == null || username.isEmpty())
+            throw new NoPermissionException();
+        
+        TUserDTO userDTO = userManager.getTUserDTO(username);
+        
+        if(userDTO == null)
+            throw new NoPermissionException();
+        
+        if(userDTO.getUsertype() != permissionType)
+            throw new NoPermissionException();       
+    }
     
     
 }

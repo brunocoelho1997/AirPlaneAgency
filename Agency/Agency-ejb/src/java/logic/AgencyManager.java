@@ -34,36 +34,37 @@ public class AgencyManager implements AgencyManagerRemote {
 
     @Override
     public boolean acceptUser(TUserDTO userDTO) {
-        return usersManagerLocal.acceptUser(userDTO);
+        return usersManagerLocal.acceptTUser(userDTO, username);
     }
 
     
     //Planes
     @Override
-    public List<TPlaneDTO> findAll() {
-        return tripsManagerLocal.findAll();
+    public List<TPlaneDTO> findAllPlanes() throws NoPermissionException{
+        return tripsManagerLocal.findAllPlanes(username);
     }
     
     @Override
     public TPlaneDTO findPlane(int id) {
-        return tripsManagerLocal.findPlane(id);
+        return tripsManagerLocal.findPlane(id, username);
     }
 
     @Override
     public boolean addPlane(TPlaneDTO planeDTO) {
-        return tripsManagerLocal.addPlane(planeDTO);
+        return tripsManagerLocal.addPlane(planeDTO, username);
     }
 
     @Override
     public boolean editPlane(TPlaneDTO planeDTO) {
-        return tripsManagerLocal.editPlane(planeDTO);
+        return tripsManagerLocal.editPlane(planeDTO, username);
     }
 
     @Override
     public boolean removePlane(TPlaneDTO planeDTO) {
-        return tripsManagerLocal.removePlane(planeDTO);
+        return tripsManagerLocal.removePlane(planeDTO, username);
     }
 
+    
     
     
 }

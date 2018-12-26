@@ -6,6 +6,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import logic.AgencyManagerRemote;
 import logic.Config;
+import logic.NoPermissionException;
 import logic.TPlaneDTO;
 import logic.TUserDTO;
 
@@ -16,7 +17,9 @@ public class Main {
     public static void main(String[] args) {
         initRemoteReferences();
         
+        
         doListenCommands();
+        
     }
     
     private static void doListenCommands() {
@@ -24,44 +27,48 @@ public class Main {
         boolean listenCommand = true;
 
         while (listenCommand) {
-            System.out.println("TODO: Listen command....");
-            System.out.print(">");
-            String command = sc.nextLine();
-            switch (command) {
-                case Command.SIGNIN:
-                    processSignIn();
-                    break;
-                case Command.SIGNUP:
-                    processSignUp();
-                    break;
-                case Command.HELP:
-                    printCommandList();
-                    break;
-                case Command.EXIT:
-                    listenCommand = false;
-                    break;
-                case Command.ACCEPTUSER:
-                    processAcceptUser();
-                    break;
-                case Command.FINDALLPLANES:
-                    processPlanesFindAll();
-                    break;
-                case Command.ADDPLANE:
-                    processAddPlane();
-                    break;
-                case Command.EDITPLANE:
-                    processEditPlane();
-                    break;
-                case Command.REMOVEPLANE:
-                    processRemovePlane();
-                    break;
-                
-                default:
-                    System.out.println("Command not found. Type help to get a command list.");
+            try{
+                System.out.println("TODO: Listen command....");
+                System.out.print(">");
+                String command = sc.nextLine();
+                switch (command) {
+                    case Command.SIGNIN:
+                        processSignIn();
+                        break;
+                    case Command.SIGNUP:
+                        processSignUp();
+                        break;
+                    case Command.HELP:
+                        printCommandList();
+                        break;
+                    case Command.EXIT:
+                        listenCommand = false;
+                        break;
+                    case Command.ACCEPTUSER:
+                        processAcceptUser();
+                        break;
+                    case Command.FINDALLPLANES:
+                        processPlanesFindAll();
+                        break;
+                    case Command.ADDPLANE:
+                        processAddPlane();
+                        break;
+                    case Command.EDITPLANE:
+                        processEditPlane();
+                        break;
+                    case Command.REMOVEPLANE:
+                        processRemovePlane();
+                        break;
 
-                    break;
-                    
-            }            
+                    default:
+                        System.out.println("Command not found. Type help to get a command list.");
+
+                        break;
+
+                }
+            }catch(Exception e){
+                System.err.println("Error - " + e);
+            }
         }
     }
 
@@ -134,11 +141,11 @@ public class Main {
         */
     }
     
-    private static void processPlanesFindAll(){
+    private static void processPlanesFindAll() throws NoPermissionException{
         
         System.out.println("All planes in the system:");
         
-        for(TPlaneDTO planeDTO : sAgencyManager.findAll())
+        for(TPlaneDTO planeDTO : sAgencyManager.findAllPlanes())
             System.out.println(planeDTO);
     }
     
@@ -165,34 +172,31 @@ public class Main {
         boolean result;
         int id;
         
-        try
+
+        System.out.println("Plane Id:");
+        id = Integer.parseInt(sc.nextLine());
+        planeDTO = sAgencyManager.findPlane(id);
+
+        if(planeDTO == null)
         {
-            System.out.println("Plane Id:");
-            id = Integer.parseInt(sc.nextLine());
-            planeDTO = sAgencyManager.findPlane(id);
-            
-            if(planeDTO == null)
-            {
-                System.out.println("Not found a plane with that id. Try again.");
-                return;
-            }
-            
-            System.out.println("Plane: " + planeDTO);
-            
-            System.out.println("New plane Name:");
-            planeDTO.setPlaneName(sc.nextLine());
-            System.out.println("New plane Limit:");
-            planeDTO.setPlaneLimit(Integer.parseInt(sc.nextLine()));
-            
-            result = sAgencyManager.editPlane(planeDTO);
-            if(!result)
-                System.out.println("A problem occurred. The system didn't edit the plane.");
-            else
-                System.out.println("Plane edited with success!");
-        
-        }catch(Exception e){
-            System.err.println("Error - " + e);
+            System.out.println("Not found a plane with that id. Try again.");
+            return;
         }
+
+        System.out.println("Plane: " + planeDTO);
+
+        System.out.println("New plane Name:");
+        planeDTO.setPlaneName(sc.nextLine());
+        System.out.println("New plane Limit:");
+        planeDTO.setPlaneLimit(Integer.parseInt(sc.nextLine()));
+
+        result = sAgencyManager.editPlane(planeDTO);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't edit the plane.");
+        else
+            System.out.println("Plane edited with success!");
+        
+        
     }
     
     private static void processRemovePlane(){
@@ -202,34 +206,31 @@ public class Main {
         int id;
         int op;
         
-        try
-        {
-            System.out.println("Plane Id:");
-            id = Integer.parseInt(sc.nextLine());
-            planeDTO = sAgencyManager.findPlane(id);
-            
-            if(planeDTO == null)
-            {
-                System.out.println("Not found a plane with that id. Try again.");
-                return;
-            }
-            
-            
-            System.out.println("Do you want remove the plane: " + planeDTO + "? [1/0]");
-            op = Integer.parseInt(sc.nextLine());
-            
-            if(op == 0)
-                return;
-            
-            result = sAgencyManager.removePlane(planeDTO);
-            if(!result)
-                System.out.println("A problem occurred. The system didn't remove the plane.");
-            else
-                System.out.println("Plane removed with success!");
         
-        }catch(Exception e){
-            System.err.println("Error - " + e);
+        System.out.println("Plane Id:");
+        id = Integer.parseInt(sc.nextLine());
+        planeDTO = sAgencyManager.findPlane(id);
+
+        if(planeDTO == null)
+        {
+            System.out.println("Not found a plane with that id. Try again.");
+            return;
         }
+
+
+        System.out.println("Do you want remove the plane: " + planeDTO + "? [1/0]");
+        op = Integer.parseInt(sc.nextLine());
+
+        if(op == 0)
+            return;
+
+        result = sAgencyManager.removePlane(planeDTO);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't remove the plane.");
+        else
+            System.out.println("Plane removed with success!");
+        
+        
     }
     
     private static void printCommandList(){

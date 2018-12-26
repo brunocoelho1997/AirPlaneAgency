@@ -70,7 +70,7 @@ public class UsersManager implements UsersManagerLocal {
     }
     
     @Override
-    public boolean acceptUser(TUserDTO userDTO) {
+    public boolean acceptTUser(TUserDTO userDTO, String username) {
         TUser user = getTUserByUsername(userDTO.getUsername());
         if(user == null)
             return false;
@@ -79,7 +79,30 @@ public class UsersManager implements UsersManagerLocal {
         
     }
     
+    @Override
+    public TUserDTO getTUserDTO(String username) {
+        TUser user = getTUserByUsername(username);
+        return getTUserDTOFromTUser(user);
+    }
+    
+    
+    
     //Auxiliary methoths
+    
+    private TUserDTO getTUserDTOFromTUser(TUser user){
+        TUserDTO tUserDTO = new TUserDTO();
+        tUserDTO.setUsername(user.getUsername());
+        tUserDTO.setPassword(user.getPassword());
+        tUserDTO.setAccepted(user.getAccepted());
+        tUserDTO.setUsertype(user.getUsertype());
+        
+        if(user.getUsertype() == Config.CLIENT)
+        {
+            tUserDTO.setBalance(user.getBalance());
+            tUserDTO.setClientName(user.getClientname());
+        }
+        return tUserDTO;
+    }
     
     private TUser getTUserByUsername(String username)
     {
@@ -104,6 +127,8 @@ public class UsersManager implements UsersManagerLocal {
             userFacade.create(admin);
         }
     }
+
+    
 
     
 

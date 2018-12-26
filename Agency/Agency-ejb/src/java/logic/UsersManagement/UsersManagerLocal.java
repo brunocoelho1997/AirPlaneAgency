@@ -16,7 +16,7 @@ import logic.TUserDTO;
 public interface UsersManagerLocal {
     boolean signIn(String username, String password);
     boolean signUp(TUserDTO userDTO);
-    boolean acceptUser(TUserDTO userDTO);
-    
+    boolean acceptTUser(TUserDTO userDTO, String username);
+    TUserDTO getTUserDTO(String username);
     
 }

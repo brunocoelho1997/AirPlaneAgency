@@ -7,6 +7,7 @@ package logic.TripsManagement;
 
 import java.util.List;
 import javax.ejb.Local;
+import logic.NoPermissionException;
 import logic.TPlaneDTO;
 
 /**
@@ -17,10 +18,10 @@ import logic.TPlaneDTO;
 public interface TripsManagerLocal {
     
     //planes
-    List<TPlaneDTO> findAll();
-    TPlaneDTO findPlane(int id);
-    boolean addPlane(TPlaneDTO planeDTO);
-    boolean editPlane(TPlaneDTO planeDTO);
-    boolean removePlane(TPlaneDTO planeDTO);
+    List<TPlaneDTO> findAllPlanes(String username) throws NoPermissionException;
+    TPlaneDTO findPlane(int id, String username);
+    boolean addPlane(TPlaneDTO planeDTO, String username);
+    boolean editPlane(TPlaneDTO planeDTO, String username);
+    boolean removePlane(TPlaneDTO planeDTO, String username);
     
 }

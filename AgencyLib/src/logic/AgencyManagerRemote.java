@@ -12,7 +12,7 @@ public interface AgencyManagerRemote {
     boolean acceptUser(TUserDTO userDTO);
     
     //planes
-    List<TPlaneDTO> findAll();
+    List<TPlaneDTO> findAllPlanes() throws NoPermissionException;
     TPlaneDTO findPlane(int id);
     boolean addPlane(TPlaneDTO planeDTO);
     boolean editPlane(TPlaneDTO planeDTO);
