@@ -11,6 +11,7 @@ public interface AgencyManagerRemote {
     boolean signUp(TUserDTO userDTO);
     boolean logout();
     boolean acceptUser(TUserDTO userDTO);
+    TUserDTO getTUserDTO(String username);
     
     //planes
     List<TPlaneDTO> findAllPlanes() throws NoPermissionException;

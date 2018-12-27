@@ -136,22 +136,35 @@ public class Main {
     private static void processAcceptUser() {
         Scanner sc = new Scanner(System.in);
         TUserDTO userDTO;
-        boolean result;
+        String username;
+        boolean result = false;
+        int op;
         
         System.out.println("Username:");
+        username = sc.nextLine();
         
+        userDTO = sAgencyManager.getTUserDTO(username);
+                
+        if(userDTO == null)
+        {
+            System.out.println("Not found a user with that name. Try again.");
+            return;
+        }
         
-        /*
+        System.out.println("Do you want accept the user " + userDTO + " ? [1/0]");
+        op = Integer.parseInt(sc.nextLine());
+        
+        if(op==0)
+            return;
         
         sAgencyManager.acceptUser(userDTO);
         
-        result = sAgencyManager.signUp(userDTO);
         if(!result)
-            System.out.println("Username already exists or passwords are different.");
+            System.out.println("The user has been accepted with success.");
         else
-            System.out.println("Sign up with sucess! Now you can sign in, " + userDTO.getUsername() + ".");
+            System.out.println("An error has occurred..");
 
-        */
+        
     }
     
     private static void processPlanesFindAll() throws NoPermissionException{

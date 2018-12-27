@@ -133,6 +133,9 @@ public class TripsManager implements TripsManagerLocal {
         if(userDTO == null)
             throw new NoPermissionException(Config.msgNoPermissionOperator);
         
+        if(!userDTO.getAccepted())
+            throw new NoPermissionException(Config.msgNoPermissionOperator);       
+
         if(userDTO.getUsertype() != permissionType)
             throw new NoPermissionException(Config.msgNoPermissionOperator);       
     }

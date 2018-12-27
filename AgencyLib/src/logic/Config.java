@@ -53,5 +53,5 @@ public class Config {
     public static final int OPERATOR = 0;
     public static final int CLIENT = 1;
     
-    public static final String msgNoPermissionOperator = "No permissions to invoke the method. Just an operator has permissions.";
+    public static final String msgNoPermissionOperator = "No permissions to invoke the method. Just an operator has permissions and accepted.";
 }

@@ -31,6 +31,11 @@ public class AgencyManager implements AgencyManagerRemote {
     public boolean signUp(TUserDTO userDTO) {
         return usersManagerLocal.signUp(userDTO);
     }
+    
+    @Override
+    public TUserDTO getTUserDTO(String username) {
+        return usersManagerLocal.getTUserDTO(username);
+    }
 
     @Override
     public boolean acceptUser(TUserDTO userDTO) {
@@ -69,6 +74,7 @@ public class AgencyManager implements AgencyManagerRemote {
         return tripsManagerLocal.removePlane(planeDTO, username);
     }
 
+    
     
 
     
