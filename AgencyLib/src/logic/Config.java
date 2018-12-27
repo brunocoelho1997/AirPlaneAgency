@@ -26,7 +26,7 @@ drop table if exists t_plane;
 create table t_plane(
     id int primary key default nextval('plane_seq'),
     planename varchar(30) not null,
-    planelimit int not null default 50
+    planelimit int not null
 );
 
 
@@ -46,6 +46,34 @@ create table t_user(
     clientname varchar(30),
     balance float,
     accepted boolean
+);
+
+
+- Airline
+
+drop sequence if exists airline_seq;
+
+create sequence airline_seq;
+
+drop table if exists t_airline;
+
+create table t_airline(
+    id int primary key default nextval('airline_seq'),
+    airlinename varchar(30) not null,
+    phonenumber varchar(30) not null
+);
+
+- feedback
+
+drop sequence if exists feedback_seq;
+
+create sequence feedback_seq;
+
+drop table if exists t_feedback;
+
+create table t_feedback(
+    id int primary key default nextval('feedback_seq'),
+    score int not null
 );
 
 */

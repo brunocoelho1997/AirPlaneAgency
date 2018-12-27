@@ -19,6 +19,12 @@ public class Command {
     public static final String EDITPLANE = "editplane";
     public static final String REMOVEPLANE = "removeplane";
     
+    //airlines
+    public static final String FINDALLAIRLINES = "findallairlines";
+    public static final String ADDAIRLINE = "addairline";
+    public static final String EDITAIRLINE = "editairline";
+    public static final String REMOVEAIRLINE = "removeairline";
+    
     
     
 }

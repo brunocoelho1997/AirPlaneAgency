@@ -7,6 +7,7 @@ import javax.naming.NamingException;
 import logic.AgencyManagerRemote;
 import logic.Config;
 import logic.NoPermissionException;
+import logic.TAirlineDTO;
 import logic.TPlaneDTO;
 import logic.TUserDTO;
 
@@ -62,7 +63,18 @@ public class Main {
                     case Command.REMOVEPLANE:
                         processRemovePlane();
                         break;
-
+                    case Command.FINDALLAIRLINES:
+                        processAirlinesFindAll();
+                        break;
+                    case Command.ADDAIRLINE:
+                        processAddAirline();
+                        break;
+                    case Command.EDITAIRLINE:
+                        processEditAirline();
+                        break;
+                    case Command.REMOVEAIRLINE:
+                        processRemoveAirline();
+                        break;
                     default:
                         System.out.println("Command not found. Type help to get a command list.");
 
@@ -167,6 +179,8 @@ public class Main {
         
     }
     
+    //-------------------------------------------------------
+    //planes
     private static void processPlanesFindAll() throws NoPermissionException{
         
         System.out.println("All planes in the system:");
@@ -221,8 +235,6 @@ public class Main {
             System.out.println("A problem occurred. The system didn't edit the plane.");
         else
             System.out.println("Plane edited with success!");
-        
-        
     }
     
     private static void processRemovePlane() throws NoPermissionException{
@@ -255,10 +267,100 @@ public class Main {
             System.out.println("A problem occurred. The system didn't remove the plane.");
         else
             System.out.println("Plane removed with success!");
-        
-        
     }
     
+    //----------------------------------------------------
+    //airlines
+    private static void processAirlinesFindAll() throws NoPermissionException{
+        
+        System.out.println("All airlines in the system:");
+        
+        for(TAirlineDTO airlineDTO : sAgencyManager.findAllAirlines())
+            System.out.println(airlineDTO);
+    }
+    
+    private static void processAddAirline() throws NoPermissionException{
+        Scanner sc = new Scanner(System.in);
+        TAirlineDTO airlineDTO = new TAirlineDTO();
+        boolean result;
+        
+        System.out.println("Airline Name:");
+        airlineDTO.setAirlineName(sc.nextLine());
+        System.out.println("Phone Number:");
+        airlineDTO.setPhoneNumber(sc.nextLine());
+        
+        result = sAgencyManager.addAirline(airlineDTO);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't add the airline.");
+        else
+            System.out.println("Airline added with sucess!");
+    }
+    
+    private static void processEditAirline() throws NoPermissionException{
+        Scanner sc = new Scanner(System.in);
+        TAirlineDTO airlineDTO;
+        boolean result;
+        int id;
+        
+
+        System.out.println("Airline Id:");
+        id = Integer.parseInt(sc.nextLine());
+        airlineDTO = sAgencyManager.findAirline(id);
+
+        if(airlineDTO == null)
+        {
+            System.out.println("Not found an airline with that id. Try again.");
+            return;
+        }
+
+        System.out.println("Airline: " + airlineDTO);
+
+        System.out.println("New Airline Name:");
+        airlineDTO.setAirlineName(sc.nextLine());
+        System.out.println("New Phonenumber:");
+        airlineDTO.setPhoneNumber(sc.nextLine());
+
+        result = sAgencyManager.editAirline(airlineDTO);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't edit the airline.");
+        else
+            System.out.println("Airline edited with success!");
+    }
+    
+    private static void processRemoveAirline() throws NoPermissionException{
+        Scanner sc = new Scanner(System.in);
+        TAirlineDTO airlineDTO;
+        boolean result;
+        int id;
+        int op;
+        
+        
+        System.out.println("Airline Id:");
+        id = Integer.parseInt(sc.nextLine());
+        airlineDTO = sAgencyManager.findAirline(id);
+
+        if(airlineDTO == null)
+        {
+            System.out.println("Not found a airline with that id. Try again.");
+            return;
+        }
+
+
+        System.out.println("Do you want remove the airline: " + airlineDTO + "? [1/0]");
+        op = Integer.parseInt(sc.nextLine());
+
+        if(op == 0)
+            return;
+
+        result = sAgencyManager.removeAirline(airlineDTO);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't remove the airline.");
+        else
+            System.out.println("Airline removed with success!");
+    }
+    
+    //----------------------------------------------------
+    //Auxiliar methods
     private static void printCommandList(){
         System.out.println("\n-- Help --");
         
@@ -273,6 +375,12 @@ public class Main {
         System.out.println(Command.ADDPLANE + " - Add a new plane");
         System.out.println(Command.EDITPLANE + " - Edit a plane");
         System.out.println(Command.REMOVEPLANE + " - Remove a plane");
+        
+        //airlines        
+        System.out.println(Command.FINDALLAIRLINES + " - List All airlines");
+        System.out.println(Command.ADDAIRLINE + " - Add a new airline");
+        System.out.println(Command.EDITAIRLINE + " - Edit an airline");
+        System.out.println(Command.REMOVEAIRLINE + " - Remove an airline");
         
         System.out.println(Command.EXIT + " - Exit");
         System.out.println("----------------");

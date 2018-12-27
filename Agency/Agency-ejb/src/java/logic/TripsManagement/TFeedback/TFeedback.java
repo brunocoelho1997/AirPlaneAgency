@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package logic.TripsManagement;
+package logic.TripsManagement.TFeedback;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
@@ -22,14 +22,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author bruno
  */
 @Entity
-@Table(name = "t_plane")
+@Table(name = "t_feedback")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "TPlane.findAll", query = "SELECT t FROM TPlane t")
-    , @NamedQuery(name = "TPlane.findById", query = "SELECT t FROM TPlane t WHERE t.id = :id")
-    , @NamedQuery(name = "TPlane.findByPlanename", query = "SELECT t FROM TPlane t WHERE t.planename = :planename")
-    , @NamedQuery(name = "TPlane.findByPlanelimit", query = "SELECT t FROM TPlane t WHERE t.planelimit = :planelimit")})
-public class TPlane implements Serializable {
+    @NamedQuery(name = "TFeedback.findAll", query = "SELECT t FROM TFeedback t")
+    , @NamedQuery(name = "TFeedback.findById", query = "SELECT t FROM TFeedback t WHERE t.id = :id")
+    , @NamedQuery(name = "TFeedback.findByScore", query = "SELECT t FROM TFeedback t WHERE t.score = :score")})
+public class TFeedback implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -38,23 +37,19 @@ public class TPlane implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @Column(name = "planename")
-    private String planename;
-    @Basic(optional = false)
-    @Column(name = "planelimit")
-    private int planelimit;
+    @Column(name = "score")
+    private int score;
 
-    public TPlane() {
+    public TFeedback() {
     }
 
-    public TPlane(Integer id) {
+    public TFeedback(Integer id) {
         this.id = id;
     }
 
-    public TPlane(Integer id, String planename, int planelimit) {
+    public TFeedback(Integer id, int score) {
         this.id = id;
-        this.planename = planename;
-        this.planelimit = planelimit;
+        this.score = score;
     }
 
     public Integer getId() {
@@ -65,20 +60,12 @@ public class TPlane implements Serializable {
         this.id = id;
     }
 
-    public String getPlanename() {
-        return planename;
+    public int getScore() {
+        return score;
     }
 
-    public void setPlanename(String planename) {
-        this.planename = planename;
-    }
-
-    public int getPlanelimit() {
-        return planelimit;
-    }
-
-    public void setPlanelimit(int planelimit) {
-        this.planelimit = planelimit;
+    public void setScore(int score) {
+        this.score = score;
     }
 
     @Override
@@ -91,10 +78,10 @@ public class TPlane implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TPlane)) {
+        if (!(object instanceof TFeedback)) {
             return false;
         }
-        TPlane other = (TPlane) object;
+        TFeedback other = (TFeedback) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -103,7 +90,7 @@ public class TPlane implements Serializable {
 
     @Override
     public String toString() {
-        return "logic.TripsManagement.TPlane[ id=" + id + " ]";
+        return "logic.TripsManagement.TFeedback.TFeedback[ id=" + id + " ]";
     }
     
 }

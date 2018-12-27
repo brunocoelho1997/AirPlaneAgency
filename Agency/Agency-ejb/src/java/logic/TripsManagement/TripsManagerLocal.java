@@ -8,6 +8,7 @@ package logic.TripsManagement;
 import java.util.List;
 import javax.ejb.Local;
 import logic.NoPermissionException;
+import logic.TAirlineDTO;
 import logic.TPlaneDTO;
 
 /**
@@ -24,4 +25,10 @@ public interface TripsManagerLocal {
     boolean editPlane(TPlaneDTO planeDTO, String username) throws NoPermissionException;
     boolean removePlane(TPlaneDTO planeDTO, String username) throws NoPermissionException;
     
+    //Airline
+    List<TAirlineDTO> findAllAirlines(String username) throws NoPermissionException;
+    TAirlineDTO findAirline(int id, String username) throws NoPermissionException;
+    boolean addAirline(TAirlineDTO airlineDTO, String username) throws NoPermissionException;
+    boolean editAirline(TAirlineDTO airlineDTO, String username) throws NoPermissionException;
+    boolean removeAirline(TAirlineDTO airlineDTO, String username) throws NoPermissionException;
 }

@@ -74,6 +74,31 @@ public class AgencyManager implements AgencyManagerRemote {
         return tripsManagerLocal.removePlane(planeDTO, username);
     }
 
+    @Override
+    public List<TAirlineDTO> findAllAirlines() throws NoPermissionException {
+        return tripsManagerLocal.findAllAirlines(username);
+    }
+
+    @Override
+    public TAirlineDTO findAirline(int id) throws NoPermissionException {
+        return tripsManagerLocal.findAirline(id, username);
+    }
+
+    @Override
+    public boolean addAirline(TAirlineDTO airlineDTO) throws NoPermissionException {
+        return tripsManagerLocal.addAirline(airlineDTO, username);
+    }
+
+    @Override
+    public boolean editAirline(TAirlineDTO airlineDTO) throws NoPermissionException {
+        return tripsManagerLocal.editAirline(airlineDTO, username);
+    }
+
+    @Override
+    public boolean removeAirline(TAirlineDTO airlineDTO) throws NoPermissionException {
+        return tripsManagerLocal.removeAirline(airlineDTO, username);
+    }
+
     
     
 
