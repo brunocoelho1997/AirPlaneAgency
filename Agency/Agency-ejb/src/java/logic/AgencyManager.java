@@ -50,22 +50,22 @@ public class AgencyManager implements AgencyManagerRemote {
     }
     
     @Override
-    public TPlaneDTO findPlane(int id) {
+    public TPlaneDTO findPlane(int id) throws NoPermissionException {
         return tripsManagerLocal.findPlane(id, username);
     }
 
     @Override
-    public boolean addPlane(TPlaneDTO planeDTO) {
+    public boolean addPlane(TPlaneDTO planeDTO) throws NoPermissionException {
         return tripsManagerLocal.addPlane(planeDTO, username);
     }
 
     @Override
-    public boolean editPlane(TPlaneDTO planeDTO) {
+    public boolean editPlane(TPlaneDTO planeDTO) throws NoPermissionException {
         return tripsManagerLocal.editPlane(planeDTO, username);
     }
 
     @Override
-    public boolean removePlane(TPlaneDTO planeDTO) {
+    public boolean removePlane(TPlaneDTO planeDTO) throws NoPermissionException {
         return tripsManagerLocal.removePlane(planeDTO, username);
     }
 

@@ -10,8 +10,8 @@ package logic;
  * @author bruno
  */
 public class NoPermissionException extends Exception{
-    public NoPermissionException() {
-        super("No permissions to invoke the method.");
+    public NoPermissionException(String errorMsg) {
+        super(errorMsg);
     }
 
     

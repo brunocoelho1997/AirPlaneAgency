@@ -19,9 +19,9 @@ public interface TripsManagerLocal {
     
     //planes
     List<TPlaneDTO> findAllPlanes(String username) throws NoPermissionException;
-    TPlaneDTO findPlane(int id, String username);
-    boolean addPlane(TPlaneDTO planeDTO, String username);
-    boolean editPlane(TPlaneDTO planeDTO, String username);
-    boolean removePlane(TPlaneDTO planeDTO, String username);
+    TPlaneDTO findPlane(int id, String username) throws NoPermissionException;
+    boolean addPlane(TPlaneDTO planeDTO, String username) throws NoPermissionException;
+    boolean editPlane(TPlaneDTO planeDTO, String username) throws NoPermissionException;
+    boolean removePlane(TPlaneDTO planeDTO, String username) throws NoPermissionException;
     
 }

@@ -14,9 +14,9 @@ public interface AgencyManagerRemote {
     
     //planes
     List<TPlaneDTO> findAllPlanes() throws NoPermissionException;
-    TPlaneDTO findPlane(int id);
-    boolean addPlane(TPlaneDTO planeDTO);
-    boolean editPlane(TPlaneDTO planeDTO);
-    boolean removePlane(TPlaneDTO planeDTO);
+    TPlaneDTO findPlane(int id) throws NoPermissionException;
+    boolean addPlane(TPlaneDTO planeDTO) throws NoPermissionException;
+    boolean editPlane(TPlaneDTO planeDTO) throws NoPermissionException;
+    boolean removePlane(TPlaneDTO planeDTO) throws NoPermissionException;
     
 }

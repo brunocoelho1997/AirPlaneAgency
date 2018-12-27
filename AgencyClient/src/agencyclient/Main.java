@@ -162,7 +162,7 @@ public class Main {
             System.out.println(planeDTO);
     }
     
-    private static void processAddPlane(){
+    private static void processAddPlane() throws NoPermissionException{
         Scanner sc = new Scanner(System.in);
         TPlaneDTO planeDTO = new TPlaneDTO();
         boolean result;
@@ -179,7 +179,7 @@ public class Main {
             System.out.println("Plane added with sucess!");
     }
     
-    private static void processEditPlane(){
+    private static void processEditPlane() throws NoPermissionException{
         Scanner sc = new Scanner(System.in);
         TPlaneDTO planeDTO;
         boolean result;
@@ -212,7 +212,7 @@ public class Main {
         
     }
     
-    private static void processRemovePlane(){
+    private static void processRemovePlane() throws NoPermissionException{
         Scanner sc = new Scanner(System.in);
         TPlaneDTO planeDTO;
         boolean result;

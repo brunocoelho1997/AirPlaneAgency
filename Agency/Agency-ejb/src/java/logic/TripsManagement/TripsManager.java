@@ -34,8 +34,7 @@ public class TripsManager implements TripsManagerLocal {
     
     @Override
     public List<TPlaneDTO> findAllPlanes(String username) throws NoPermissionException {
-        
-        
+               
         verifyPermission(username, Config.OPERATOR);
         
         List<TPlaneDTO> tPlaneDTOList = new ArrayList<>();
@@ -47,7 +46,10 @@ public class TripsManager implements TripsManagerLocal {
     }
 
     @Override
-    public TPlaneDTO findPlane(int id, String username) {
+    public TPlaneDTO findPlane(int id, String username) throws NoPermissionException {
+        
+        verifyPermission(username, Config.OPERATOR);
+
         for(TPlane tplane : planeFacade.findAll())
         {
             if(tplane.getId()==id)
@@ -57,7 +59,10 @@ public class TripsManager implements TripsManagerLocal {
     }
     
     @Override
-    public boolean addPlane(TPlaneDTO planeDTO, String username) {
+    public boolean addPlane(TPlaneDTO planeDTO, String username) throws NoPermissionException {
+        
+        verifyPermission(username, Config.OPERATOR);
+
         TPlane tplane = new TPlane();
         
         if(planeDTO.getPlaneName()== null || planeDTO.getPlaneName().isEmpty())
@@ -73,7 +78,10 @@ public class TripsManager implements TripsManagerLocal {
     }
 
     @Override
-    public boolean editPlane(TPlaneDTO planeDTO, String username) {
+    public boolean editPlane(TPlaneDTO planeDTO, String username) throws NoPermissionException {
+        
+        verifyPermission(username, Config.OPERATOR);
+        
         TPlane tplane = planeFacade.find(planeDTO.getId());
         
         if(tplane == null)
@@ -92,7 +100,10 @@ public class TripsManager implements TripsManagerLocal {
     }
 
     @Override
-    public boolean removePlane(TPlaneDTO planeDTO, String username) {
+    public boolean removePlane(TPlaneDTO planeDTO, String username) throws NoPermissionException {
+        
+        verifyPermission(username, Config.OPERATOR);
+        
         TPlane tplane = planeFacade.find(planeDTO.getId());
         
         if(tplane == null)
@@ -115,15 +126,15 @@ public class TripsManager implements TripsManagerLocal {
     
     private void verifyPermission(String username, int permissionType) throws NoPermissionException{
         if(username == null || username.isEmpty())
-            throw new NoPermissionException();
+            throw new NoPermissionException(Config.msgNoPermissionOperator);
         
         TUserDTO userDTO = userManager.getTUserDTO(username);
         
         if(userDTO == null)
-            throw new NoPermissionException();
+            throw new NoPermissionException(Config.msgNoPermissionOperator);
         
         if(userDTO.getUsertype() != permissionType)
-            throw new NoPermissionException();       
+            throw new NoPermissionException(Config.msgNoPermissionOperator);       
     }
     
     
