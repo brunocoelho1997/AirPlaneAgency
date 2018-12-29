@@ -63,17 +63,38 @@ create table t_airline(
     phonenumber varchar(30) not null
 );
 
-- feedback
+-Place
 
-drop sequence if exists feedback_seq;
+drop sequence if exists place_seq;
 
-create sequence feedback_seq;
+create sequence place_seq;
 
-drop table if exists t_feedback;
+drop table if exists t_place;
 
-create table t_feedback(
-    id int primary key default nextval('feedback_seq'),
-    score int not null
+create table t_place(
+    id int primary key default nextval('place_seq'),
+    country varchar(30) not null,
+    city varchar(30) not null,
+    address varchar(150) not null
+);
+
+-placefeedback
+
+drop sequence if exists placefeedback_seq;
+
+create sequence placefeedback_seq;
+
+drop table if exists t_placefeedback;
+
+
+create table t_placefeedback(
+    id int primary key default nextval('placefeedback_seq'),
+    placeid int not null,
+    userid int not null,
+    score int not null,
+
+    constraint fk foreign key (placeid) references t_place (id),
+    foreign key (userid) references t_user (id)
 );
 
 */

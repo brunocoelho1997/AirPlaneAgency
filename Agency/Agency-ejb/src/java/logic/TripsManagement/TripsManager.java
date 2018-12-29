@@ -16,10 +16,17 @@ import javax.ejb.Singleton;
 import logic.Config;
 import logic.NoPermissionException;
 import logic.TAirlineDTO;
+import logic.TPlaceFeedbackDTO;
+import logic.TPlaceDTO;
 import logic.TPlaneDTO;
 import logic.TUserDTO;
 import logic.TripsManagement.TAirline.TAirline;
 import logic.TripsManagement.TAirline.TAirlineFacadeLocal;
+import logic.TripsManagement.TPlace.TPlace;
+import logic.TripsManagement.TPlace.TPlaceFacadeLocal;
+import logic.TripsManagement.TPlaceFeedback.TPlacefeedback;
+import logic.TripsManagement.TPlaceFeedback.TPlacefeedbackFacadeLocal;
+import logic.UsersManagement.TUser;
 import logic.UsersManagement.TUserFacadeLocal;
 import logic.UsersManagement.UsersManagerLocal;
 
@@ -38,6 +45,13 @@ public class TripsManager implements TripsManagerLocal {
 
     @EJB
     TAirlineFacadeLocal airlineFacade;
+    
+    @EJB
+    TPlacefeedbackFacadeLocal placeFeedbackFacade;
+    
+    @EJB
+    TPlaceFacadeLocal placeFacade;
+    
     
     //Planes
     @Override
@@ -217,6 +231,131 @@ public class TripsManager implements TripsManagerLocal {
         return true;
     }
     
+    
+    //-------------------------------------------------------------------------------------------------------------------
+    //Place
+    @Override
+    public List<TPlaceDTO> findAllPlaces(String username) {
+        List<TPlaceDTO> tplaceDTOList = new ArrayList<>();
+        for(TPlace place : placeFacade.findAll())
+        {
+            tplaceDTOList.add(placeToDTO(place));
+        }
+        return tplaceDTOList;
+    }
+
+    @Override
+    public TPlaceDTO findPlace(int id) {
+        for(TPlace place : placeFacade.findAll())
+        {
+            if(place.getId()==id)
+                return placeToDTO(place);
+        }
+        return null;
+    }
+
+    @Override
+    public boolean addPlace(TPlaceDTO placeDTO, String username) throws NoPermissionException {
+        verifyPermission(username, Config.OPERATOR);
+
+        TPlace tplace = new TPlace();
+          
+        if(!validatePlaceDTO(placeDTO))
+            return false;
+        
+        tplace.setCity(placeDTO.getCity());
+        tplace.setCountry(placeDTO.getCountry());
+        tplace.setTPlacefeedbackCollection(new ArrayList());
+        if(placeDTO.getAddress() != null && !placeDTO.getAddress().isEmpty())
+            tplace.setAddress(placeDTO.getAddress());
+        
+        
+        placeFacade.create(tplace);
+        return true;
+    }
+
+    @Override
+    public boolean editPlace(TPlaceDTO placeDTO, String username) throws NoPermissionException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean removePlace(TPlaceDTO placeDTO, String username) throws NoPermissionException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    private TPlaceDTO placeToDTO(TPlace place){
+        
+        System.out.println("\n\nPlace: " + place);
+        List<TPlaceFeedbackDTO> placeFeedBackList = new ArrayList();
+        for(TPlacefeedback placeFeedback : place.getTPlacefeedbackCollection())
+        {
+            placeFeedBackList.add(placeFeedbackToDTO(placeFeedback));
+        }
+        
+        return new TPlaceDTO(place.getId(), place.getCountry(), place.getCity(), place.getAddress(),placeFeedBackList);
+    }
+    
+    private boolean validatePlaceDTO(TPlaceDTO placeDTO)
+    {
+        if(placeDTO == null)
+            return false;
+        
+        if(placeDTO.getCity() == null || placeDTO.getCity().isEmpty())
+            return false;
+        
+        if(placeDTO.getCountry()== null || placeDTO.getCountry().isEmpty())
+            return false;
+        
+        return true;
+    }
+    
+    //-------------------------------------------------------------------------------------------------------------------
+    //feedback
+    
+    @Override
+    public boolean addFeedbackToPlace(TPlaceDTO placeDTO, TPlaceFeedbackDTO feedbackDTO, String username ) throws NoPermissionException {
+        
+        verifyPermission(username, Config.CLIENT);
+        
+        TPlace place = placeFacade.find(placeDTO.getId());
+        
+        if(place == null)
+            return false;
+        
+        TUser user = userManager.getTUserByUsername(username);
+        
+        if(user == null)
+            return false;
+        
+        if(!validatePlaceFeedbackDTO(feedbackDTO))
+            return false;
+        
+        TPlacefeedback placeFeedback = new TPlacefeedback();
+        placeFeedback.setPlaceid(place);
+        placeFeedback.setUserid(user);
+        placeFeedback.setScore(feedbackDTO.getScore());
+        
+        placeFeedbackFacade.create(placeFeedback);
+        return true;
+    }
+    
+    private TPlaceFeedbackDTO placeFeedbackToDTO(TPlacefeedback feedback){
+        return new TPlaceFeedbackDTO(feedback.getId(), feedback.getScore());
+    }
+    
+    private boolean validatePlaceFeedbackDTO(TPlaceFeedbackDTO placeFeedback)
+    {
+        if(placeFeedback == null)
+            return false;
+        
+        if(placeFeedback.getScore() < 0)
+            return false;
+        
+        return true;
+    }
+    
+    //-----------------------------------------------------------------------------------------------------------------
     //auxiliar methods
     
     private void verifyPermission(String username, int permissionType) throws NoPermissionException{
@@ -231,7 +370,8 @@ public class TripsManager implements TripsManagerLocal {
         if(!userDTO.getAccepted())
             throw new NoPermissionException(Config.msgNoPermissionOperator);       
 
-        if(userDTO.getUsertype() != permissionType)
+        //se for um cliente e a permissao exigida for do tipo de cliente permite... caso contrario nao deixa (os operadores podem fazer tudo, portanto nao fiz validacao para os operadores)
+        if(userDTO.getUsertype() == Config.CLIENT && permissionType != Config.CLIENT)
             throw new NoPermissionException(Config.msgNoPermissionOperator);       
     }
 

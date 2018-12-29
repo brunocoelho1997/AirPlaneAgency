@@ -47,7 +47,7 @@ public class AgencyManager implements AgencyManagerRemote {
         this.username = null;
         return true;
     }
-    
+    //----------------------------------------------------------------------
     //Planes
     @Override
     public List<TPlaneDTO> findAllPlanes() throws NoPermissionException{
@@ -74,6 +74,8 @@ public class AgencyManager implements AgencyManagerRemote {
         return tripsManagerLocal.removePlane(planeDTO, username);
     }
 
+    //----------------------------------------------------------------------
+    //Airlines
     @Override
     public List<TAirlineDTO> findAllAirlines() throws NoPermissionException {
         return tripsManagerLocal.findAllAirlines(username);
@@ -98,11 +100,37 @@ public class AgencyManager implements AgencyManagerRemote {
     public boolean removeAirline(TAirlineDTO airlineDTO) throws NoPermissionException {
         return tripsManagerLocal.removeAirline(airlineDTO, username);
     }
+//----------------------------------------------------------------------
+    //Places
+    @Override
+    public List<TPlaceDTO> findAllPlaces() {
+        return tripsManagerLocal.findAllPlaces(username);
+    }
 
-    
-    
+    @Override
+    public TPlaceDTO findPlace(int id) {
+        return tripsManagerLocal.findPlace(id);
+    }
 
-    
-    
-    
+    @Override
+    public boolean addPlace(TPlaceDTO placeDTO) throws NoPermissionException {
+        return tripsManagerLocal.addPlace(placeDTO, username);
+    }
+
+    @Override
+    public boolean editPlace(TPlaceDTO placeDTO) throws NoPermissionException {
+        return tripsManagerLocal.editPlace(placeDTO, username);
+    }
+
+    @Override
+    public boolean removePlace(TPlaceDTO placeDTO) throws NoPermissionException {
+        return tripsManagerLocal.removePlace(placeDTO, username);
+    }
+//----------------------------------------------------------------------
+    //Places
+    @Override
+    public boolean addFeedbackToPlace(TPlaceDTO placeDTO, TPlaceFeedbackDTO feedbackDTO) throws NoPermissionException {
+        return tripsManagerLocal.addFeedbackToPlace(placeDTO, feedbackDTO, username);
+    }
+ 
 }

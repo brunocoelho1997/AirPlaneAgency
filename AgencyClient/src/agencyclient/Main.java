@@ -8,6 +8,8 @@ import logic.AgencyManagerRemote;
 import logic.Config;
 import logic.NoPermissionException;
 import logic.TAirlineDTO;
+import logic.TPlaceDTO;
+import logic.TPlaceFeedbackDTO;
 import logic.TPlaneDTO;
 import logic.TUserDTO;
 
@@ -74,6 +76,24 @@ public class Main {
                         break;
                     case Command.REMOVEAIRLINE:
                         processRemoveAirline();
+                        break;
+                    case Command.FINDALLPLACES:
+                        processPlacesFindAll();
+                        break;
+                    case Command.ADDPLACE:
+                        processAddPlace();
+                        break;
+                    case Command.EDITPLACE:
+                        processEditPlace();
+                        break;
+                    case Command.REMOVEPLACE:
+                        processRemovePlace();
+                        break;
+                    case Command.FINDALLMYPLACESFEEDBACKS:
+                        processMyPlacesFeedbackFindAll();
+                        break;
+                    case Command.ADDPLACEFEEDBACK:
+                        processAddPlaceFeedback();
                         break;
                     default:
                         System.out.println("Command not found. Type help to get a command list.");
@@ -360,6 +380,81 @@ public class Main {
     }
     
     //----------------------------------------------------
+    //places
+    private static void processPlacesFindAll() throws NoPermissionException{
+        
+        System.out.println("All places in the system:");
+        
+        for(TPlaceDTO placeDTO : sAgencyManager.findAllPlaces())
+            System.out.println(placeDTO);
+    }
+    
+    private static void processAddPlace() throws NoPermissionException{
+        Scanner sc = new Scanner(System.in);
+        TPlaceDTO placeDTO = new TPlaceDTO();
+        boolean result;
+        
+        System.out.println("Country:");
+        placeDTO.setCountry(sc.nextLine());
+        System.out.println("City:");
+        placeDTO.setCity(sc.nextLine());
+        System.out.println("Address:");
+        placeDTO.setAddress(sc.nextLine());
+        
+        result = sAgencyManager.addPlace(placeDTO);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't add the place.");
+        else
+            System.out.println("Place added with sucess!");
+    }
+    
+    private static void processEditPlace() throws NoPermissionException{
+        
+    }
+    
+    private static void processRemovePlace() throws NoPermissionException{
+        
+    }
+    
+    
+    //places feedback
+    private static void processAddPlaceFeedback() throws NoPermissionException {
+        Scanner sc = new Scanner(System.in);
+        TPlaceFeedbackDTO placeFeedbackDTO = new TPlaceFeedbackDTO();
+        int placeid;
+        TPlaceDTO tPlaceDTO = null;
+        boolean result;
+        
+        
+        
+        System.out.println("Place Id:");
+        placeid = Integer.parseInt(sc.nextLine());
+        tPlaceDTO = sAgencyManager.findPlace(placeid);
+
+        if(tPlaceDTO == null)
+        {
+            System.out.println("Not found a place with that id. Try again.");
+            return;
+        }
+
+        System.out.println("Place: " + tPlaceDTO);
+        
+        System.out.println("Score: ");
+        placeFeedbackDTO.setScore(Integer.parseInt(sc.nextLine()));
+        
+        
+        result = sAgencyManager.addFeedbackToPlace(tPlaceDTO, placeFeedbackDTO);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't added the feedback.");
+        else
+            System.out.println("Feedback added with success!");
+        
+    }
+
+    private static void processMyPlacesFeedbackFindAll() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    //----------------------------------------------------
     //Auxiliar methods
     private static void printCommandList(){
         System.out.println("\n-- Help --");
@@ -381,6 +476,19 @@ public class Main {
         System.out.println(Command.ADDAIRLINE + " - Add a new airline");
         System.out.println(Command.EDITAIRLINE + " - Edit an airline");
         System.out.println(Command.REMOVEAIRLINE + " - Remove an airline");
+        
+        //places        
+        System.out.println(Command.FINDALLPLACES + " - List All places");
+        System.out.println(Command.ADDPLACE + " - Add a new place");
+        System.out.println(Command.EDITPLACE + " - Edit a place");
+        System.out.println(Command.REMOVEPLACE + " - Remove a place");
+        
+        
+        //places feedback
+        System.out.println(Command.FINDALLMYPLACESFEEDBACKS + " - List All my feedbacks of places");
+        System.out.println(Command.ADDPLACEFEEDBACK + " - Add a new feedback of a place");
+        System.out.println(Command.EDITPLACEFEEDBACK + " - Edit a feedback of a place");
+        System.out.println(Command.REMOVEPLACEFEEDBACK + " - Remove feedback of a place");
         
         System.out.println(Command.EXIT + " - Exit");
         System.out.println("----------------");
@@ -420,6 +528,8 @@ public class Main {
            System.out.println(e.getMessage());
         }
     }
+
+    
 
     
     

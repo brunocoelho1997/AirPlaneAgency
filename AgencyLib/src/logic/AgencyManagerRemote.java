@@ -27,4 +27,13 @@ public interface AgencyManagerRemote {
     boolean editAirline(TAirlineDTO airlineDTO) throws NoPermissionException;
     boolean removeAirline(TAirlineDTO airlineDTO) throws NoPermissionException;
     
+    //places
+    List<TPlaceDTO> findAllPlaces();
+    TPlaceDTO findPlace(int id);
+    boolean addPlace(TPlaceDTO placeDTO) throws NoPermissionException;
+    boolean editPlace(TPlaceDTO placeDTO) throws NoPermissionException;
+    boolean removePlace(TPlaceDTO placeDTO) throws NoPermissionException;
+    
+    //place feedback
+    boolean addFeedbackToPlace(TPlaceDTO placeDTO, TPlaceFeedbackDTO feedbackDTO) throws NoPermissionException;
 }

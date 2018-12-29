@@ -18,5 +18,6 @@ public interface UsersManagerLocal {
     boolean signUp(TUserDTO userDTO);
     boolean acceptTUser(TUserDTO userDTO, String username);
     TUserDTO getTUserDTO(String username);
+    TUser getTUserByUsername(String usernameOfWantedUser);
     
 }

@@ -25,6 +25,15 @@ public class Command {
     public static final String EDITAIRLINE = "editairline";
     public static final String REMOVEAIRLINE = "removeairline";
     
+    //places
+    public static final String FINDALLPLACES = "findallplaces";
+    public static final String ADDPLACE = "addplace";
+    public static final String EDITPLACE = "editplace";
+    public static final String REMOVEPLACE = "removeplace";
     
-    
+    //places feedback
+    public static final String FINDALLMYPLACESFEEDBACKS = "findallmyplacesfeedbacks";
+    public static final String ADDPLACEFEEDBACK = "addplacefeedback";
+    public static final String EDITPLACEFEEDBACK = "editplace";
+    public static final String REMOVEPLACEFEEDBACK = "removeplace";
 }

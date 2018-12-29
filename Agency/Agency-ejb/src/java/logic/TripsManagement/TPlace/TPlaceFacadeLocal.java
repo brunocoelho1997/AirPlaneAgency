@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package logic.TripsManagement.TFeedback;
+package logic.TripsManagement.TPlace;
 
 import java.util.List;
 import javax.ejb.Local;
@@ -13,19 +13,19 @@ import javax.ejb.Local;
  * @author bruno
  */
 @Local
-public interface TFeedbackFacadeLocal {
+public interface TPlaceFacadeLocal {
 
-    void create(TFeedback tFeedback);
+    void create(TPlace tPlace);
 
-    void edit(TFeedback tFeedback);
+    void edit(TPlace tPlace);
 
-    void remove(TFeedback tFeedback);
+    void remove(TPlace tPlace);
 
-    TFeedback find(Object id);
+    TPlace find(Object id);
 
-    List<TFeedback> findAll();
+    List<TPlace> findAll();
 
-    List<TFeedback> findRange(int[] range);
+    List<TPlace> findRange(int[] range);
 
     int count();
     

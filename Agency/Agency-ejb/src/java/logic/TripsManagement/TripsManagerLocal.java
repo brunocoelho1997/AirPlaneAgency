@@ -9,6 +9,8 @@ import java.util.List;
 import javax.ejb.Local;
 import logic.NoPermissionException;
 import logic.TAirlineDTO;
+import logic.TPlaceFeedbackDTO;
+import logic.TPlaceDTO;
 import logic.TPlaneDTO;
 
 /**
@@ -31,4 +33,15 @@ public interface TripsManagerLocal {
     boolean addAirline(TAirlineDTO airlineDTO, String username) throws NoPermissionException;
     boolean editAirline(TAirlineDTO airlineDTO, String username) throws NoPermissionException;
     boolean removeAirline(TAirlineDTO airlineDTO, String username) throws NoPermissionException;
+    
+    //places
+    List<TPlaceDTO> findAllPlaces(String username);
+    TPlaceDTO findPlace(int id);
+    boolean addPlace(TPlaceDTO placeDTO, String username) throws NoPermissionException;
+    boolean editPlace(TPlaceDTO placeDTO, String username) throws NoPermissionException;
+    boolean removePlace(TPlaceDTO placeDTO, String username) throws NoPermissionException;
+    
+    //place feedback
+    boolean addFeedbackToPlace(TPlaceDTO placeDTO, TPlaceFeedbackDTO feedbackDTO, String username) throws NoPermissionException;
+
 }

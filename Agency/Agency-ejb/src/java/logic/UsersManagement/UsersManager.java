@@ -86,6 +86,15 @@ public class UsersManager implements UsersManagerLocal {
     }
     
     
+    @Override
+    public TUser getTUserByUsername(String usernameOfWantedUser){
+        for(TUser user : userFacade.findAll())
+        {
+            if(user.getUsername().equals(usernameOfWantedUser))
+                return user;
+        }
+        return null;
+    }
     
     //Auxiliary methoths
     
@@ -102,16 +111,6 @@ public class UsersManager implements UsersManagerLocal {
             tUserDTO.setClientName(user.getClientname());
         }
         return tUserDTO;
-    }
-    
-    private TUser getTUserByUsername(String username)
-    {
-        for(TUser user : userFacade.findAll())
-        {
-            if(user.getUsername().equals(username))
-                return user;
-        }
-        return null;
     }
 
     //TODO: este metodo nao esta' a ser chamado. Tinha no construtor e bugava

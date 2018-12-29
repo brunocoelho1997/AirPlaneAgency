@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package logic.TripsManagement.TFeedback;
+package logic.TripsManagement.TPlaceFeedback;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
@@ -12,23 +12,27 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import logic.TripsManagement.TPlace.TPlace;
+import logic.UsersManagement.TUser;
 
 /**
  *
  * @author bruno
  */
 @Entity
-@Table(name = "t_feedback")
+@Table(name = "t_placefeedback")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "TFeedback.findAll", query = "SELECT t FROM TFeedback t")
-    , @NamedQuery(name = "TFeedback.findById", query = "SELECT t FROM TFeedback t WHERE t.id = :id")
-    , @NamedQuery(name = "TFeedback.findByScore", query = "SELECT t FROM TFeedback t WHERE t.score = :score")})
-public class TFeedback implements Serializable {
+    @NamedQuery(name = "TPlacefeedback.findAll", query = "SELECT t FROM TPlacefeedback t")
+    , @NamedQuery(name = "TPlacefeedback.findById", query = "SELECT t FROM TPlacefeedback t WHERE t.id = :id")
+    , @NamedQuery(name = "TPlacefeedback.findByScore", query = "SELECT t FROM TPlacefeedback t WHERE t.score = :score")})
+public class TPlacefeedback implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -39,15 +43,21 @@ public class TFeedback implements Serializable {
     @Basic(optional = false)
     @Column(name = "score")
     private int score;
+    @JoinColumn(name = "placeid", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private TPlace placeid;
+    @JoinColumn(name = "userid", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private TUser userid;
 
-    public TFeedback() {
+    public TPlacefeedback() {
     }
 
-    public TFeedback(Integer id) {
+    public TPlacefeedback(Integer id) {
         this.id = id;
     }
 
-    public TFeedback(Integer id, int score) {
+    public TPlacefeedback(Integer id, int score) {
         this.id = id;
         this.score = score;
     }
@@ -68,6 +78,22 @@ public class TFeedback implements Serializable {
         this.score = score;
     }
 
+    public TPlace getPlaceid() {
+        return placeid;
+    }
+
+    public void setPlaceid(TPlace placeid) {
+        this.placeid = placeid;
+    }
+
+    public TUser getUserid() {
+        return userid;
+    }
+
+    public void setUserid(TUser userid) {
+        this.userid = userid;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -78,10 +104,10 @@ public class TFeedback implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TFeedback)) {
+        if (!(object instanceof TPlacefeedback)) {
             return false;
         }
-        TFeedback other = (TFeedback) object;
+        TPlacefeedback other = (TPlacefeedback) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -90,7 +116,7 @@ public class TFeedback implements Serializable {
 
     @Override
     public String toString() {
-        return "logic.TripsManagement.TFeedback.TFeedback[ id=" + id + " ]";
+        return "logic.TripsManagement.TPlaceFeedback.TPlacefeedback[ id=" + id + " ]";
     }
     
 }
