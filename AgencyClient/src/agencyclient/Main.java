@@ -409,11 +409,67 @@ public class Main {
     }
     
     private static void processEditPlace() throws NoPermissionException{
+        Scanner sc = new Scanner(System.in);
+        TPlaceDTO placeDTO;
+        boolean result;
+        int id;
         
+        System.out.println("Place Id:");
+        id = Integer.parseInt(sc.nextLine());
+        placeDTO = sAgencyManager.findPlace(id);
+
+        if(placeDTO == null)
+        {
+            System.out.println("Not found a place with that id. Try again.");
+            return;
+        }
+
+        System.out.println("Place: " + placeDTO);
+
+        System.out.println("New place country:");
+        placeDTO.setCountry(sc.nextLine());
+        System.out.println("New place city:");
+        placeDTO.setCity(sc.nextLine());
+        System.out.println("New place address:");
+        placeDTO.setAddress(sc.nextLine());
+
+        result = sAgencyManager.editPlace(placeDTO);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't edit the place.");
+        else
+            System.out.println("Place edited with success!");
     }
     
     private static void processRemovePlace() throws NoPermissionException{
+        Scanner sc = new Scanner(System.in);
+        TPlaceDTO placeDTO;
+        boolean result;
+        int id;
+        int op;
         
+        
+        System.out.println("Place Id:");
+        id = Integer.parseInt(sc.nextLine());
+        placeDTO = sAgencyManager.findPlace(id);
+
+        if(placeDTO == null)
+        {
+            System.out.println("Not found a place with that id. Try again.");
+            return;
+        }
+
+
+        System.out.println("Do you want remove the place: " + placeDTO + "? [1/0]");
+        op = Integer.parseInt(sc.nextLine());
+
+        if(op == 0)
+            return;
+
+        result = sAgencyManager.removePlace(placeDTO);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't remove the place.");
+        else
+            System.out.println("Place removed with success!");
     }
     
     
@@ -465,19 +521,22 @@ public class Main {
         System.out.println(Command.LOGOUT + " - Logout");
         System.out.println("asguest - Enter as guest");
 
-        //planes        
+        //planes
+        System.out.println("\n-------Planes--------");
         System.out.println(Command.FINDALLPLANES + " - List All Planes");
         System.out.println(Command.ADDPLANE + " - Add a new plane");
         System.out.println(Command.EDITPLANE + " - Edit a plane");
         System.out.println(Command.REMOVEPLANE + " - Remove a plane");
         
-        //airlines        
+        //airlines
+        System.out.println("\n-------Airlines--------");
         System.out.println(Command.FINDALLAIRLINES + " - List All airlines");
         System.out.println(Command.ADDAIRLINE + " - Add a new airline");
         System.out.println(Command.EDITAIRLINE + " - Edit an airline");
         System.out.println(Command.REMOVEAIRLINE + " - Remove an airline");
         
-        //places        
+        //places
+        System.out.println("\n-------Places--------");
         System.out.println(Command.FINDALLPLACES + " - List All places");
         System.out.println(Command.ADDPLACE + " - Add a new place");
         System.out.println(Command.EDITPLACE + " - Edit a place");
@@ -485,6 +544,7 @@ public class Main {
         
         
         //places feedback
+        System.out.println("\n-------Feedback of Places--------");
         System.out.println(Command.FINDALLMYPLACESFEEDBACKS + " - List All my feedbacks of places");
         System.out.println(Command.ADDPLACEFEEDBACK + " - Add a new feedback of a place");
         System.out.println(Command.EDITPLACEFEEDBACK + " - Edit a feedback of a place");

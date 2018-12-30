@@ -276,12 +276,37 @@ public class TripsManager implements TripsManagerLocal {
 
     @Override
     public boolean editPlace(TPlaceDTO placeDTO, String username) throws NoPermissionException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        verifyPermission(username, Config.OPERATOR);
+        
+        TPlace place = placeFacade.find(placeDTO.getId());
+        
+        if(place == null)
+            return false;
+        
+        if(!validatePlaceDTO(placeDTO))
+            return false;
+        
+        place.setCity(placeDTO.getCity());
+        place.setCountry(placeDTO.getCountry());
+        place.setTPlacefeedbackCollection(new ArrayList());
+        if(placeDTO.getAddress() != null && !placeDTO.getAddress().isEmpty())
+            place.setAddress(placeDTO.getAddress());
+        
+        placeFacade.edit(place);
+        return true;
     }
 
     @Override
     public boolean removePlace(TPlaceDTO placeDTO, String username) throws NoPermissionException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        verifyPermission(username, Config.OPERATOR);
+        
+        TPlace place = placeFacade.find(placeDTO.getId());
+        
+        if(place == null)
+            return false;
+        placeFacade.remove(place);
+        return true;
     }
     
     private TPlaceDTO placeToDTO(TPlace place){
