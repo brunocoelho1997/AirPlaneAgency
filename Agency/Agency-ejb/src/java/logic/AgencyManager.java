@@ -127,10 +127,27 @@ public class AgencyManager implements AgencyManagerRemote {
         return tripsManagerLocal.removePlace(placeDTO, username);
     }
 //----------------------------------------------------------------------
-    //Places
+    //Feedback Places
+    @Override
+    public TPlaceFeedbackDTO findPlacefeedback(int id) {
+        return tripsManagerLocal.findPlacefeedback(id);
+    }
+    
     @Override
     public boolean addFeedbackToPlace(TPlaceDTO placeDTO, TPlaceFeedbackDTO feedbackDTO) throws NoPermissionException {
         return tripsManagerLocal.addFeedbackToPlace(placeDTO, feedbackDTO, username);
     }
+
+    @Override
+    public boolean editFeedbackOfPlace(TPlaceFeedbackDTO feedbackDTO) throws NoPermissionException {
+        return tripsManagerLocal.editFeedbackOfPlace(feedbackDTO, username);
+    }
+
+    @Override
+    public boolean removeFeedbackOfPlace(TPlaceFeedbackDTO feedbackDTO) throws NoPermissionException {
+        return tripsManagerLocal.removeFeedbackOfPlace(feedbackDTO, username);
+    }
+
+    
  
 }

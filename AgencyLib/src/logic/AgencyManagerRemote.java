@@ -35,5 +35,9 @@ public interface AgencyManagerRemote {
     boolean removePlace(TPlaceDTO placeDTO) throws NoPermissionException;
     
     //place feedback
+    TPlaceFeedbackDTO findPlacefeedback(int id);
     boolean addFeedbackToPlace(TPlaceDTO placeDTO, TPlaceFeedbackDTO feedbackDTO) throws NoPermissionException;
+    boolean editFeedbackOfPlace(TPlaceFeedbackDTO feedbackDTO) throws NoPermissionException;
+    boolean removeFeedbackOfPlace(TPlaceFeedbackDTO feedbackDTO) throws NoPermissionException;
+
 }

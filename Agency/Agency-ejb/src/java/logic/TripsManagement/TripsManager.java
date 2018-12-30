@@ -72,12 +72,12 @@ public class TripsManager implements TripsManagerLocal {
         
         verifyPermission(username, Config.OPERATOR);
 
-        for(TPlane tplane : planeFacade.findAll())
-        {
-            if(tplane.getId()==id)
-                return planeToDTO(tplane);
-        }
-        return null;
+        TPlane plane = planeFacade.find(id);
+        
+        if(plane == null)
+            return null;
+        
+        return planeToDTO(plane);
     }
     
     @Override
@@ -161,13 +161,13 @@ public class TripsManager implements TripsManagerLocal {
     @Override
     public TAirlineDTO findAirline(int id, String username) throws NoPermissionException {
         verifyPermission(username, Config.OPERATOR);
-
-        for(TAirline tairline : airlineFacade.findAll())
-        {
-            if(tairline.getId()==id)
-                return airlineToDTO(tairline);
-        }
-        return null;
+        
+        TAirline airline = airlineFacade.find(id);
+        
+        if(airline == null)
+            return null;
+        
+        return airlineToDTO(airline);
     }
 
     @Override
@@ -246,12 +246,13 @@ public class TripsManager implements TripsManagerLocal {
 
     @Override
     public TPlaceDTO findPlace(int id) {
-        for(TPlace place : placeFacade.findAll())
-        {
-            if(place.getId()==id)
-                return placeToDTO(place);
-        }
-        return null;
+        TPlace place = placeFacade.find(id);
+        
+        if(place == null)
+            return null;
+        
+        return placeToDTO(place);
+        
     }
 
     @Override
@@ -369,6 +370,39 @@ public class TripsManager implements TripsManagerLocal {
         return true;
     }
     
+    @Override
+    public TPlaceFeedbackDTO findPlacefeedback(int id) {
+        TPlacefeedback placeFeedback = placeFeedbackFacade.find(id);
+        
+        if(placeFeedback == null)
+            return null;
+        
+        return placeFeedbackToDTO(placeFeedback);
+    }
+    
+    @Override
+    public boolean editFeedbackOfPlace(TPlaceFeedbackDTO feedbackDTO, String username) throws NoPermissionException {
+        verifyPermission(username, Config.CLIENT);
+        
+        TPlacefeedback placeFeedback = placeFeedbackFacade.find(feedbackDTO.getId());
+        
+        if(placeFeedback == null)
+            return false;
+        
+        //se o comentario for de um user diferente do que esta a alterar manda excecao
+        if(!placeFeedback.getUserid().getUsername().equals(username))
+            throw new NoPermissionException(Config.msgNoPermissionFeedback);
+        
+        if(!validatePlaceFeedbackDTO(feedbackDTO))
+            return false;
+        
+        placeFeedback.setScore(feedbackDTO.getScore());
+        
+        placeFeedbackFacade.edit(placeFeedback);
+        
+        return true;
+    }
+    
     private TPlaceFeedbackDTO placeFeedbackToDTO(TPlacefeedback feedback){
         return new TPlaceFeedbackDTO(feedback.getId(), feedback.getScore());
     }
@@ -384,6 +418,31 @@ public class TripsManager implements TripsManagerLocal {
         return true;
     }
     
+    @Override
+    public boolean removeFeedbackOfPlace(TPlaceFeedbackDTO feedbackDTO, String username) throws NoPermissionException {
+        verifyPermission(username, Config.CLIENT);
+        
+        TPlacefeedback placeFeedback = placeFeedbackFacade.find(feedbackDTO.getId());
+        
+        if(placeFeedback == null)
+            return false;
+        
+        TPlace place = placeFeedback.getPlaceid();
+        
+        if(place == null)
+            return false;
+        
+        //se o comentario for de um user diferente do que esta a alterar manda excecao
+        if(!placeFeedback.getUserid().getUsername().equals(username))
+            throw new NoPermissionException(Config.msgNoPermissionFeedback);
+        
+        placeFeedbackFacade.remove(placeFeedback);
+        
+        place.getTPlacefeedbackCollection().remove(placeFeedback);
+        placeFacade.edit(place);
+        
+        return true;
+    }
     //-----------------------------------------------------------------------------------------------------------------
     //auxiliar methods
     
@@ -403,5 +462,11 @@ public class TripsManager implements TripsManagerLocal {
         if(userDTO.getUsertype() == Config.CLIENT && permissionType != Config.CLIENT)
             throw new NoPermissionException(Config.msgNoPermissionOperator);       
     }
+
+    
+
+    
+
+    
 
 }

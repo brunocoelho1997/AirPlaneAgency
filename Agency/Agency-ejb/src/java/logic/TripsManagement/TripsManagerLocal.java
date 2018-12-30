@@ -42,6 +42,9 @@ public interface TripsManagerLocal {
     boolean removePlace(TPlaceDTO placeDTO, String username) throws NoPermissionException;
     
     //place feedback
+    TPlaceFeedbackDTO findPlacefeedback(int id);
     boolean addFeedbackToPlace(TPlaceDTO placeDTO, TPlaceFeedbackDTO feedbackDTO, String username) throws NoPermissionException;
+    boolean editFeedbackOfPlace(TPlaceFeedbackDTO feedbackDTO, String username) throws NoPermissionException;
+    boolean removeFeedbackOfPlace(TPlaceFeedbackDTO feedbackDTO, String username) throws NoPermissionException;
 
 }

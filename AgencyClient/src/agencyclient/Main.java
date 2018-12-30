@@ -95,6 +95,12 @@ public class Main {
                     case Command.ADDPLACEFEEDBACK:
                         processAddPlaceFeedback();
                         break;
+                    case Command.EDITPLACEFEEDBACK:
+                        processEditPlaceFeedback();
+                        break;
+                    case Command.REMOVEPLACEFEEDBACK:
+                        processRemovePlaceFeedback();
+                        break;
                     default:
                         System.out.println("Command not found. Type help to get a command list.");
 
@@ -457,8 +463,7 @@ public class Main {
             System.out.println("Not found a place with that id. Try again.");
             return;
         }
-
-
+        
         System.out.println("Do you want remove the place: " + placeDTO + "? [1/0]");
         op = Integer.parseInt(sc.nextLine());
 
@@ -510,7 +515,66 @@ public class Main {
     private static void processMyPlacesFeedbackFindAll() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    //----------------------------------------------------
+    
+    private static void processEditPlaceFeedback() throws NoPermissionException{
+        Scanner sc = new Scanner(System.in);
+        TPlaceFeedbackDTO placeFeedbackDTO;
+        boolean result;
+        int id;
+        
+        System.out.println("Place feedback Id:");
+        id = Integer.parseInt(sc.nextLine());
+        placeFeedbackDTO = sAgencyManager.findPlacefeedback(id);
+
+        if(placeFeedbackDTO == null)
+        {
+            System.out.println("Not found a place's feedback with that id. Try again.");
+            return;
+        }
+
+        System.out.println("Place: " + placeFeedbackDTO);
+
+        System.out.println("Score: ");
+        placeFeedbackDTO.setScore(Integer.parseInt(sc.nextLine()));
+        
+        
+        result = sAgencyManager.editFeedbackOfPlace(placeFeedbackDTO);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't edited the feedback.");
+        else
+            System.out.println("Feedback edited with success!");
+    }
+    
+    private static void processRemovePlaceFeedback() throws NoPermissionException{
+        Scanner sc = new Scanner(System.in);
+        TPlaceFeedbackDTO placeFeedbackDTO;
+        boolean result;
+        int id;
+        int op;
+        
+        System.out.println("Place feedback Id:");
+        id = Integer.parseInt(sc.nextLine());
+        placeFeedbackDTO = sAgencyManager.findPlacefeedback(id);
+
+        if(placeFeedbackDTO == null)
+        {
+            System.out.println("Not found a place's feedback with that id. Try again.");
+            return;
+        }
+        
+        System.out.println("Do you want remove the place: " + placeFeedbackDTO + "? [1/0]");
+        op = Integer.parseInt(sc.nextLine());
+
+        if(op == 0)
+            return;
+        
+        result = sAgencyManager.removeFeedbackOfPlace(placeFeedbackDTO);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't removed the feedback.");
+        else
+            System.out.println("Feedback removed with success!");
+    }
+//----------------------------------------------------
     //Auxiliar methods
     private static void printCommandList(){
         System.out.println("\n-- Help --");
@@ -553,8 +617,7 @@ public class Main {
         System.out.println(Command.EXIT + " - Exit");
         System.out.println("----------------");
     }
-    
-    
+      
     private static void initRemoteReferences() {
         Properties prop = new Properties();
 
@@ -589,8 +652,5 @@ public class Main {
         }
     }
 
-    
-
-    
     
 }

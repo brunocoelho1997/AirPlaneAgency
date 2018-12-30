@@ -103,4 +103,6 @@ public class Config {
     public static final int CLIENT = 1;
     
     public static final String msgNoPermissionOperator = "No permissions to invoke the method. Just an operator has permissions and accepted.";
+    public static final String msgNoPermissionFeedback= "No permission to change the place's feedback of other user.";
+
 }

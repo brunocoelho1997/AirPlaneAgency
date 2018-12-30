@@ -34,6 +34,6 @@ public class Command {
     //places feedback
     public static final String FINDALLMYPLACESFEEDBACKS = "findallmyplacesfeedbacks";
     public static final String ADDPLACEFEEDBACK = "addplacefeedback";
-    public static final String EDITPLACEFEEDBACK = "editplace";
-    public static final String REMOVEPLACEFEEDBACK = "removeplace";
+    public static final String EDITPLACEFEEDBACK = "editplacefeedback";
+    public static final String REMOVEPLACEFEEDBACK = "removeplacefeedback";
 }
