@@ -337,6 +337,10 @@ public class TripsManager implements TripsManagerLocal {
         placeFeedback.setScore(feedbackDTO.getScore());
         
         placeFeedbackFacade.create(placeFeedback);
+        
+        place.getTPlacefeedbackCollection().add(placeFeedback);
+        placeFacade.edit(place);
+        
         return true;
     }
     
