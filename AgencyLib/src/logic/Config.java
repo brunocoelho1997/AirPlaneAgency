@@ -14,7 +14,14 @@ package logic;
 
 SQL COMMANDS
 
+--------------------------------------------------------------------
+---------------------------WARNING----------------------------------
 
+depois de ter as tabelas todas na base de dados e as quisermos transoformar em classes com o witcher do netbeans fazer:
+1 - transformar tabela para classe uma a uma... para poder realizar todas as foreign keys...
+2 - dps ai podemos fazer o facade de todas as entities de uma vez que correra' tudo bem
+
+--------------------------------------------------------------------
 -Plane
 
 drop sequence if exists plane_seq;
@@ -30,6 +37,7 @@ create table t_plane(
 );
 
 
+--------------------------------------------------------------------
 -User
 
 drop sequence if exists user_seq;
@@ -49,6 +57,7 @@ create table t_user(
 );
 
 
+--------------------------------------------------------------------
 - Airline
 
 drop sequence if exists airline_seq;
@@ -63,6 +72,7 @@ create table t_airline(
     phonenumber varchar(30) not null
 );
 
+--------------------------------------------------------------------
 -Place
 
 drop sequence if exists place_seq;
@@ -78,6 +88,7 @@ create table t_place(
     address varchar(150) not null
 );
 
+--------------------------------------------------------------------
 -placefeedback
 
 drop sequence if exists placefeedback_seq;
@@ -93,8 +104,108 @@ create table t_placefeedback(
     userid int not null,
     score int not null,
 
-    constraint fk foreign key (placeid) references t_place (id),
-    foreign key (userid) references t_user (id)
+    constraint fk1 foreign key (placeid) references t_place (id),
+    constraint fk2 foreign key (userid) references t_user (id)
+);
+
+
+
+--------------------------------------------------------------------
+- trip
+
+drop sequence if exists trip_seq;
+
+create sequence trip_seq;
+
+drop table if exists t_trip;
+
+
+create table t_trip(
+    id int primary key default nextval('trip_seq'),
+    price float,
+    done boolean,
+    canceled boolean,
+    placeid int not null,
+    airlineid int not null,
+    planeid int not null,
+
+    constraint fk1 foreign key (placeid) references t_place (id),
+    constraint fk2 foreign key (airlineid) references t_airline (id),
+    constraint fk3 foreign key (planeid) references t_plane (id)
+
+);
+
+
+--------------------------------------------------------------------
+-seat
+
+drop sequence if exists seat_seq;
+
+create sequence seat_seq;
+
+drop table if exists t_seat;
+
+
+create table t_seat(
+    id int primary key default nextval('seat_seq'),
+    luggage varchar(30) not null,
+    auctioned boolean,
+    price float,
+    tripid int not null,
+    userid int not null,
+
+    constraint fk1 foreign key (tripid) references t_trip (id),
+    constraint fk2 foreign key (userid) references t_user (id)
+);
+
+--------------------------------------------------------------------
+- purchase
+
+drop sequence if exists purchase_seq;
+
+create sequence purchase_seq;
+
+drop table if exists t_purchase;
+
+
+create table t_purchase(
+    id int primary key default nextval('purchase_seq'),
+    userid int not null,
+
+    constraint fk foreign key (userid) references t_user (id)
+);
+
+--------------------------------------------------------------------
+- purchase and trip (JOIN)
+
+drop table if exists t_purchase_trip;
+
+create table t_purchase_trip(
+    purchaseid int not null,    
+    tripid int not null,
+   
+    
+    constraint fk1 foreign key (purchaseid) references t_purchase (id),
+    constraint fk2 foreign key (tripid) references t_trip (id)
+);
+--------------------------------------------------------------------
+- trip feedback
+drop sequence if exists tripfeedback_seq;
+
+create sequence tripfeedback_seq;
+
+drop table if exists t_tripfeedback;
+
+
+create table t_tripfeedback(
+    id int primary key default nextval('tripfeedback_seq'),
+    score int not null,
+    tripid int not null,
+    userid int not null,
+   
+
+    constraint fk1 foreign key (tripid) references t_trip (id),
+    constraint fk2 foreign key (userid) references t_user (id)
 );
 
 */

@@ -5,8 +5,7 @@
  */
 package logic.TripsManagement;
 
-import logic.TripsManagement.TPlane.TPlane;
-import logic.TripsManagement.TPlane.TPlaneFacadeLocal;
+import logic.TripsManagement.TPlane;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -20,12 +19,10 @@ import logic.TPlaceFeedbackDTO;
 import logic.TPlaceDTO;
 import logic.TPlaneDTO;
 import logic.TUserDTO;
-import logic.TripsManagement.TAirline.TAirline;
-import logic.TripsManagement.TAirline.TAirlineFacadeLocal;
-import logic.TripsManagement.TPlace.TPlace;
-import logic.TripsManagement.TPlace.TPlaceFacadeLocal;
-import logic.TripsManagement.TPlaceFeedback.TPlacefeedback;
-import logic.TripsManagement.TPlaceFeedback.TPlacefeedbackFacadeLocal;
+import logic.TripsManagement.TAirline;
+import logic.TripsManagement.TAirlineFacadeLocal;
+import logic.TripsManagement.TPlace;
+import logic.TripsManagement.TPlaceFacadeLocal;
 import logic.UsersManagement.TUser;
 import logic.UsersManagement.TUserFacadeLocal;
 import logic.UsersManagement.UsersManagerLocal;

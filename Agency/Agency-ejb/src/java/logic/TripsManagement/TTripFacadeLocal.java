@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package logic.TripsManagement.TAirline;
+package logic.TripsManagement;
 
 import java.util.List;
 import javax.ejb.Local;
@@ -13,19 +13,19 @@ import javax.ejb.Local;
  * @author bruno
  */
 @Local
-public interface TAirlineFacadeLocal {
+public interface TTripFacadeLocal {
 
-    void create(TAirline tAirline);
+    void create(TTrip tTrip);
 
-    void edit(TAirline tAirline);
+    void edit(TTrip tTrip);
 
-    void remove(TAirline tAirline);
+    void remove(TTrip tTrip);
 
-    TAirline find(Object id);
+    TTrip find(Object id);
 
-    List<TAirline> findAll();
+    List<TTrip> findAll();
 
-    List<TAirline> findRange(int[] range);
+    List<TTrip> findRange(int[] range);
 
     int count();
     

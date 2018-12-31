@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package logic.TripsManagement.TPlaceFeedback;
+package logic.TripsManagement;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,12 +14,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import logic.TripsManagement.TPlace.TPlace;
+import javax.xml.bind.annotation.XmlTransient;
 import logic.UsersManagement.TUser;
 
 /**
@@ -26,13 +29,18 @@ import logic.UsersManagement.TUser;
  * @author bruno
  */
 @Entity
-@Table(name = "t_placefeedback")
+@Table(name = "t_purchase")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "TPlacefeedback.findAll", query = "SELECT t FROM TPlacefeedback t")
-    , @NamedQuery(name = "TPlacefeedback.findById", query = "SELECT t FROM TPlacefeedback t WHERE t.id = :id")
-    , @NamedQuery(name = "TPlacefeedback.findByScore", query = "SELECT t FROM TPlacefeedback t WHERE t.score = :score")})
-public class TPlacefeedback implements Serializable {
+    @NamedQuery(name = "TPurchase.findAll", query = "SELECT t FROM TPurchase t")
+    , @NamedQuery(name = "TPurchase.findById", query = "SELECT t FROM TPurchase t WHERE t.id = :id")})
+public class TPurchase implements Serializable {
+
+    @JoinTable(name = "t_purchase_trip", joinColumns = {
+        @JoinColumn(name = "purchaseid", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "tripid", referencedColumnName = "id")})
+    @ManyToMany
+    private Collection<TTrip> tTripCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -40,26 +48,15 @@ public class TPlacefeedback implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
-    @Column(name = "score")
-    private int score;
-    @JoinColumn(name = "placeid", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private TPlace placeid;
     @JoinColumn(name = "userid", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private TUser userid;
 
-    public TPlacefeedback() {
+    public TPurchase() {
     }
 
-    public TPlacefeedback(Integer id) {
+    public TPurchase(Integer id) {
         this.id = id;
-    }
-
-    public TPlacefeedback(Integer id, int score) {
-        this.id = id;
-        this.score = score;
     }
 
     public Integer getId() {
@@ -68,22 +65,6 @@ public class TPlacefeedback implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    public TPlace getPlaceid() {
-        return placeid;
-    }
-
-    public void setPlaceid(TPlace placeid) {
-        this.placeid = placeid;
     }
 
     public TUser getUserid() {
@@ -104,10 +85,10 @@ public class TPlacefeedback implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TPlacefeedback)) {
+        if (!(object instanceof TPurchase)) {
             return false;
         }
-        TPlacefeedback other = (TPlacefeedback) object;
+        TPurchase other = (TPurchase) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -116,7 +97,16 @@ public class TPlacefeedback implements Serializable {
 
     @Override
     public String toString() {
-        return "logic.TripsManagement.TPlaceFeedback.TPlacefeedback[ id=" + id + " ]";
+        return "logic.TripsManagement.TPurchase[ id=" + id + " ]";
+    }
+
+    @XmlTransient
+    public Collection<TTrip> getTTripCollection() {
+        return tTripCollection;
+    }
+
+    public void setTTripCollection(Collection<TTrip> tTripCollection) {
+        this.tTripCollection = tTripCollection;
     }
     
 }

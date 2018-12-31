@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package logic.TripsManagement.TPlace;
+package logic.TripsManagement;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -14,7 +14,7 @@ import javax.persistence.PersistenceContext;
  * @author bruno
  */
 @Stateless
-public class TPlaceFacade extends AbstractFacade<TPlace> implements TPlaceFacadeLocal {
+public class TAirlineFacade extends AbstractFacade<TAirline> implements TAirlineFacadeLocal {
 
     @PersistenceContext(unitName = "Agency-ejbPU")
     private EntityManager em;
@@ -24,8 +24,8 @@ public class TPlaceFacade extends AbstractFacade<TPlace> implements TPlaceFacade
         return em;
     }
 
-    public TPlaceFacade() {
-        super(TPlace.class);
+    public TAirlineFacade() {
+        super(TAirline.class);
     }
     
 }

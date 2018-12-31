@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package logic.TripsManagement.TPlane;
+package logic.TripsManagement;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
@@ -12,24 +12,26 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import logic.UsersManagement.TUser;
 
 /**
  *
  * @author bruno
  */
 @Entity
-@Table(name = "t_plane")
+@Table(name = "t_placefeedback")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "TPlane.findAll", query = "SELECT t FROM TPlane t")
-    , @NamedQuery(name = "TPlane.findById", query = "SELECT t FROM TPlane t WHERE t.id = :id")
-    , @NamedQuery(name = "TPlane.findByPlanename", query = "SELECT t FROM TPlane t WHERE t.planename = :planename")
-    , @NamedQuery(name = "TPlane.findByPlanelimit", query = "SELECT t FROM TPlane t WHERE t.planelimit = :planelimit")})
-public class TPlane implements Serializable {
+    @NamedQuery(name = "TPlacefeedback.findAll", query = "SELECT t FROM TPlacefeedback t")
+    , @NamedQuery(name = "TPlacefeedback.findById", query = "SELECT t FROM TPlacefeedback t WHERE t.id = :id")
+    , @NamedQuery(name = "TPlacefeedback.findByScore", query = "SELECT t FROM TPlacefeedback t WHERE t.score = :score")})
+public class TPlacefeedback implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -38,23 +40,25 @@ public class TPlane implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @Column(name = "planename")
-    private String planename;
-    @Basic(optional = false)
-    @Column(name = "planelimit")
-    private int planelimit;
+    @Column(name = "score")
+    private int score;
+    @JoinColumn(name = "placeid", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private TPlace placeid;
+    @JoinColumn(name = "userid", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private TUser userid;
 
-    public TPlane() {
+    public TPlacefeedback() {
     }
 
-    public TPlane(Integer id) {
+    public TPlacefeedback(Integer id) {
         this.id = id;
     }
 
-    public TPlane(Integer id, String planename, int planelimit) {
+    public TPlacefeedback(Integer id, int score) {
         this.id = id;
-        this.planename = planename;
-        this.planelimit = planelimit;
+        this.score = score;
     }
 
     public Integer getId() {
@@ -65,20 +69,28 @@ public class TPlane implements Serializable {
         this.id = id;
     }
 
-    public String getPlanename() {
-        return planename;
+    public int getScore() {
+        return score;
     }
 
-    public void setPlanename(String planename) {
-        this.planename = planename;
+    public void setScore(int score) {
+        this.score = score;
     }
 
-    public int getPlanelimit() {
-        return planelimit;
+    public TPlace getPlaceid() {
+        return placeid;
     }
 
-    public void setPlanelimit(int planelimit) {
-        this.planelimit = planelimit;
+    public void setPlaceid(TPlace placeid) {
+        this.placeid = placeid;
+    }
+
+    public TUser getUserid() {
+        return userid;
+    }
+
+    public void setUserid(TUser userid) {
+        this.userid = userid;
     }
 
     @Override
@@ -91,10 +103,10 @@ public class TPlane implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TPlane)) {
+        if (!(object instanceof TPlacefeedback)) {
             return false;
         }
-        TPlane other = (TPlane) object;
+        TPlacefeedback other = (TPlacefeedback) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -103,7 +115,7 @@ public class TPlane implements Serializable {
 
     @Override
     public String toString() {
-        return "logic.TripsManagement.TPlane[ id=" + id + " ]";
+        return "logic.TripsManagement.TPlacefeedback[ id=" + id + " ]";
     }
     
 }

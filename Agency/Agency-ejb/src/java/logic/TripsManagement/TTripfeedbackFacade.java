@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package logic.TripsManagement.TAirline;
+package logic.TripsManagement;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -14,7 +14,7 @@ import javax.persistence.PersistenceContext;
  * @author bruno
  */
 @Stateless
-public class TAirlineFacade extends AbstractFacade<TAirline> implements TAirlineFacadeLocal {
+public class TTripfeedbackFacade extends AbstractFacade<TTripfeedback> implements TTripfeedbackFacadeLocal {
 
     @PersistenceContext(unitName = "Agency-ejbPU")
     private EntityManager em;
@@ -24,8 +24,8 @@ public class TAirlineFacade extends AbstractFacade<TAirline> implements TAirline
         return em;
     }
 
-    public TAirlineFacade() {
-        super(TAirline.class);
+    public TTripfeedbackFacade() {
+        super(TTripfeedback.class);
     }
     
 }

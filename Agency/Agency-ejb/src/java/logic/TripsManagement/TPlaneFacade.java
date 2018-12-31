@@ -3,19 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package logic.TripsManagement.TPlace;
+package logic.TripsManagement;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import logic.TripsManagement.TPlaceFeedback.TPlacefeedback;
 
 /**
  *
  * @author bruno
  */
 @Stateless
-public class TPlacefeedbackFacade extends AbstractFacade<TPlacefeedback> implements TPlacefeedbackFacadeLocal {
+public class TPlaneFacade extends AbstractFacade<TPlane> implements TPlaneFacadeLocal {
 
     @PersistenceContext(unitName = "Agency-ejbPU")
     private EntityManager em;
@@ -25,8 +24,8 @@ public class TPlacefeedbackFacade extends AbstractFacade<TPlacefeedback> impleme
         return em;
     }
 
-    public TPlacefeedbackFacade() {
-        super(TPlacefeedback.class);
+    public TPlaneFacade() {
+        super(TPlane.class);
     }
     
 }

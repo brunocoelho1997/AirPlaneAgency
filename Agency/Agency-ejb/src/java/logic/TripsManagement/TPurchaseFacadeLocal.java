@@ -3,30 +3,29 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package logic.TripsManagement.TPlace;
+package logic.TripsManagement;
 
 import java.util.List;
 import javax.ejb.Local;
-import logic.UsersManagement.TUser;
 
 /**
  *
  * @author bruno
  */
 @Local
-public interface TUserFacadeLocal {
+public interface TPurchaseFacadeLocal {
 
-    void create(TUser tUser);
+    void create(TPurchase tPurchase);
 
-    void edit(TUser tUser);
+    void edit(TPurchase tPurchase);
 
-    void remove(TUser tUser);
+    void remove(TPurchase tPurchase);
 
-    TUser find(Object id);
+    TPurchase find(Object id);
 
-    List<TUser> findAll();
+    List<TPurchase> findAll();
 
-    List<TUser> findRange(int[] range);
+    List<TPurchase> findRange(int[] range);
 
     int count();
     

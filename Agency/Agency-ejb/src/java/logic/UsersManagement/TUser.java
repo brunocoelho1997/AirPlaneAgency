@@ -20,7 +20,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import logic.TripsManagement.TPlaceFeedback.TPlacefeedback;
+import logic.TripsManagement.TPlacefeedback;
+import logic.TripsManagement.TPurchase;
+import logic.TripsManagement.TSeat;
+import logic.TripsManagement.TTripfeedback;
 
 /**
  *
@@ -39,6 +42,15 @@ import logic.TripsManagement.TPlaceFeedback.TPlacefeedback;
     , @NamedQuery(name = "TUser.findByBalance", query = "SELECT t FROM TUser t WHERE t.balance = :balance")
     , @NamedQuery(name = "TUser.findByAccepted", query = "SELECT t FROM TUser t WHERE t.accepted = :accepted")})
 public class TUser implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userid")
+    private Collection<TPurchase> tPurchaseCollection;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userid")
+    private Collection<TSeat> tSeatCollection;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userid")
+    private Collection<TTripfeedback> tTripfeedbackCollection;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userid")
     private Collection<TPlacefeedback> tPlacefeedbackCollection;
@@ -168,6 +180,33 @@ public class TUser implements Serializable {
 
     public void setTPlacefeedbackCollection(Collection<TPlacefeedback> tPlacefeedbackCollection) {
         this.tPlacefeedbackCollection = tPlacefeedbackCollection;
+    }
+
+    @XmlTransient
+    public Collection<TTripfeedback> getTTripfeedbackCollection() {
+        return tTripfeedbackCollection;
+    }
+
+    public void setTTripfeedbackCollection(Collection<TTripfeedback> tTripfeedbackCollection) {
+        this.tTripfeedbackCollection = tTripfeedbackCollection;
+    }
+
+    @XmlTransient
+    public Collection<TSeat> getTSeatCollection() {
+        return tSeatCollection;
+    }
+
+    public void setTSeatCollection(Collection<TSeat> tSeatCollection) {
+        this.tSeatCollection = tSeatCollection;
+    }
+
+    @XmlTransient
+    public Collection<TPurchase> getTPurchaseCollection() {
+        return tPurchaseCollection;
+    }
+
+    public void setTPurchaseCollection(Collection<TPurchase> tPurchaseCollection) {
+        this.tPurchaseCollection = tPurchaseCollection;
     }
     
 }

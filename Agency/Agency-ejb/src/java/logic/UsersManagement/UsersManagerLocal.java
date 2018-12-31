@@ -19,5 +19,4 @@ public interface UsersManagerLocal {
     boolean acceptTUser(TUserDTO userDTO, String username);
     TUserDTO getTUserDTO(String username);
     TUser getTUserByUsername(String usernameOfWantedUser);
-    
 }

@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package logic.TripsManagement.TPlace;
+package logic.TripsManagement;
 
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,7 +20,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import logic.TripsManagement.TPlaceFeedback.TPlacefeedback;
 
 /**
  *
@@ -36,7 +36,10 @@ import logic.TripsManagement.TPlaceFeedback.TPlacefeedback;
     , @NamedQuery(name = "TPlace.findByAddress", query = "SELECT t FROM TPlace t WHERE t.address = :address")})
 public class TPlace implements Serializable {
 
-    @OneToMany(mappedBy = "placeid")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "placeid")
+    private Collection<TTrip> tTripCollection;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "placeid")
     private Collection<TPlacefeedback> tPlacefeedbackCollection;
 
     private static final long serialVersionUID = 1L;
@@ -123,10 +126,8 @@ public class TPlace implements Serializable {
 
     @Override
     public String toString() {
-        return "TPlace{" + "tPlacefeedbackCollection=" + tPlacefeedbackCollection + ", id=" + id + ", country=" + country + ", city=" + city + ", address=" + address + '}';
+        return "logic.TripsManagement.TPlace[ id=" + id + " ]";
     }
-
-    
 
     @XmlTransient
     public Collection<TPlacefeedback> getTPlacefeedbackCollection() {
@@ -135,6 +136,15 @@ public class TPlace implements Serializable {
 
     public void setTPlacefeedbackCollection(Collection<TPlacefeedback> tPlacefeedbackCollection) {
         this.tPlacefeedbackCollection = tPlacefeedbackCollection;
+    }
+
+    @XmlTransient
+    public Collection<TTrip> getTTripCollection() {
+        return tTripCollection;
+    }
+
+    public void setTTripCollection(Collection<TTrip> tTripCollection) {
+        this.tTripCollection = tTripCollection;
     }
     
 }

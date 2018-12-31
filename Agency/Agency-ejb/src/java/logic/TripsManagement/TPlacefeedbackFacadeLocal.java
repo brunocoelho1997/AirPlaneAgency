@@ -3,11 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package logic.TripsManagement.TPlace;
+package logic.TripsManagement;
 
 import java.util.List;
 import javax.ejb.Local;
-import logic.TripsManagement.TPlaceFeedback.TPlacefeedback;
 
 /**
  *
