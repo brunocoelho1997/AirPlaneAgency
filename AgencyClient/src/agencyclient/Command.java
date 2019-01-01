@@ -36,4 +36,14 @@ public class Command {
     public static final String ADDPLACEFEEDBACK = "addplacefeedback";
     public static final String EDITPLACEFEEDBACK = "editplacefeedback";
     public static final String REMOVEPLACEFEEDBACK = "removeplacefeedback";
+    
+    //trip
+    public static final String FINDALLTRIPS = "findalltrips";
+    public static final String ADDTRIP = "addtrip";
+    public static final String EDITTRIP = "edittrip";
+    public static final String REMOVETRIP = "removetrip";
+    public static final String CANCELTRIP = "canceltrip";
+    public static final String SETTRIPDONE = "settripdone";
+    
+    
 }

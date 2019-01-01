@@ -40,4 +40,14 @@ public interface AgencyManagerRemote {
     boolean editFeedbackOfPlace(TPlaceFeedbackDTO feedbackDTO) throws NoPermissionException;
     boolean removeFeedbackOfPlace(TPlaceFeedbackDTO feedbackDTO) throws NoPermissionException;
 
+    //trip
+
+    List<TTripDTO> findAllTrips();
+    TTripDTO findTrip(int id);
+    boolean addTrip(TTripDTO tripDTO) throws NoPermissionException;
+    boolean editTrip(TTripDTO tripDTO) throws NoPermissionException;
+    boolean removeTrip(TTripDTO tripDTO) throws NoPermissionException;
+    boolean cancelTrip(TTripDTO tripDTO) throws NoPermissionException;
+    boolean setTripDone(TTripDTO tripDTO) throws NoPermissionException;
+
 }

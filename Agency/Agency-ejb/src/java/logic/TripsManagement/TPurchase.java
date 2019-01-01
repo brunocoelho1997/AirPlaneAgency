@@ -36,18 +36,17 @@ import logic.UsersManagement.TUser;
     , @NamedQuery(name = "TPurchase.findById", query = "SELECT t FROM TPurchase t WHERE t.id = :id")})
 public class TPurchase implements Serializable {
 
-    @JoinTable(name = "t_purchase_trip", joinColumns = {
-        @JoinColumn(name = "purchaseid", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "tripid", referencedColumnName = "id")})
-    @ManyToMany
-    private Collection<TTrip> tTripCollection;
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    @JoinTable(name = "t_purchase_trip", joinColumns = {
+        @JoinColumn(name = "purchaseid", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "tripid", referencedColumnName = "id")})
+    @ManyToMany
+    private Collection<TTrip> tTripCollection;
     @JoinColumn(name = "userid", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private TUser userid;
@@ -65,6 +64,15 @@ public class TPurchase implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @XmlTransient
+    public Collection<TTrip> getTTripCollection() {
+        return tTripCollection;
+    }
+
+    public void setTTripCollection(Collection<TTrip> tTripCollection) {
+        this.tTripCollection = tTripCollection;
     }
 
     public TUser getUserid() {
@@ -98,15 +106,6 @@ public class TPurchase implements Serializable {
     @Override
     public String toString() {
         return "logic.TripsManagement.TPurchase[ id=" + id + " ]";
-    }
-
-    @XmlTransient
-    public Collection<TTrip> getTTripCollection() {
-        return tTripCollection;
-    }
-
-    public void setTTripCollection(Collection<TTrip> tTripCollection) {
-        this.tTripCollection = tTripCollection;
     }
     
 }

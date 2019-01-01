@@ -11,6 +11,7 @@ import logic.TAirlineDTO;
 import logic.TPlaceDTO;
 import logic.TPlaceFeedbackDTO;
 import logic.TPlaneDTO;
+import logic.TTripDTO;
 import logic.TUserDTO;
 
 public class Main {
@@ -100,6 +101,24 @@ public class Main {
                         break;
                     case Command.REMOVEPLACEFEEDBACK:
                         processRemovePlaceFeedback();
+                        break;
+                    case Command.FINDALLTRIPS:
+                        processTripsFindAll();
+                        break;
+                    case Command.ADDTRIP:
+                        processAddTrip();
+                        break;
+                    case Command.EDITTRIP:
+                        processEditTrip();
+                        break;
+                    case Command.REMOVETRIP:
+                        processRemoveTrip();
+                        break;
+                    case Command.CANCELTRIP:
+                        processCancelTrip();
+                        break;
+                    case Command.SETTRIPDONE:
+                        processSetDoneTrip();
                         break;
                     default:
                         System.out.println("Command not found. Type help to get a command list.");
@@ -477,7 +496,7 @@ public class Main {
             System.out.println("Place removed with success!");
     }
     
-    
+    //----------------------------------------------------
     //places feedback
     private static void processAddPlaceFeedback() throws NoPermissionException {
         Scanner sc = new Scanner(System.in);
@@ -574,6 +593,95 @@ public class Main {
         else
             System.out.println("Feedback removed with success!");
     }
+
+
+//----------------------------------------------------
+    //trips
+    
+    private static void processTripsFindAll(){
+        System.out.println("All trips in the system:");
+       
+        for(TTripDTO tripDTO : sAgencyManager.findAllTrips())
+            System.out.println(tripDTO);
+
+    }
+    private static void processAddTrip() throws NoPermissionException{
+        Scanner sc = new Scanner(System.in);
+        TTripDTO tripDTO = new TTripDTO();
+        int placeid, planeid, airlineid;
+        TPlaceDTO tPlaceDTO = null;
+        TPlaneDTO tPlaneDTO = null;
+        TAirlineDTO tAirlineDTO = null;
+        
+        boolean result;
+        
+        System.out.println("Place Id:");
+        placeid = Integer.parseInt(sc.nextLine());
+        tPlaceDTO = sAgencyManager.findPlace(placeid);
+
+        if(tPlaceDTO == null)
+        {
+            System.out.println("Not found a place with that id. Try again.");
+            return;
+        }
+        System.out.println("Place: " + tPlaceDTO);
+        
+        //-------------
+        System.out.println("Plane Id:");
+        planeid = Integer.parseInt(sc.nextLine());
+        tPlaneDTO = sAgencyManager.findPlane(planeid);
+
+        if(tPlaneDTO == null)
+        {
+            System.out.println("Not found a plane with that id. Try again.");
+            return;
+        }
+        System.out.println("Plane: " + tPlaneDTO);
+        //----
+        System.out.println("Airline Id:");
+        airlineid = Integer.parseInt(sc.nextLine());
+        tAirlineDTO = sAgencyManager.findAirline(airlineid);
+
+        if(tAirlineDTO == null)
+        {
+            System.out.println("Not found a airline with that id. Try again.");
+            return;
+        }
+        System.out.println("Airline: " + tAirlineDTO);
+        
+        //-----------------
+        
+        tripDTO.setPlaceDTO(tPlaceDTO);
+        tripDTO.setAirlineDTO(tAirlineDTO);
+        tripDTO.setPlaneDTO(tPlaneDTO);
+        
+        
+        System.out.println("Score: ");
+        tripDTO.setPrice(Double.parseDouble(sc.nextLine()));
+        
+        
+        result = sAgencyManager.addTrip(tripDTO);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't added the trip.");
+        else
+            System.out.println("Trip added with success!");
+
+
+    }
+    private static void processEditTrip() throws NoPermissionException{
+
+    }
+
+    private static void processRemoveTrip() throws NoPermissionException{
+
+    }
+    private static void processCancelTrip() throws NoPermissionException{
+
+    }
+    private static void processSetDoneTrip() throws NoPermissionException{
+
+    }
+
 //----------------------------------------------------
     //Auxiliar methods
     private static void printCommandList(){
@@ -613,6 +721,16 @@ public class Main {
         System.out.println(Command.ADDPLACEFEEDBACK + " - Add a new feedback of a place");
         System.out.println(Command.EDITPLACEFEEDBACK + " - Edit a feedback of a place");
         System.out.println(Command.REMOVEPLACEFEEDBACK + " - Remove feedback of a place");
+        
+        //trips
+        System.out.println("\n-------Trips--------");
+        System.out.println(Command.FINDALLTRIPS + " - List All trips");
+        System.out.println(Command.ADDTRIP + " - Add a new trip");
+        System.out.println(Command.EDITTRIP + " - Edit a trip");
+        System.out.println(Command.REMOVETRIP + " - Remove a trip");
+        System.out.println(Command.CANCELTRIP + " - Cancel a trip");
+        System.out.println(Command.SETTRIPDONE + " - Set done a trip");
+        
         
         System.out.println(Command.EXIT + " - Exit");
         System.out.println("----------------");

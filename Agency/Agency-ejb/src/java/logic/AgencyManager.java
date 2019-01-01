@@ -126,7 +126,7 @@ public class AgencyManager implements AgencyManagerRemote {
     public boolean removePlace(TPlaceDTO placeDTO) throws NoPermissionException {
         return tripsManagerLocal.removePlace(placeDTO, username);
     }
-//----------------------------------------------------------------------
+    //----------------------------------------------------------------------
     //Feedback Places
     @Override
     public TPlaceFeedbackDTO findPlacefeedback(int id) {
@@ -147,7 +147,41 @@ public class AgencyManager implements AgencyManagerRemote {
     public boolean removeFeedbackOfPlace(TPlaceFeedbackDTO feedbackDTO) throws NoPermissionException {
         return tripsManagerLocal.removeFeedbackOfPlace(feedbackDTO, username);
     }
+    //----------------------------------------------------------------------    
+//Trips
+    @Override
+    public List<TTripDTO> findAllTrips() {
+        return tripsManagerLocal.findAllTrips();
+    }
 
-    
+    @Override
+    public TTripDTO findTrip(int id) {
+        return tripsManagerLocal.findTrip(id);
+    }
+
+    @Override
+    public boolean addTrip(TTripDTO tripDTO) throws NoPermissionException {
+        return tripsManagerLocal.addTrip(tripDTO, username);
+    }
+
+    @Override
+    public boolean editTrip(TTripDTO tripDTO) throws NoPermissionException {
+        return tripsManagerLocal.editTrip(tripDTO, username);
+    }
+
+    @Override
+    public boolean removeTrip(TTripDTO tripDTO) throws NoPermissionException {
+        return tripsManagerLocal.removeTrip(tripDTO, username);
+    }
+
+    @Override
+    public boolean cancelTrip(TTripDTO tripDTO) throws NoPermissionException {
+        return tripsManagerLocal.cancelTrip(tripDTO, username);
+    }
+
+    @Override
+    public boolean setTripDone(TTripDTO tripDTO) throws NoPermissionException {
+        return tripsManagerLocal.setTripDone(tripDTO, username);
+    }
  
 }

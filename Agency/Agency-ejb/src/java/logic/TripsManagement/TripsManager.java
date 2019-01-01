@@ -18,6 +18,7 @@ import logic.TAirlineDTO;
 import logic.TPlaceFeedbackDTO;
 import logic.TPlaceDTO;
 import logic.TPlaneDTO;
+import logic.TTripDTO;
 import logic.TUserDTO;
 import logic.TripsManagement.TAirline;
 import logic.TripsManagement.TAirlineFacadeLocal;
@@ -47,7 +48,13 @@ public class TripsManager implements TripsManagerLocal {
     TPlacefeedbackFacadeLocal placeFeedbackFacade;
     
     @EJB
-    TPlaceFacadeLocal placeFacade;
+    TPlaceFacadeLocal placeFacade; 
+    
+    @EJB
+    TTripFacadeLocal tripFacade;
+    
+    @EJB
+    TPurchaseFacadeLocal purchaseFacade;
     
     
     //Planes
@@ -440,7 +447,172 @@ public class TripsManager implements TripsManagerLocal {
         
         return true;
     }
-    //-----------------------------------------------------------------------------------------------------------------
+    
+
+    //-------------------------------------------------------------------------------------------------------------------
+    //trip
+  
+    @Override
+    public List<TTripDTO> findAllTrips() {
+        List<TTripDTO> tTripDTOList = new ArrayList<>();
+        for(TTrip trip : tripFacade.findAll())
+        {
+            tTripDTOList.add(tripToDTO(trip));
+        }
+        return tTripDTOList;
+    }
+
+    @Override
+    public TTripDTO findTrip(int id) {
+        TTrip trip = tripFacade.find(id);
+        
+        if(trip == null)
+            return null;
+        
+        return tripToDTO(trip);
+    }
+
+    @Override
+    public boolean addTrip(TTripDTO tripDTO, String username) throws NoPermissionException {
+        verifyPermission(username, Config.OPERATOR);
+        
+        TPlace place = placeFacade.find(tripDTO.getPlaceDTO().getId());     
+        if(place == null)
+            return false;
+        
+        TAirline airline = airlineFacade.find(tripDTO.getAirlineDTO().getId());
+        if(airline == null)
+            return false;
+        
+        TPlane plane = planeFacade.find(tripDTO.getPlaneDTO().getId());
+        if(plane == null)
+            return false;
+        
+        if(!validateTripDTO(tripDTO))
+            return false;
+        
+        TTrip trip = new TTrip();
+        trip.setPlaceid(place);
+        trip.setAirlineid(airline);
+        trip.setPlaneid(plane);
+        trip.setDone(tripDTO.getDone());
+        trip.setCanceled(tripDTO.getCanceled());
+        trip.setPrice(tripDTO.getPrice());
+        trip.setCanceled(false);
+        trip.setDone(false);
+        trip.setTPurchaseCollection(new ArrayList());
+        trip.setTSeatCollection(new ArrayList());
+        trip.setTTripfeedbackCollection(new ArrayList());
+
+        tripFacade.create(trip);
+        
+        return true;
+    }
+
+    @Override
+    public boolean editTrip(TTripDTO tripDTO, String username) throws NoPermissionException {
+        
+        verifyPermission(username, Config.OPERATOR);
+        
+        TTrip trip = tripFacade.find(tripDTO.getId());     
+        if(trip == null)
+            return false;
+        
+        TPlace place = placeFacade.find(tripDTO.getPlaceDTO().getId());     
+        if(place == null)
+            return false;
+        
+        TAirline airline = airlineFacade.find(tripDTO.getAirlineDTO().getId());
+        if(airline == null)
+            return false;
+        
+        TPlane plane = planeFacade.find(tripDTO.getPlaneDTO().getId());
+        if(plane == null)
+            return false;
+        
+        if(!validateTripDTO(tripDTO))
+            return false;
+        
+        trip.setPlaceid(place);
+        trip.setAirlineid(airline);
+        trip.setPlaneid(plane);
+        trip.setDone(tripDTO.getDone());
+        trip.setCanceled(tripDTO.getCanceled());
+        trip.setPrice(tripDTO.getPrice());
+        
+        tripFacade.edit(trip);
+        return true;
+    }
+
+    
+    //este metodo nao convem ser usado... Deve ser usado o canceltrip()
+    
+    @Override
+    public boolean removeTrip(TTripDTO tripDTO, String username) throws NoPermissionException {
+        verifyPermission(username, Config.OPERATOR);
+        
+        TTrip trip = tripFacade.find(tripDTO.getId());
+        if(trip == null)
+            return false;
+        tripFacade.remove(trip);
+        
+        //remover de todas as purchases
+        for(TPurchase purchase : purchaseFacade.findAll())
+        {
+            if(purchase.getTTripCollection().contains(trip))
+            {
+                purchase.getTTripCollection().remove(trip);
+                purchaseFacade.edit(purchase);
+            }
+        }
+        
+        return true;
+    }
+    
+    @Override
+    public boolean cancelTrip(TTripDTO tripDTO, String username) throws NoPermissionException {
+        verifyPermission(username, Config.OPERATOR);
+        
+        TTrip trip = tripFacade.find(tripDTO.getId());     
+        if(trip == null)
+            return false;
+        
+        trip.setCanceled(true);
+        
+        tripFacade.edit(trip);
+        return true;
+    }
+
+    @Override
+    public boolean setTripDone(TTripDTO tripDTO, String username) throws NoPermissionException {
+        verifyPermission(username, Config.OPERATOR);
+        
+        TTrip trip = tripFacade.find(tripDTO.getId());     
+        if(trip == null)
+            return false;
+        
+        trip.setDone(true);
+        
+        tripFacade.edit(trip);
+        return true;
+    }
+    
+    private TTripDTO tripToDTO(TTrip trip){
+        return new TTripDTO(trip.getId(), trip.getPrice(), trip.getDone(), trip.getCanceled(), airlineToDTO(trip.getAirlineid()), placeToDTO(trip.getPlaceid()), planeToDTO(trip.getPlaneid()));
+    }
+
+    private boolean validateTripDTO(TTripDTO tripDTO)
+    {
+        if(tripDTO == null)
+            return false;
+        
+        if(tripDTO.getPrice()<0)
+            return false;
+        
+        return true;
+    }
+
+//-----------------------------------------------------------------------------------------------------------------
     //auxiliar methods
     
     private void verifyPermission(String username, int permissionType) throws NoPermissionException{
@@ -459,6 +631,9 @@ public class TripsManager implements TripsManagerLocal {
         if(userDTO.getUsertype() == Config.CLIENT && permissionType != Config.CLIENT)
             throw new NoPermissionException(Config.msgNoPermissionOperator);       
     }
+
+
+    
 
     
 

@@ -43,10 +43,10 @@ public class TTrip implements Serializable {
     private Collection<TPurchase> tPurchaseCollection;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tripid")
-    private Collection<TSeat> tSeatCollection;
+    private Collection<TTripfeedback> tTripfeedbackCollection;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tripid")
-    private Collection<TTripfeedback> tTripfeedbackCollection;
+    private Collection<TSeat> tSeatCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -160,21 +160,21 @@ public class TTrip implements Serializable {
     }
 
     @XmlTransient
-    public Collection<TTripfeedback> getTTripfeedbackCollection() {
-        return tTripfeedbackCollection;
-    }
-
-    public void setTTripfeedbackCollection(Collection<TTripfeedback> tTripfeedbackCollection) {
-        this.tTripfeedbackCollection = tTripfeedbackCollection;
-    }
-
-    @XmlTransient
     public Collection<TSeat> getTSeatCollection() {
         return tSeatCollection;
     }
 
     public void setTSeatCollection(Collection<TSeat> tSeatCollection) {
         this.tSeatCollection = tSeatCollection;
+    }
+
+    @XmlTransient
+    public Collection<TTripfeedback> getTTripfeedbackCollection() {
+        return tTripfeedbackCollection;
+    }
+
+    public void setTTripfeedbackCollection(Collection<TTripfeedback> tTripfeedbackCollection) {
+        this.tTripfeedbackCollection = tTripfeedbackCollection;
     }
 
     @XmlTransient
