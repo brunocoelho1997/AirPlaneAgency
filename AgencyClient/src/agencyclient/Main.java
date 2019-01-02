@@ -48,6 +48,9 @@ public class Main {
                     case Command.HELP:
                         printCommandList();
                         break;
+                    case Command.CLS:
+                        processCLS();
+                        break;
                     case Command.EXIT:
                         listenCommand = false;
                         break;
@@ -654,11 +657,12 @@ public class Main {
         tripDTO.setPlaceDTO(tPlaceDTO);
         tripDTO.setAirlineDTO(tAirlineDTO);
         tripDTO.setPlaneDTO(tPlaneDTO);
-        
-        
-        System.out.println("Score: ");
+              
+        System.out.println("Price: ");
         tripDTO.setPrice(Double.parseDouble(sc.nextLine()));
         
+        System.out.println("Date trip: ");
+        tripDTO.setDatetrip(Integer.parseInt(sc.nextLine()));
         
         result = sAgencyManager.addTrip(tripDTO);
         if(!result)
@@ -666,20 +670,168 @@ public class Main {
         else
             System.out.println("Trip added with success!");
 
-
     }
     private static void processEditTrip() throws NoPermissionException{
+        Scanner sc = new Scanner(System.in);
+        TTripDTO tripDTO = new TTripDTO();
+        int placeid, planeid, airlineid, id;
+        TPlaceDTO tPlaceDTO = null;
+        TPlaneDTO tPlaneDTO = null;
+        TAirlineDTO tAirlineDTO = null;
+        
+        boolean result;
+        
+        System.out.println("Trip Id to edit:");
+        id = Integer.parseInt(sc.nextLine());
+        tripDTO = sAgencyManager.findTrip(id);
 
+        if(tripDTO == null)
+        {
+            System.out.println("Not found a trip with that id. Try again.");
+            return;
+        }
+        
+        System.out.println("Editing the trip: " + tripDTO);
+        
+        System.out.println("Place Id:");
+        placeid = Integer.parseInt(sc.nextLine());
+        tPlaceDTO = sAgencyManager.findPlace(placeid);
+
+        if(tPlaceDTO == null)
+        {
+            System.out.println("Not found a place with that id. Try again.");
+            return;
+        }
+        System.out.println("Place: " + tPlaceDTO);
+        
+        //-------------
+        System.out.println("Plane Id:");
+        planeid = Integer.parseInt(sc.nextLine());
+        tPlaneDTO = sAgencyManager.findPlane(planeid);
+
+        if(tPlaneDTO == null)
+        {
+            System.out.println("Not found a plane with that id. Try again.");
+            return;
+        }
+        System.out.println("Plane: " + tPlaneDTO);
+        //----
+        System.out.println("Airline Id:");
+        airlineid = Integer.parseInt(sc.nextLine());
+        tAirlineDTO = sAgencyManager.findAirline(airlineid);
+
+        if(tAirlineDTO == null)
+        {
+            System.out.println("Not found a airline with that id. Try again.");
+            return;
+        }
+        System.out.println("Airline: " + tAirlineDTO);
+        
+        //-----------------
+        
+        tripDTO.setPlaceDTO(tPlaceDTO);
+        tripDTO.setAirlineDTO(tAirlineDTO);
+        tripDTO.setPlaneDTO(tPlaneDTO);
+              
+        System.out.println("Price: ");
+        tripDTO.setPrice(Double.parseDouble(sc.nextLine()));
+        
+        System.out.println("Date trip: ");
+        tripDTO.setDatetrip(Integer.parseInt(sc.nextLine()));
+        
+        result = sAgencyManager.editTrip(tripDTO);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't eddited the trip.");
+        else
+            System.out.println("Trip eddited with success!");
     }
 
     private static void processRemoveTrip() throws NoPermissionException{
+        Scanner sc = new Scanner(System.in);
+        TTripDTO tripDTO = new TTripDTO();
+        int id;
+        int op;
+        boolean result;
+        
+        System.out.println("Trip Id to remove:");
+        id = Integer.parseInt(sc.nextLine());
+        tripDTO = sAgencyManager.findTrip(id);
 
+        if(tripDTO == null)
+        {
+            System.out.println("Not found a trip with that id. Try again.");
+            return;
+        }
+        
+        System.out.println("Do you want remove the trip: " + tripDTO + "? [1/0]");
+        op = Integer.parseInt(sc.nextLine());
+
+        if(op == 0)
+            return;
+        
+        result = sAgencyManager.removeTrip(tripDTO);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't removed the trip.");
+        else
+            System.out.println("Trip removed with success!");
     }
     private static void processCancelTrip() throws NoPermissionException{
+        Scanner sc = new Scanner(System.in);
+        TTripDTO tripDTO = new TTripDTO();
+        int id;
+        int op;
+        boolean result;
+        
+        System.out.println("Trip Id to cancel:");
+        id = Integer.parseInt(sc.nextLine());
+        tripDTO = sAgencyManager.findTrip(id);
 
+        if(tripDTO == null)
+        {
+            System.out.println("Not found a trip with that id. Try again.");
+            return;
+        }
+        
+        System.out.println("Do you want cancel the trip: " + tripDTO + "? [1/0]");
+        op = Integer.parseInt(sc.nextLine());
+
+        if(op == 0)
+            return;
+        
+        result = sAgencyManager.cancelTrip(tripDTO);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't canceled the trip.");
+        else
+            System.out.println("Trip canceled with success!");
     }
     private static void processSetDoneTrip() throws NoPermissionException{
+        Scanner sc = new Scanner(System.in);
+        TTripDTO tripDTO = new TTripDTO();
+        int id;
+        int op;
+        boolean result;
+        
+        System.out.println("Trip Id to set as done:");
+        id = Integer.parseInt(sc.nextLine());
+        tripDTO = sAgencyManager.findTrip(id);
 
+        if(tripDTO == null)
+        {
+            System.out.println("Not found a trip with that id. Try again.");
+            return;
+        }
+        
+        System.out.println("Do you want set as done the trip: " + tripDTO + "? [1/0]");
+        op = Integer.parseInt(sc.nextLine());
+
+        if(op == 0)
+            return;
+        
+        result = sAgencyManager.setTripDone(tripDTO);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't setted as done the trip.");
+        else
+            System.out.println("Trip setted as done with success!");
     }
 
 //----------------------------------------------------
@@ -735,7 +887,11 @@ public class Main {
         System.out.println(Command.EXIT + " - Exit");
         System.out.println("----------------");
     }
-      
+    
+    private static void processCLS(){
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    }
+            
     private static void initRemoteReferences() {
         Properties prop = new Properties();
 
