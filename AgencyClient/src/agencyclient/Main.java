@@ -12,6 +12,7 @@ import logic.TPlaceDTO;
 import logic.TPlaceFeedbackDTO;
 import logic.TPlaneDTO;
 import logic.TTripDTO;
+import logic.TTripFeedbackDTO;
 import logic.TUserDTO;
 
 public class Main {
@@ -93,9 +94,6 @@ public class Main {
                     case Command.REMOVEPLACE:
                         processRemovePlace();
                         break;
-                    case Command.FINDALLMYPLACESFEEDBACKS:
-                        processMyPlacesFeedbackFindAll();
-                        break;
                     case Command.ADDPLACEFEEDBACK:
                         processAddPlaceFeedback();
                         break;
@@ -122,6 +120,15 @@ public class Main {
                         break;
                     case Command.SETTRIPDONE:
                         processSetDoneTrip();
+                        break;
+                    case Command.ADDTRIPFEEDBACK:
+                        processAddTripFeedback();
+                        break;
+                    case Command.EDITTRIPFEEDBACK:
+                        processEditTripFeedback();
+                        break;
+                    case Command.REMOVETRIPFEEDBACK:
+                        processRemoveTripFeedback();
                         break;
                     default:
                         System.out.println("Command not found. Type help to get a command list.");
@@ -533,10 +540,6 @@ public class Main {
             System.out.println("Feedback added with success!");
         
     }
-
-    private static void processMyPlacesFeedbackFindAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
     private static void processEditPlaceFeedback() throws NoPermissionException{
         Scanner sc = new Scanner(System.in);
@@ -834,6 +837,98 @@ public class Main {
             System.out.println("Trip setted as done with success!");
     }
 
+    //----------------------------------------------------
+    //trips feedback
+    private static void processAddTripFeedback() throws NoPermissionException {
+        Scanner sc = new Scanner(System.in);
+        TTripFeedbackDTO fedbackDTO = new TTripFeedbackDTO();
+        int tripid;
+        TTripDTO tTripDTO = null;
+        boolean result;
+        
+        System.out.println("Trip Id:");
+        tripid = Integer.parseInt(sc.nextLine());
+        tTripDTO = sAgencyManager.findTrip(tripid);
+
+        if(tTripDTO == null)
+        {
+            System.out.println("Not found a trip with that id. Try again.");
+            return;
+        }
+
+        System.out.println("Place: " + tTripDTO);
+        
+        System.out.println("Score: ");
+        fedbackDTO.setScore(Integer.parseInt(sc.nextLine()));
+        
+        
+        result = sAgencyManager.addFeedbackToTrip(tTripDTO, fedbackDTO);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't added the feedback.");
+        else
+            System.out.println("Feedback added with success!");
+        
+    }
+    
+    private static void processEditTripFeedback() throws NoPermissionException{
+        Scanner sc = new Scanner(System.in);
+        TTripFeedbackDTO feedbackDTO;
+        boolean result;
+        int id;
+        
+        System.out.println("Trip feedback Id:");
+        id = Integer.parseInt(sc.nextLine());
+        feedbackDTO = sAgencyManager.findTripfeedback(id);
+
+        if(feedbackDTO == null)
+        {
+            System.out.println("Not found a trip's feedback with that id. Try again.");
+            return;
+        }
+
+        System.out.println("Trip's Feedback: " + feedbackDTO);
+
+        System.out.println("Score: ");
+        feedbackDTO.setScore(Integer.parseInt(sc.nextLine()));
+        
+        
+        result = sAgencyManager.editFeedbackOfTrip(feedbackDTO);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't edited the feedback.");
+        else
+            System.out.println("Feedback edited with success!");
+    }
+    
+    private static void processRemoveTripFeedback() throws NoPermissionException{
+        Scanner sc = new Scanner(System.in);
+        TTripFeedbackDTO tripFeedbackDTO;
+        boolean result;
+        int id;
+        int op;
+        
+        System.out.println("Trip feedback Id:");
+        id = Integer.parseInt(sc.nextLine());
+        tripFeedbackDTO = sAgencyManager.findTripfeedback(id);
+
+        if(tripFeedbackDTO == null)
+        {
+            System.out.println("Not found a trip's feedback with that id. Try again.");
+            return;
+        }
+        
+        System.out.println("Do you want remove the place: " + tripFeedbackDTO + "? [1/0]");
+        op = Integer.parseInt(sc.nextLine());
+
+        if(op == 0)
+            return;
+        
+        result = sAgencyManager.removeFeedbackOfTrip(tripFeedbackDTO);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't removed the feedback.");
+        else
+            System.out.println("Feedback removed with success!");
+    }
+    
 //----------------------------------------------------
     //Auxiliar methods
     private static void printCommandList(){
@@ -869,7 +964,6 @@ public class Main {
         
         //places feedback
         System.out.println("\n-------Feedback of Places--------");
-        System.out.println(Command.FINDALLMYPLACESFEEDBACKS + " - List All my feedbacks of places");
         System.out.println(Command.ADDPLACEFEEDBACK + " - Add a new feedback of a place");
         System.out.println(Command.EDITPLACEFEEDBACK + " - Edit a feedback of a place");
         System.out.println(Command.REMOVEPLACEFEEDBACK + " - Remove feedback of a place");
@@ -883,6 +977,11 @@ public class Main {
         System.out.println(Command.CANCELTRIP + " - Cancel a trip");
         System.out.println(Command.SETTRIPDONE + " - Set done a trip");
         
+        //trips feedback
+        System.out.println("\n-------Feedback of Trips--------");
+        System.out.println(Command.ADDTRIPFEEDBACK+ " - Add a new feedback of a trip");
+        System.out.println(Command.EDITTRIPFEEDBACK + " - Edit a feedback of a trip");
+        System.out.println(Command.REMOVETRIPFEEDBACK + " - Remove feedback of a trip");
         
         System.out.println(Command.EXIT + " - Exit");
         System.out.println("----------------");

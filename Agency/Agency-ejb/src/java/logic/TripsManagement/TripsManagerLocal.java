@@ -13,6 +13,7 @@ import logic.TPlaceFeedbackDTO;
 import logic.TPlaceDTO;
 import logic.TPlaneDTO;
 import logic.TTripDTO;
+import logic.TTripFeedbackDTO;
 
 /**
  *
@@ -58,4 +59,10 @@ public interface TripsManagerLocal {
     boolean removeTrip(TTripDTO tripDTO, String username) throws NoPermissionException;
     boolean cancelTrip(TTripDTO tripDTO, String username) throws NoPermissionException;
     boolean setTripDone(TTripDTO tripDTO, String username) throws NoPermissionException;
+    
+    //trip feedback
+    TTripFeedbackDTO findTripfeedback(int id);
+    boolean addFeedbackToTrip(TTripDTO tripDTO, TTripFeedbackDTO tripFeedbackDTO, String username) throws NoPermissionException;
+    boolean editFeedbackOfTrip(TTripFeedbackDTO tripFeedbackDTO, String username) throws NoPermissionException;
+    boolean removeFeedbackOfTrip(TTripFeedbackDTO tripFeedbackDTO, String username) throws NoPermissionException;
 }

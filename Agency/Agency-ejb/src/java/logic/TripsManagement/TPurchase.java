@@ -44,9 +44,9 @@ public class TPurchase implements Serializable {
     private Integer id;
     @JoinTable(name = "t_purchase_trip", joinColumns = {
         @JoinColumn(name = "purchaseid", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "tripid", referencedColumnName = "id")})
+        @JoinColumn(name = "seatid", referencedColumnName = "id")})
     @ManyToMany
-    private Collection<TTrip> tTripCollection;
+    private Collection<TSeat> tSeatCollection;
     @JoinColumn(name = "userid", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private TUser userid;
@@ -67,12 +67,12 @@ public class TPurchase implements Serializable {
     }
 
     @XmlTransient
-    public Collection<TTrip> getTTripCollection() {
-        return tTripCollection;
+    public Collection<TSeat> getTSeatCollection() {
+        return tSeatCollection;
     }
 
-    public void setTTripCollection(Collection<TTrip> tTripCollection) {
-        this.tTripCollection = tTripCollection;
+    public void setTSeatCollection(Collection<TSeat> tSeatCollection) {
+        this.tSeatCollection = tSeatCollection;
     }
 
     public TUser getUserid() {

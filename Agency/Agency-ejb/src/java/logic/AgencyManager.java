@@ -183,5 +183,28 @@ public class AgencyManager implements AgencyManagerRemote {
     public boolean setTripDone(TTripDTO tripDTO) throws NoPermissionException {
         return tripsManagerLocal.setTripDone(tripDTO, username);
     }
+
+     //----------------------------------------------------------------------    
+//Trips feedback
+    
+    @Override
+    public TTripFeedbackDTO findTripfeedback(int id) {
+        return tripsManagerLocal.findTripfeedback(id);
+    }
+
+    @Override
+    public boolean addFeedbackToTrip(TTripDTO tripDTO, TTripFeedbackDTO feedbackDTO) throws NoPermissionException {
+        return tripsManagerLocal.addFeedbackToTrip(tripDTO, feedbackDTO, username);
+    }
+
+    @Override
+    public boolean editFeedbackOfTrip(TTripFeedbackDTO feedbackDTO) throws NoPermissionException {
+        return tripsManagerLocal.editFeedbackOfTrip(feedbackDTO, username);
+    }
+
+    @Override
+    public boolean removeFeedbackOfTrip(TTripFeedbackDTO feedbackDTO) throws NoPermissionException {
+        return tripsManagerLocal.removeFeedbackOfTrip(feedbackDTO, username);
+    }
  
 }

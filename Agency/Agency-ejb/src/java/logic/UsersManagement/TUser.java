@@ -6,9 +6,7 @@
 package logic.UsersManagement;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,14 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import logic.TripsManagement.TPlacefeedback;
-import logic.TripsManagement.TPurchase;
-import logic.TripsManagement.TSeat;
-import logic.TripsManagement.TTripfeedback;
 
 /**
  *
@@ -42,18 +34,6 @@ import logic.TripsManagement.TTripfeedback;
     , @NamedQuery(name = "TUser.findByBalance", query = "SELECT t FROM TUser t WHERE t.balance = :balance")
     , @NamedQuery(name = "TUser.findByAccepted", query = "SELECT t FROM TUser t WHERE t.accepted = :accepted")})
 public class TUser implements Serializable {
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userid")
-    private Collection<TPurchase> tPurchaseCollection;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userid")
-    private Collection<TSeat> tSeatCollection;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userid")
-    private Collection<TTripfeedback> tTripfeedbackCollection;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userid")
-    private Collection<TPlacefeedback> tPlacefeedbackCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -171,42 +151,6 @@ public class TUser implements Serializable {
     @Override
     public String toString() {
         return "logic.UsersManagement.TUser[ id=" + id + " ]";
-    }
-
-    @XmlTransient
-    public Collection<TPlacefeedback> getTPlacefeedbackCollection() {
-        return tPlacefeedbackCollection;
-    }
-
-    public void setTPlacefeedbackCollection(Collection<TPlacefeedback> tPlacefeedbackCollection) {
-        this.tPlacefeedbackCollection = tPlacefeedbackCollection;
-    }
-
-    @XmlTransient
-    public Collection<TTripfeedback> getTTripfeedbackCollection() {
-        return tTripfeedbackCollection;
-    }
-
-    public void setTTripfeedbackCollection(Collection<TTripfeedback> tTripfeedbackCollection) {
-        this.tTripfeedbackCollection = tTripfeedbackCollection;
-    }
-
-    @XmlTransient
-    public Collection<TSeat> getTSeatCollection() {
-        return tSeatCollection;
-    }
-
-    public void setTSeatCollection(Collection<TSeat> tSeatCollection) {
-        this.tSeatCollection = tSeatCollection;
-    }
-
-    @XmlTransient
-    public Collection<TPurchase> getTPurchaseCollection() {
-        return tPurchaseCollection;
-    }
-
-    public void setTPurchaseCollection(Collection<TPurchase> tPurchaseCollection) {
-        this.tPurchaseCollection = tPurchaseCollection;
     }
     
 }

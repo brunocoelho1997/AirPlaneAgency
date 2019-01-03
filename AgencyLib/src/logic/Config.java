@@ -125,6 +125,7 @@ create table t_trip(
     price float,
     done boolean,
     canceled boolean,
+    datetrip int,
     placeid int not null,
     airlineid int not null,
     planeid int not null,
@@ -182,11 +183,11 @@ drop table if exists t_purchase_trip;
 
 create table t_purchase_trip(
     purchaseid int not null,    
-    tripid int not null,
+    seatid int not null,
    
     
     constraint fk1 foreign key (purchaseid) references t_purchase (id),
-    constraint fk2 foreign key (tripid) references t_trip (id)
+    constraint fk2 foreign key (seatid) references t_seat (id)
 );
 --------------------------------------------------------------------
 - trip feedback
@@ -213,7 +214,8 @@ public class Config {
     public static final int OPERATOR = 0;
     public static final int CLIENT = 1;
     
-    public static final String msgNoPermissionOperator = "No permissions to invoke the method. Just an operator has permissions and accepted.";
+    public static final String msgNoPermission = "No permissions to invoke the method. Just an accepted operator or client has permissions.";
+    public static final String msgNoPermissionOperator = "No permissions to invoke the method. Just an accepted operator has permissions.";
     public static final String msgNoPermissionFeedback= "No permission to change the place's feedback of other user.";
 
 }

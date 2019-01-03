@@ -19,6 +19,7 @@ import logic.TPlaceFeedbackDTO;
 import logic.TPlaceDTO;
 import logic.TPlaneDTO;
 import logic.TTripDTO;
+import logic.TTripFeedbackDTO;
 import logic.TUserDTO;
 import logic.TripsManagement.TAirline;
 import logic.TripsManagement.TAirlineFacadeLocal;
@@ -46,6 +47,9 @@ public class TripsManager implements TripsManagerLocal {
     
     @EJB
     TPlacefeedbackFacadeLocal placeFeedbackFacade;
+    
+    @EJB
+    TTripfeedbackFacadeLocal tripFeedbackFacade;
     
     @EJB
     TPlaceFacadeLocal placeFacade; 
@@ -315,8 +319,6 @@ public class TripsManager implements TripsManagerLocal {
     }
     
     private TPlaceDTO placeToDTO(TPlace place){
-        
-        System.out.println("\n\nPlace: " + place);
         List<TPlaceFeedbackDTO> placeFeedBackList = new ArrayList();
         for(TPlacefeedback placeFeedback : place.getTPlacefeedbackCollection())
         {
@@ -341,7 +343,7 @@ public class TripsManager implements TripsManagerLocal {
     }
     
     //-------------------------------------------------------------------------------------------------------------------
-    //feedback
+    //place feedback
     
     @Override
     public boolean addFeedbackToPlace(TPlaceDTO placeDTO, TPlaceFeedbackDTO feedbackDTO, String username ) throws NoPermissionException {
@@ -500,7 +502,7 @@ public class TripsManager implements TripsManagerLocal {
         trip.setPrice(tripDTO.getPrice());
         trip.setCanceled(false);
         trip.setDone(false);
-        trip.setTPurchaseCollection(new ArrayList());
+        trip.setDatetrip(tripDTO.getDatetrip());
         trip.setTSeatCollection(new ArrayList());
         trip.setTTripfeedbackCollection(new ArrayList());
 
@@ -539,7 +541,8 @@ public class TripsManager implements TripsManagerLocal {
         trip.setDone(tripDTO.getDone());
         trip.setCanceled(tripDTO.getCanceled());
         trip.setPrice(tripDTO.getPrice());
-        
+        trip.setDatetrip(tripDTO.getDatetrip());
+
         tripFacade.edit(trip);
         return true;
     }
@@ -555,16 +558,6 @@ public class TripsManager implements TripsManagerLocal {
         if(trip == null)
             return false;
         tripFacade.remove(trip);
-        
-        //remover de todas as purchases
-        for(TPurchase purchase : purchaseFacade.findAll())
-        {
-            if(purchase.getTTripCollection().contains(trip))
-            {
-                purchase.getTTripCollection().remove(trip);
-                purchaseFacade.edit(purchase);
-            }
-        }
         
         return true;
     }
@@ -598,7 +591,12 @@ public class TripsManager implements TripsManagerLocal {
     }
     
     private TTripDTO tripToDTO(TTrip trip){
-        return new TTripDTO(trip.getId(), trip.getPrice(), trip.getDone(), trip.getCanceled(), airlineToDTO(trip.getAirlineid()), placeToDTO(trip.getPlaceid()), planeToDTO(trip.getPlaneid()));
+        List<TTripFeedbackDTO> tripFeedBackList = new ArrayList();
+        for(TTripfeedback tripfeedback : trip.getTTripfeedbackCollection())
+        {
+            tripFeedBackList.add(tripFeedbackToDTO(tripfeedback));
+        }             
+        return new TTripDTO(trip.getId(), trip.getPrice(), trip.getDone(), trip.getCanceled(), trip.getDatetrip(),airlineToDTO(trip.getAirlineid()), placeToDTO(trip.getPlaceid()), planeToDTO(trip.getPlaneid()), tripFeedBackList);
     }
 
     private boolean validateTripDTO(TTripDTO tripDTO)
@@ -612,25 +610,166 @@ public class TripsManager implements TripsManagerLocal {
         return true;
     }
 
+    
+    //-------------------------------------------------------------------------------------------------------------------
+    //trip feedback
+    @Override
+    public TTripFeedbackDTO findTripfeedback(int id) {
+        TTripfeedback tripFeedback = tripFeedbackFacade.find(id);
+        
+        if(tripFeedback == null)
+            return null;
+        
+        return tripFeedbackToDTO(tripFeedback);
+    }
+
+    @Override
+    public boolean addFeedbackToTrip(TTripDTO tripDTO, TTripFeedbackDTO tripFeedbackDTO, String username) throws NoPermissionException {
+        verifyPermission(username, Config.CLIENT);
+        
+        TTrip trip = tripFacade.find(tripDTO.getId());
+        
+        if(trip == null)
+            return false;
+        
+        TUser user = userManager.getTUserByUsername(username);
+        
+        if(user == null)
+            return false;
+        
+        
+        if(!validateTripFeedbackDTO(tripFeedbackDTO, trip, user))
+            return false;
+        
+        TTripfeedback tripFeedback = new TTripfeedback();
+        tripFeedback.setTripid(trip);
+        tripFeedback.setUserid(user);
+        tripFeedback.setScore(tripFeedbackDTO.getScore());
+        
+        tripFeedbackFacade.create(tripFeedback);
+        
+        trip.getTTripfeedbackCollection().add(tripFeedback);
+        tripFacade.edit(trip);
+        
+        return true;
+    }
+
+    @Override
+    public boolean editFeedbackOfTrip(TTripFeedbackDTO tripFeedbackDTO, String username) throws NoPermissionException {
+        verifyPermission(username, Config.CLIENT);
+        
+        TTripfeedback tripFeedback = tripFeedbackFacade.find(tripFeedbackDTO.getId());
+        
+        if(tripFeedback == null)
+            return false;
+        
+        //se o comentario for de um user diferente do que esta a alterar manda excecao
+        if(!tripFeedback.getUserid().getUsername().equals(username))
+            throw new NoPermissionException(Config.msgNoPermissionFeedback);
+        
+        
+        TUser user = userManager.getTUserByUsername(username);
+        
+        if(user == null)
+            return false;
+        
+        if(!validateTripFeedbackDTO(tripFeedbackDTO, tripFeedback.getTripid(), user))
+            return false;
+        
+        tripFeedback.setScore(tripFeedbackDTO.getScore());
+        
+        tripFeedbackFacade.edit(tripFeedback);
+        
+        return true;
+    }
+
+    @Override
+    public boolean removeFeedbackOfTrip(TTripFeedbackDTO tripFeedbackDTO, String username) throws NoPermissionException {
+        verifyPermission(username, Config.CLIENT);
+        
+        TTripfeedback tripFeedback = tripFeedbackFacade.find(tripFeedbackDTO.getId());
+        
+        if(tripFeedback == null)
+            return false;
+        
+        TTrip trip = tripFeedback.getTripid();
+        
+        if(trip == null)
+            return false;
+        
+        //se o comentario for de um user diferente do que esta a alterar manda excecao
+        if(!tripFeedback.getUserid().getUsername().equals(username))
+            throw new NoPermissionException(Config.msgNoPermissionFeedback);
+        
+        tripFeedbackFacade.remove(tripFeedback);
+        
+        trip.getTTripfeedbackCollection().remove(tripFeedback);
+        tripFacade.edit(trip);
+        
+        return true;
+    }
+    
+    private TTripFeedbackDTO tripFeedbackToDTO(TTripfeedback feedback){
+        return new TTripFeedbackDTO(feedback.getId(), feedback.getScore());
+    }
+    
+    private boolean validateTripFeedbackDTO(TTripFeedbackDTO tripFeedback, TTrip trip, TUser user)
+    {
+        boolean userDoneTripTemp = false;
+        if(tripFeedback == null)
+            return false;
+        
+        //apenas pode dar feedback caso esta ja se tenha realizado
+        if(!trip.getDone())
+            return false;
+        
+        /*
+        
+        
+        //verifica se o user pertenceu 'a trip
+        for(TSeat seat : trip.getTSeatCollection())
+        {
+            if(seat.getUserid().equals(user))
+            {
+                userDoneTripTemp = true;
+                break;
+            }
+        }
+        
+        if(!userDoneTripTemp)
+            return false;
+        */
+        
+        if(tripFeedback.getScore() < 0)
+            return false;
+        
+        return true;
+    }
+    
 //-----------------------------------------------------------------------------------------------------------------
     //auxiliar methods
     
     private void verifyPermission(String username, int permissionType) throws NoPermissionException{
+        
+        String errorMessage = (Config.CLIENT == permissionType? Config.msgNoPermission: Config.msgNoPermissionOperator);
+        
         if(username == null || username.isEmpty())
-            throw new NoPermissionException(Config.msgNoPermissionOperator);
+            throw new NoPermissionException(errorMessage);
         
         TUserDTO userDTO = userManager.getTUserDTO(username);
         
         if(userDTO == null)
-            throw new NoPermissionException(Config.msgNoPermissionOperator);
+            throw new NoPermissionException(errorMessage);
         
         if(!userDTO.getAccepted())
-            throw new NoPermissionException(Config.msgNoPermissionOperator);       
+            throw new NoPermissionException(errorMessage);       
 
         //se for um cliente e a permissao exigida for do tipo de cliente permite... caso contrario nao deixa (os operadores podem fazer tudo, portanto nao fiz validacao para os operadores)
         if(userDTO.getUsertype() == Config.CLIENT && permissionType != Config.CLIENT)
-            throw new NoPermissionException(Config.msgNoPermissionOperator);       
+            throw new NoPermissionException(errorMessage);       
     }
+
+    
 
 
     

@@ -6,6 +6,7 @@
 package logic.TripsManagement;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,11 +14,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import logic.UsersManagement.TUser;
 
 /**
@@ -34,6 +37,9 @@ import logic.UsersManagement.TUser;
     , @NamedQuery(name = "TSeat.findByAuctioned", query = "SELECT t FROM TSeat t WHERE t.auctioned = :auctioned")
     , @NamedQuery(name = "TSeat.findByPrice", query = "SELECT t FROM TSeat t WHERE t.price = :price")})
 public class TSeat implements Serializable {
+
+    @ManyToMany(mappedBy = "tSeatCollection")
+    private Collection<TPurchase> tPurchaseCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -139,6 +145,15 @@ public class TSeat implements Serializable {
     @Override
     public String toString() {
         return "logic.TripsManagement.TSeat[ id=" + id + " ]";
+    }
+
+    @XmlTransient
+    public Collection<TPurchase> getTPurchaseCollection() {
+        return tPurchaseCollection;
+    }
+
+    public void setTPurchaseCollection(Collection<TPurchase> tPurchaseCollection) {
+        this.tPurchaseCollection = tPurchaseCollection;
     }
     
 }

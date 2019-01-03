@@ -15,7 +15,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -36,11 +35,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "TTrip.findById", query = "SELECT t FROM TTrip t WHERE t.id = :id")
     , @NamedQuery(name = "TTrip.findByPrice", query = "SELECT t FROM TTrip t WHERE t.price = :price")
     , @NamedQuery(name = "TTrip.findByDone", query = "SELECT t FROM TTrip t WHERE t.done = :done")
-    , @NamedQuery(name = "TTrip.findByCanceled", query = "SELECT t FROM TTrip t WHERE t.canceled = :canceled")})
+    , @NamedQuery(name = "TTrip.findByCanceled", query = "SELECT t FROM TTrip t WHERE t.canceled = :canceled")
+    , @NamedQuery(name = "TTrip.findByDatetrip", query = "SELECT t FROM TTrip t WHERE t.datetrip = :datetrip")})
 public class TTrip implements Serializable {
-
-    @ManyToMany(mappedBy = "tTripCollection")
-    private Collection<TPurchase> tPurchaseCollection;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tripid")
     private Collection<TTripfeedback> tTripfeedbackCollection;
@@ -61,6 +58,8 @@ public class TTrip implements Serializable {
     private Boolean done;
     @Column(name = "canceled")
     private Boolean canceled;
+    @Column(name = "datetrip")
+    private Integer datetrip;
     @JoinColumn(name = "airlineid", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private TAirline airlineid;
@@ -108,6 +107,14 @@ public class TTrip implements Serializable {
 
     public void setCanceled(Boolean canceled) {
         this.canceled = canceled;
+    }
+
+    public Integer getDatetrip() {
+        return datetrip;
+    }
+
+    public void setDatetrip(Integer datetrip) {
+        this.datetrip = datetrip;
     }
 
     public TAirline getAirlineid() {
@@ -175,15 +182,6 @@ public class TTrip implements Serializable {
 
     public void setTTripfeedbackCollection(Collection<TTripfeedback> tTripfeedbackCollection) {
         this.tTripfeedbackCollection = tTripfeedbackCollection;
-    }
-
-    @XmlTransient
-    public Collection<TPurchase> getTPurchaseCollection() {
-        return tPurchaseCollection;
-    }
-
-    public void setTPurchaseCollection(Collection<TPurchase> tPurchaseCollection) {
-        this.tPurchaseCollection = tPurchaseCollection;
     }
     
 }

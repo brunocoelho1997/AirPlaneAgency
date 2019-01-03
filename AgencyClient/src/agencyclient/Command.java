@@ -4,6 +4,8 @@ public class Command {
     
     public static final String EXIT = "exit";
     public static final String HELP = "help";
+    public static final String CLS = "cls";
+    
     
     //users
     public static final String SIGNIN = "signin";
@@ -32,7 +34,6 @@ public class Command {
     public static final String REMOVEPLACE = "removeplace";
     
     //places feedback
-    public static final String FINDALLMYPLACESFEEDBACKS = "findallmyplacesfeedbacks";
     public static final String ADDPLACEFEEDBACK = "addplacefeedback";
     public static final String EDITPLACEFEEDBACK = "editplacefeedback";
     public static final String REMOVEPLACEFEEDBACK = "removeplacefeedback";
@@ -45,5 +46,9 @@ public class Command {
     public static final String CANCELTRIP = "canceltrip";
     public static final String SETTRIPDONE = "settripdone";
     
+    //trips feedback
+    public static final String ADDTRIPFEEDBACK = "addtripfeedback";
+    public static final String EDITTRIPFEEDBACK = "edittripfeedback";
+    public static final String REMOVETRIPFEEDBACK = "removetripfeedback";
     
 }
