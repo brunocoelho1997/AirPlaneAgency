@@ -10,7 +10,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import logic.Config;
-import logic.NoPermissionException;
+import logic.DTOFactory;
 import logic.TUserDTO;
 
 /**
@@ -84,7 +84,7 @@ public class UsersManager implements UsersManagerLocal {
     @Override
     public TUserDTO getTUserDTO(String username) {
         TUser user = getTUserByUsername(username);
-        return getTUserDTOFromTUser(user);
+        return DTOFactory.getTUserDTOFromTUser(user);
     }
     
     
@@ -121,28 +121,13 @@ public class UsersManager implements UsersManagerLocal {
         
         for(TUser user : userFacade.findAll())
         {
-            userList.add(getTUserDTOFromTUser(user));
+            userList.add(DTOFactory.getTUserDTOFromTUser(user));
         }
         return userList;
     }
     
     
     //Auxiliary methoths
-    
-    private TUserDTO getTUserDTOFromTUser(TUser user){
-        TUserDTO tUserDTO = new TUserDTO();
-        tUserDTO.setUsername(user.getUsername());
-        tUserDTO.setPassword(user.getPassword());
-        tUserDTO.setAccepted(user.getAccepted());
-        tUserDTO.setUsertype(user.getUsertype());
-        
-        if(user.getUsertype() == Config.CLIENT)
-        {
-            tUserDTO.setBalance(user.getBalance());
-            tUserDTO.setClientName(user.getClientname());
-        }
-        return tUserDTO;
-    }
 
     //TODO: este metodo nao esta' a ser chamado. Tinha no construtor e bugava
     private void verifyIfAdminExist() {
@@ -156,9 +141,6 @@ public class UsersManager implements UsersManagerLocal {
             
             userFacade.create(admin);
         }
-}
-
-    
-
+    }
     
 }

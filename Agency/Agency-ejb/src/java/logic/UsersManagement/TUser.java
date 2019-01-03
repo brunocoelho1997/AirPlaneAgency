@@ -6,7 +6,9 @@
 package logic.UsersManagement;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,8 +16,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import logic.LogsManagement.TLog;
 
 /**
  *
@@ -34,6 +38,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "TUser.findByBalance", query = "SELECT t FROM TUser t WHERE t.balance = :balance")
     , @NamedQuery(name = "TUser.findByAccepted", query = "SELECT t FROM TUser t WHERE t.accepted = :accepted")})
 public class TUser implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userid")
+    private Collection<TLog> tLogCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -151,6 +158,14 @@ public class TUser implements Serializable {
     @Override
     public String toString() {
         return "logic.UsersManagement.TUser[ id=" + id + " ]";
+    }
+
+    public Collection<TLog> getTLogCollection() {
+        return tLogCollection;
+    }
+
+    public void setTLogCollection(Collection<TLog> tLogCollection) {
+        this.tLogCollection = tLogCollection;
     }
     
 }

@@ -35,7 +35,7 @@ public interface TripsManagerLocal {
     boolean addAirline(TAirlineDTO airlineDTO, String username) throws NoPermissionException;
     boolean editAirline(TAirlineDTO airlineDTO, String username) throws NoPermissionException;
     boolean removeAirline(TAirlineDTO airlineDTO, String username) throws NoPermissionException;
-    
+
     //places
     List<TPlaceDTO> findAllPlaces(String username);
     TPlaceDTO findPlace(int id);

@@ -5,14 +5,19 @@
  */
 package logic.TripsManagement;
 
-import logic.TripsManagement.TPlane;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
+import javax.inject.Inject;
+import javax.jms.JMSConnectionFactory;
+import javax.jms.JMSContext;
+import javax.jms.ObjectMessage;
+import javax.jms.Queue;
 import logic.Config;
+import logic.LogsManagement.LogTypes;
+import logic.LogsManagement.TLogDTO;
 import logic.NoPermissionException;
 import logic.TAirlineDTO;
 import logic.TPlaceFeedbackDTO;
@@ -21,12 +26,7 @@ import logic.TPlaneDTO;
 import logic.TTripDTO;
 import logic.TTripFeedbackDTO;
 import logic.TUserDTO;
-import logic.TripsManagement.TAirline;
-import logic.TripsManagement.TAirlineFacadeLocal;
-import logic.TripsManagement.TPlace;
-import logic.TripsManagement.TPlaceFacadeLocal;
 import logic.UsersManagement.TUser;
-import logic.UsersManagement.TUserFacadeLocal;
 import logic.UsersManagement.UsersManagerLocal;
 
 /**
@@ -60,7 +60,13 @@ public class TripsManager implements TripsManagerLocal {
     @EJB
     TPurchaseFacadeLocal purchaseFacade;
     
+    @Resource(mappedName = "jms/MyQueue")
+    Queue logsQueue;
     
+    @Inject
+    @JMSConnectionFactory("jms/MyConnFactory")
+    private JMSContext jmsContext;
+   
     //Planes
     @Override
     public List<TPlaneDTO> findAllPlanes(String username) throws NoPermissionException {
@@ -508,6 +514,8 @@ public class TripsManager implements TripsManagerLocal {
 
         tripFacade.create(trip);
         
+        sendLogMessage(username, LogTypes.CREATE_TRIP, 0);
+        
         return true;
     }
 
@@ -769,15 +777,21 @@ public class TripsManager implements TripsManagerLocal {
             throw new NoPermissionException(errorMessage);       
     }
 
-    
-
-
-    
-
-    
-
-    
-
-    
+    private void sendLogMessage(String username, String msg, int date) throws NoPermissionException {        
+        if (username == null || username.isEmpty())
+                throw new NoPermissionException(Config.msgNoPermissionLog);
+        
+        
+        TUserDTO userDTO = userManager.getTUserDTO(username);
+        
+        System.out.println("sendLogMessage: user retrieved:" + userDTO);
+        
+        if(userDTO == null)
+            throw new NoPermissionException(Config.msgNoPermissionLog);
+        
+        TLogDTO log = new TLogDTO(userDTO, msg, date);
+        ObjectMessage message = jmsContext.createObjectMessage(log);
+        jmsContext.createProducer().send(logsQueue, message);
+    }
 
 }
