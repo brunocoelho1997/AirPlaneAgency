@@ -227,6 +227,11 @@ create table t_log(
     constraint fk1 foreign key (userid) references t_user(id)
 );
 
+
+LOGS
+-- Para conseguir usar Messages Beans fazer:
+1 - criar Connection Factory
+2 - criar Destination Resource
 */
 public class Config {
     public static final int OPERATOR = 0;
