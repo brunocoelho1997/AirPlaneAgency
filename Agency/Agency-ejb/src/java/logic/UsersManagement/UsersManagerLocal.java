@@ -5,7 +5,9 @@
  */
 package logic.UsersManagement;
 
+import java.util.List;
 import javax.ejb.Local;
+import logic.NoPermissionException;
 import logic.TUserDTO;
 
 /**
@@ -19,4 +21,7 @@ public interface UsersManagerLocal {
     boolean acceptTUser(TUserDTO userDTO, String username);
     TUserDTO getTUserDTO(String username);
     TUser getTUserByUsername(String usernameOfWantedUser);
+    boolean depositToAccount(float amount,String username);
+    List<TUserDTO> findAllUsers();
+
 }

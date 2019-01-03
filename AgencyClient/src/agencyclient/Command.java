@@ -13,6 +13,10 @@ public class Command {
     public static final String LOGOUT = "logout";
     public static final String GUEST = "asguest";
     public static final String ACCEPTUSER = "acceptuser";
+    public static final String DEPOSITTOACCOUNT = "deposittoaccount";
+    public static final String FINDALLUSERS = "findallusers";
+
+
     
     
     //planes

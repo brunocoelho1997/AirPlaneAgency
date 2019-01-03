@@ -47,7 +47,18 @@ public class AgencyManager implements AgencyManagerRemote {
         this.username = null;
         return true;
     }
-    //----------------------------------------------------------------------
+    
+    @Override
+    public boolean depositToAccount(float amount) {
+        return usersManagerLocal.depositToAccount(amount, username);
+    }
+    
+    @Override
+    public List<TUserDTO> findAllUsers(){
+        return usersManagerLocal.findAllUsers();
+    }
+    
+//----------------------------------------------------------------------
     //Planes
     @Override
     public List<TPlaneDTO> findAllPlanes() throws NoPermissionException{
@@ -206,5 +217,9 @@ public class AgencyManager implements AgencyManagerRemote {
     public boolean removeFeedbackOfTrip(TTripFeedbackDTO feedbackDTO) throws NoPermissionException {
         return tripsManagerLocal.removeFeedbackOfTrip(feedbackDTO, username);
     }
+
+    
+
+    
  
 }

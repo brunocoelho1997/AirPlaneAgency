@@ -5,9 +5,12 @@
  */
 package logic.UsersManagement;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import logic.Config;
+import logic.NoPermissionException;
 import logic.TUserDTO;
 
 /**
@@ -56,6 +59,7 @@ public class UsersManager implements UsersManagerLocal {
         newUser.setPassword(userDTO.getPassword());
         newUser.setUsertype(userDTO.getUsertype());
         newUser.setAccepted(false);
+        newUser.setBalance((double) 0);
         
         if(userDTO.getUsertype()==Config.CLIENT)
         {
@@ -94,6 +98,35 @@ public class UsersManager implements UsersManagerLocal {
         return null;
     }
     
+    @Override
+    public boolean depositToAccount(float amount, String username) {
+        TUser user = getTUserByUsername(username);
+        
+        if(user == null)
+            return false;
+        
+        if(amount <= ((double)0))
+            return false;
+        
+        user.setBalance(user.getBalance() + amount);
+        userFacade.edit(user);
+        
+        return true;
+        
+    }
+    
+    @Override
+    public List<TUserDTO> findAllUsers() {
+        List<TUserDTO> userList = new ArrayList();
+        
+        for(TUser user : userFacade.findAll())
+        {
+            userList.add(getTUserDTOFromTUser(user));
+        }
+        return userList;
+    }
+    
+    
     //Auxiliary methoths
     
     private TUserDTO getTUserDTOFromTUser(TUser user){
@@ -124,4 +157,8 @@ public class UsersManager implements UsersManagerLocal {
             userFacade.create(admin);
         }
 }
+
+    
+
+    
 }

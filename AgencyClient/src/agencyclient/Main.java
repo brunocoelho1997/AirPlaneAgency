@@ -46,6 +46,12 @@ public class Main {
                     case Command.LOGOUT:
                         processLogout();
                         break;
+                    case Command.DEPOSITTOACCOUNT:
+                        processDepositToAccount();
+                        break;
+                    case Command.FINDALLUSERS:
+                        processUsersFindAll();
+                        break;
                     case Command.HELP:
                         printCommandList();
                         break;
@@ -224,7 +230,7 @@ public class Main {
         if(op==0)
             return;
         
-        sAgencyManager.acceptUser(userDTO);
+        result = sAgencyManager.acceptUser(userDTO);
         
         if(!result)
             System.out.println("The user has been accepted with success.");
@@ -233,6 +239,32 @@ public class Main {
 
         
     }
+    
+    private static void processDepositToAccount() {
+        Scanner sc = new Scanner(System.in);
+        float amoung;
+        boolean result = false;
+        int op;
+        
+        System.out.println("Amoung:");
+        amoung = Float.parseFloat(sc.nextLine());
+        
+        result = sAgencyManager.depositToAccount(amoung);
+        
+        if(!result)
+            System.out.println("The amoung has been accepted with success.");
+        else
+            System.out.println("An error has occurred.");
+
+    }
+    private static void processUsersFindAll(){
+        System.out.println("All users in the system:");
+        
+        for(TUserDTO userDTO : sAgencyManager.findAllUsers())
+            System.out.println(userDTO);
+    }
+
+    
     
     //-------------------------------------------------------
     //planes
@@ -938,6 +970,8 @@ public class Main {
         System.out.println(Command.SIGNIN + " - Sign in");
         System.out.println(Command.SIGNUP + " - Sign up");
         System.out.println(Command.LOGOUT + " - Logout");
+        System.out.println(Command.DEPOSITTOACCOUNT + " - Deposit amoung in user account");
+        System.out.println(Command.FINDALLUSERS + " - Find all Users");
         System.out.println("asguest - Enter as guest");
 
         //planes

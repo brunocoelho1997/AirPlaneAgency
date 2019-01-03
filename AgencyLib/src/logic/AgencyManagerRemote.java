@@ -12,7 +12,11 @@ public interface AgencyManagerRemote {
     boolean logout();
     boolean acceptUser(TUserDTO userDTO);
     TUserDTO getTUserDTO(String username);
-    
+    boolean depositToAccount(float amount);
+    List<TUserDTO> findAllUsers();
+
+
+        
     //planes
     List<TPlaneDTO> findAllPlanes() throws NoPermissionException;
     TPlaneDTO findPlane(int id) throws NoPermissionException;
