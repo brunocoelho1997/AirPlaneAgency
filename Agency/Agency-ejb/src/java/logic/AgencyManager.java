@@ -3,6 +3,7 @@ package logic;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import logic.TimerManagement.TimerManagerLocal;
 import logic.TripsManagement.TripsManagerLocal;
 import logic.UsersManagement.UsersManagerLocal;
 
@@ -15,6 +16,9 @@ public class AgencyManager implements AgencyManagerRemote {
     UsersManagerLocal usersManagerLocal;
     @EJB
     TripsManagerLocal tripsManagerLocal;
+    
+    @EJB
+    TimerManagerLocal timerManagerLocal;
     
     String username;
 
@@ -216,6 +220,23 @@ public class AgencyManager implements AgencyManagerRemote {
     @Override
     public boolean removeFeedbackOfTrip(TTripFeedbackDTO feedbackDTO) throws NoPermissionException {
         return tripsManagerLocal.removeFeedbackOfTrip(feedbackDTO, username);
+    }
+
+    //---------------------
+    // date
+    @Override
+    public int getDate() {
+        return timerManagerLocal.getDate();
+    }
+
+    @Override
+    public boolean setDurationTimer(long durationMinuts) {
+        return timerManagerLocal.setDurationTimer(durationMinuts);
+    }
+
+    @Override
+    public String getTimerInformation() {
+        return timerManagerLocal.getTimerInformation();
     }
 
     
