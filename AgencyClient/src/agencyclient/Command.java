@@ -55,4 +55,10 @@ public class Command {
     public static final String EDITTRIPFEEDBACK = "edittripfeedback";
     public static final String REMOVETRIPFEEDBACK = "removetripfeedback";
     
+    //date
+    public static final String GETATUALDATE = "getatualdate";
+    public static final String SETDURATIONTIMER = "setdurationtimer";
+    public static final String GETTIMERINFORMATION = "gettimerinformation";
+    
+    
 }

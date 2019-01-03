@@ -136,6 +136,16 @@ public class Main {
                     case Command.REMOVETRIPFEEDBACK:
                         processRemoveTripFeedback();
                         break;
+                    case Command.GETATUALDATE:
+                        processGetAtualDate();
+                        break;
+                    case Command.SETDURATIONTIMER:
+                        processSetDurationTimer();
+                        break;
+                    case Command.GETTIMERINFORMATION:
+                        processGetTimerInformation();
+                        break;
+                    
                     default:
                         System.out.println("Command not found. Type help to get a command list.");
 
@@ -961,6 +971,32 @@ public class Main {
             System.out.println("Feedback removed with success!");
     }
     
+    //----------------------------------------------------
+    //date
+    
+    private static void processGetAtualDate(){
+        System.out.println("Atual Date: " + sAgencyManager.getDate());
+    }
+    
+    private static void processSetDurationTimer(){
+        Scanner sc = new Scanner(System.in);
+        boolean result;
+         int durationMinuts;
+        
+        System.out.println("Duration (minuts) :");
+        durationMinuts = Integer.parseInt(sc.nextLine());
+        
+        result = sAgencyManager.setDurationTimer(durationMinuts);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't setted the duration timer.");
+        else
+            System.out.println("Duration timer edited with success!"); 
+    }
+    
+    private static void processGetTimerInformation(){
+        System.out.println("Timer Information: " + sAgencyManager.getTimerInformation());
+    }
+    
 //----------------------------------------------------
     //Auxiliar methods
     private static void printCommandList(){
@@ -1017,6 +1053,12 @@ public class Main {
         System.out.println(Command.EDITTRIPFEEDBACK + " - Edit a feedback of a trip");
         System.out.println(Command.REMOVETRIPFEEDBACK + " - Remove feedback of a trip");
         
+        //time
+        System.out.println("\n-------Time--------");
+        System.out.println(Command.GETATUALDATE+ " - Get atual time of the system");
+        System.out.println(Command.SETDURATIONTIMER + " - Set (in minuts) the increment of time");
+        System.out.println(Command.GETTIMERINFORMATION + " - Get information of the timer");
+    
         System.out.println(Command.EXIT + " - Exit");
         System.out.println("----------------");
     }

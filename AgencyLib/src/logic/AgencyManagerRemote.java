@@ -59,4 +59,9 @@ public interface AgencyManagerRemote {
     boolean editFeedbackOfTrip(TTripFeedbackDTO feedbackDTO) throws NoPermissionException;
     boolean removeFeedbackOfTrip(TTripFeedbackDTO feedbackDTO) throws NoPermissionException;
     
+    //date
+    int getDate();
+    boolean setDurationTimer(long duration);
+    String getTimerInformation();
+
 }
