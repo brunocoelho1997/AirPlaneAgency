@@ -209,6 +209,24 @@ create table t_tripfeedback(
     constraint fk2 foreign key (userid) references t_user (id)
 );
 
+--------------------------------------------------------------------
+- log
+drop sequence if exists log_seq;
+
+create sequence log_seq;
+
+drop table if exists t_log;
+
+
+create table t_log(
+    id int primary key default nextval('log_seq'),
+    msg varchar(30) not null,
+    userid int not null,
+    datelog int not null,
+
+    constraint fk1 foreign key (userid) references t_user(id)
+);
+
 */
 public class Config {
     public static final int OPERATOR = 0;
@@ -217,5 +235,6 @@ public class Config {
     public static final String msgNoPermission = "No permissions to invoke the method. Just an accepted operator or client has permissions.";
     public static final String msgNoPermissionOperator = "No permissions to invoke the method. Just an accepted operator has permissions.";
     public static final String msgNoPermissionFeedback= "No permission to change the place's feedback of other user.";
+    public static final String msgNoPermissionLog= "No permission to add logg: user does not exist.";
 
 }
