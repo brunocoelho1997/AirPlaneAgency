@@ -69,4 +69,9 @@ public class LogsManager implements LogsManagerLocal {
         logFacade.create(newLog);
         return true;
     }
+
+    @Override
+    public void removeLogs() {
+        logFacade.removeAll();
+    }
 }

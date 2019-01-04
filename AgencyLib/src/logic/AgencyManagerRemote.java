@@ -69,4 +69,5 @@ public interface AgencyManagerRemote {
     Zero for all logs. Non-zero for defined number of log lines
     */
     List<TLogDTO> getLogs(int lines);
+    void removeLogs();
 }

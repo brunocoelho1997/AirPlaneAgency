@@ -56,7 +56,7 @@ public class TLog implements Serializable {
         this.msg = msg;
         this.datelog = datelog;
     }
-
+    
     public Integer getId() {
         return id;
     }

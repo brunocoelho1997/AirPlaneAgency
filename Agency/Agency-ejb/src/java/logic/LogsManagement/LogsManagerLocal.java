@@ -18,4 +18,5 @@ public interface LogsManagerLocal {
     
     boolean addLog(TLogDTO logDTO);
     
+    void removeLogs();
 }

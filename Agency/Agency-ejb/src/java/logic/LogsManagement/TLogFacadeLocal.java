@@ -16,6 +16,8 @@ public interface TLogFacadeLocal {
     void edit(TLog tLog);
 
     void remove(TLog tLog);
+    
+    void removeAll();
 
     TLog find(Object id);
 

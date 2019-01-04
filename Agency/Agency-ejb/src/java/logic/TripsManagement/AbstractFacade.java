@@ -37,6 +37,12 @@ public abstract class AbstractFacade<T> {
     public void remove(T entity) {
         getEntityManager().remove(getEntityManager().merge(entity));
     }
+    
+    public void removeAll() {
+        String className = entityClass.getSimpleName();
+        Query query = getEntityManager().createQuery("DELETE FROM " + className);
+        query.executeUpdate();
+    }
 
     public T find(Object id) {
         return getEntityManager().find(entityClass, id);

@@ -249,4 +249,8 @@ public class AgencyManager implements AgencyManagerRemote {
         return logsManagerLocal.getLogs(lines);
     }
  
+    @Override
+    public void removeLogs() {
+        logsManagerLocal.removeLogs();
+    }
 }

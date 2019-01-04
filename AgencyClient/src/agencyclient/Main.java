@@ -152,6 +152,9 @@ public class Main {
                     case Command.GET_LOGS:
                         processGetLogs(input);
                         break;
+                    case Command.REMOVE_LOGS:
+                        processDeleteLogs();
+                        break;
                     
                     default:
                         System.out.println("Command not found. Type help to get a command list.");
@@ -1005,6 +1008,8 @@ public class Main {
         System.out.println("Timer Information: " + sAgencyManager.getTimerInformation());
     }
     
+    // logs
+    
     private static void processGetLogs(String input) {
         String[] inputs = input.split(" ");
         if (inputs.length == 1) {
@@ -1019,6 +1024,11 @@ public class Main {
         } catch(NumberFormatException e) {
             System.out.println("Wrong number format: " + inputs[1]);
         }
+    }
+    
+    private static void processDeleteLogs() {
+        sAgencyManager.removeLogs();
+        System.out.println("Logs removed");
     }
     
     private static void printLogs(int lines) {
@@ -1095,7 +1105,8 @@ public class Main {
         
         //logs
         System.out.println("\n-------Logs--------");
-        System.out.println(Command.GET_LOGS+ " - Get logs. Syntax: getlogs [n] (n: number of lines - optional)");
+        System.out.println(Command.GET_LOGS + " - Get logs. Syntax: getlogs [n] (n: number of lines - optional)");
+        System.out.println(Command.REMOVE_LOGS + " - Remove all logs");
         
         System.out.println("----------------");
     }
