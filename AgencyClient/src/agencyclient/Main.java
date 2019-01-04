@@ -257,9 +257,9 @@ public class Main {
         result = sAgencyManager.acceptUser(userDTO);
         
         if(!result)
-            System.out.println("The user has been accepted with success.");
-        else
             System.out.println("An error has occurred..");
+        else
+            System.out.println("The user has been accepted with success.");
 
         
     }
@@ -276,9 +276,9 @@ public class Main {
         result = sAgencyManager.depositToAccount(amoung);
         
         if(!result)
-            System.out.println("The amoung has been accepted with success.");
-        else
             System.out.println("An error has occurred.");
+        else
+            System.out.println("The amoung has been accepted with success.");
 
     }
     private static void processUsersFindAll(){
@@ -287,9 +287,7 @@ public class Main {
         for(TUserDTO userDTO : sAgencyManager.findAllUsers())
             System.out.println(userDTO);
     }
-
-    
-    
+ 
     //-------------------------------------------------------
     //planes
     private static void processPlanesFindAll() throws NoPermissionException{
