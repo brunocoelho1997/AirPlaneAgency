@@ -31,7 +31,7 @@ public class TimerManager implements TimerManagerLocal {
     @PostConstruct
     private void init() {
         this.date = 0;
-        this.timerDuration = Config.DEFAULT_TIMER / 1000; //converted miliseconds to seconds
+        this.timerDuration = Config.DEFAULT_TIMER / 1000 + 1; //converted miliseconds to seconds
         timerService.createTimer(1000, toMiliSeconds(Config.DEFAULT_TIMER), timerName);
     }
     

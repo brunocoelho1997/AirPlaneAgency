@@ -7,6 +7,7 @@ package logic.UsersManagement;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import logic.Config;
@@ -23,8 +24,9 @@ public class UsersManager implements UsersManagerLocal {
     @EJB
     TUserFacadeLocal userFacade;
     
-    public UsersManager() {      
-        
+    @PostConstruct
+    private void init() {
+        verifyIfAdminExist();
     }
     
     @Override
@@ -43,7 +45,6 @@ public class UsersManager implements UsersManagerLocal {
     @Override
     public boolean signUp(TUserDTO userDTO) {
         
-        verifyIfAdminExist();
         
         TUser useraux = getTUserByUsername(userDTO.getUsername());
         
