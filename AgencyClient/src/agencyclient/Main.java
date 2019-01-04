@@ -34,9 +34,12 @@ public class Main {
 
         while (listenCommand) {
             try{
-                System.out.println("TODO: Listen command....");
-                System.out.print(">");
-                String command = sc.nextLine();
+                System.out.println("Insert command:");
+                System.out.print("> ");
+                
+                String input = sc.nextLine();
+                String command = input.split(" ")[0];
+                
                 switch (command) {
                     case Command.SIGNIN:
                         processSignIn();
@@ -147,15 +150,16 @@ public class Main {
                         processGetTimerInformation();
                         break;
                     case Command.GET_LOGS:
-                        processGetLogs(command);
+                        processGetLogs(input);
                         break;
                     
                     default:
                         System.out.println("Command not found. Type help to get a command list.");
-
                         break;
-
                 }
+                
+                System.out.println("");
+                
             }catch(Exception e){
                 System.err.println("Error - " + e);
             }
@@ -1002,10 +1006,25 @@ public class Main {
     }
     
     private static void processGetLogs(String input) {
-        // TODO checkar input para numero de linhas
-        List<TLogDTO> logs = sAgencyManager.getLogs(0);
+        String[] inputs = input.split(" ");
+        if (inputs.length == 1) {
+            printLogs(0);
+            return;
+        }
         
-        System.out.println("\n\nLOGS (" + logs.size() + " logs):");
+        try {
+            int numberOfLines = Integer.parseInt(inputs[1]);
+            printLogs(numberOfLines);
+            
+        } catch(NumberFormatException e) {
+            System.out.println("Wrong number format: " + inputs[1]);
+        }
+    }
+    
+    private static void printLogs(int lines) {
+        List<TLogDTO> logs = sAgencyManager.getLogs(lines);
+        
+        System.out.println("\nLOGS (" + logs.size() + " logs):");
         for (TLogDTO log : logs) {
             System.out.println(getFormattedLogMessage(log));
         }
@@ -1023,6 +1042,7 @@ public class Main {
         System.out.println(Command.DEPOSITTOACCOUNT + " - Deposit amoung in user account");
         System.out.println(Command.FINDALLUSERS + " - Find all Users");
         System.out.println("asguest - Enter as guest");
+        System.out.println(Command.EXIT + " - Exit");
 
         //planes
         System.out.println("\n-------Planes--------");
@@ -1072,8 +1092,11 @@ public class Main {
         System.out.println(Command.GETATUALDATE+ " - Get atual time of the system");
         System.out.println(Command.SETDURATIONTIMER + " - Set (in minuts) the increment of time");
         System.out.println(Command.GETTIMERINFORMATION + " - Get information of the timer");
-    
-        System.out.println(Command.EXIT + " - Exit");
+        
+        //logs
+        System.out.println("\n-------Logs--------");
+        System.out.println(Command.GET_LOGS+ " - Get logs. Syntax: getlogs [n] (n: number of lines - optional)");
+        
         System.out.println("----------------");
     }
     

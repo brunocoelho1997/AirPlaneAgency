@@ -22,6 +22,8 @@ public interface TLogFacadeLocal {
     List<TLog> findAll();
 
     List<TLog> findRange(int[] range);
+    
+    List<TLog> findLast(int limit, String column);
 
     int count();
     
