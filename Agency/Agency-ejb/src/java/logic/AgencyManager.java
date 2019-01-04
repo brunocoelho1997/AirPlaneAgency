@@ -3,6 +3,7 @@ package logic;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import logic.LogsManagement.LogsManagerLocal;
 import logic.TimerManagement.TimerManagerLocal;
 import logic.TripsManagement.TripsManagerLocal;
 import logic.UsersManagement.UsersManagerLocal;
@@ -14,11 +15,15 @@ public class AgencyManager implements AgencyManagerRemote {
 
     @EJB
     UsersManagerLocal usersManagerLocal;
+    
     @EJB
     TripsManagerLocal tripsManagerLocal;
     
     @EJB
     TimerManagerLocal timerManagerLocal;
+    
+    @EJB
+    LogsManagerLocal logsManagerLocal;
     
     String username;
 
@@ -237,10 +242,11 @@ public class AgencyManager implements AgencyManagerRemote {
     @Override
     public String getTimerInformation() {
         return timerManagerLocal.getTimerInformation();
+    }    
+
+    @Override
+    public List<TLogDTO> getLogs(int lines) {
+        return logsManagerLocal.getLogs(lines);
     }
-
-    
-
-    
  
 }

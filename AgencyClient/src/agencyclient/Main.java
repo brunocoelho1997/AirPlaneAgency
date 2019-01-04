@@ -1,5 +1,7 @@
 package agencyclient;
 
+import static agencyclient.Utils.getFormattedLogMessage;
+import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
 import javax.naming.InitialContext;
@@ -8,6 +10,7 @@ import logic.AgencyManagerRemote;
 import logic.Config;
 import logic.NoPermissionException;
 import logic.TAirlineDTO;
+import logic.TLogDTO;
 import logic.TPlaceDTO;
 import logic.TPlaceFeedbackDTO;
 import logic.TPlaneDTO;
@@ -22,9 +25,7 @@ public class Main {
     public static void main(String[] args) {
         initRemoteReferences();
         
-        
         doListenCommands();
-        
     }
     
     private static void doListenCommands() {
@@ -144,6 +145,9 @@ public class Main {
                         break;
                     case Command.GETTIMERINFORMATION:
                         processGetTimerInformation();
+                        break;
+                    case Command.GET_LOGS:
+                        processGetLogs(command);
                         break;
                     
                     default:
@@ -997,6 +1001,16 @@ public class Main {
         System.out.println("Timer Information: " + sAgencyManager.getTimerInformation());
     }
     
+    private static void processGetLogs(String input) {
+        // TODO checkar input para numero de linhas
+        List<TLogDTO> logs = sAgencyManager.getLogs(0);
+        
+        System.out.println("\n\nLOGS (" + logs.size() + " logs):");
+        for (TLogDTO log : logs) {
+            System.out.println(getFormattedLogMessage(log));
+        }
+    }
+    
 //----------------------------------------------------
     //Auxiliar methods
     private static void printCommandList(){
@@ -1100,6 +1114,4 @@ public class Main {
            System.out.println(e.getMessage());
         }
     }
-
-    
 }

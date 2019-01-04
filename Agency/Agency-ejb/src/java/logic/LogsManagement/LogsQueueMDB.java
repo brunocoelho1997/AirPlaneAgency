@@ -5,6 +5,7 @@
  */
 package logic.LogsManagement;
 
+import logic.TLogDTO;
 import java.io.Serializable;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;

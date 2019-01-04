@@ -64,4 +64,9 @@ public interface AgencyManagerRemote {
     boolean setDurationTimer(long duration);
     String getTimerInformation();
 
+    // logs
+    /*
+    Zero for all logs. Non-zero for defined number of log lines
+    */
+    List<TLogDTO> getLogs(int lines);
 }

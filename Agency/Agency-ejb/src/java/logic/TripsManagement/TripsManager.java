@@ -16,8 +16,8 @@ import javax.jms.JMSContext;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import logic.Config;
-import logic.LogsManagement.LogTypes;
-import logic.LogsManagement.TLogDTO;
+import logic.LogTypes;
+import logic.TLogDTO;
 import logic.NoPermissionException;
 import logic.TAirlineDTO;
 import logic.TPlaceFeedbackDTO;
@@ -403,7 +403,7 @@ public class TripsManager implements TripsManagerLocal {
         
         //se o comentario for de um user diferente do que esta a alterar manda excecao
         if(!placeFeedback.getUserid().getUsername().equals(username))
-            throw new NoPermissionException(Config.msgNoPermissionFeedback);
+            throw new NoPermissionException(Config.MSG_NO_PERMISSION_FEEDBACK);
         
         if(!validatePlaceFeedbackDTO(feedbackDTO))
             return false;
@@ -446,7 +446,7 @@ public class TripsManager implements TripsManagerLocal {
         
         //se o comentario for de um user diferente do que esta a alterar manda excecao
         if(!placeFeedback.getUserid().getUsername().equals(username))
-            throw new NoPermissionException(Config.msgNoPermissionFeedback);
+            throw new NoPermissionException(Config.MSG_NO_PERMISSION_FEEDBACK);
         
         placeFeedbackFacade.remove(placeFeedback);
         
@@ -673,7 +673,7 @@ public class TripsManager implements TripsManagerLocal {
         
         //se o comentario for de um user diferente do que esta a alterar manda excecao
         if(!tripFeedback.getUserid().getUsername().equals(username))
-            throw new NoPermissionException(Config.msgNoPermissionFeedback);
+            throw new NoPermissionException(Config.MSG_NO_PERMISSION_FEEDBACK);
         
         
         TUser user = userManager.getTUserByUsername(username);
@@ -707,7 +707,7 @@ public class TripsManager implements TripsManagerLocal {
         
         //se o comentario for de um user diferente do que esta a alterar manda excecao
         if(!tripFeedback.getUserid().getUsername().equals(username))
-            throw new NoPermissionException(Config.msgNoPermissionFeedback);
+            throw new NoPermissionException(Config.MSG_NO_PERMISSION_FEEDBACK);
         
         tripFeedbackFacade.remove(tripFeedback);
         
@@ -759,7 +759,7 @@ public class TripsManager implements TripsManagerLocal {
     
     private void verifyPermission(String username, int permissionType) throws NoPermissionException{
         
-        String errorMessage = (Config.CLIENT == permissionType? Config.msgNoPermission: Config.msgNoPermissionOperator);
+        String errorMessage = (Config.CLIENT == permissionType? Config.MSG_NO_PERMISSION: Config.MSG_NO_PERMISSION_OPERATOR);
         
         if(username == null || username.isEmpty())
             throw new NoPermissionException(errorMessage);
@@ -779,7 +779,7 @@ public class TripsManager implements TripsManagerLocal {
 
     private void sendLogMessage(String username, String msg, int date) throws NoPermissionException {        
         if (username == null || username.isEmpty())
-                throw new NoPermissionException(Config.msgNoPermissionLog);
+                throw new NoPermissionException(Config.MSG_NO_PERMISSION_LOG);
         
         
         TUserDTO userDTO = userManager.getTUserDTO(username);
@@ -787,7 +787,7 @@ public class TripsManager implements TripsManagerLocal {
         System.out.println("sendLogMessage: user retrieved:" + userDTO);
         
         if(userDTO == null)
-            throw new NoPermissionException(Config.msgNoPermissionLog);
+            throw new NoPermissionException(Config.MSG_NO_PERMISSION_LOG);
         
         TLogDTO log = new TLogDTO(userDTO, msg, date);
         ObjectMessage message = jmsContext.createObjectMessage(log);

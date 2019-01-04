@@ -6,7 +6,6 @@
 package logic;
 
 import logic.LogsManagement.TLog;
-import logic.LogsManagement.TLogDTO;
 import logic.UsersManagement.TUser;
 
 

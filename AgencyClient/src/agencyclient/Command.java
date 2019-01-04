@@ -60,5 +60,6 @@ public class Command {
     public static final String SETDURATIONTIMER = "setdurationtimer";
     public static final String GETTIMERINFORMATION = "gettimerinformation";
     
-    
+    // logs
+    public static final String GET_LOGS = "getlogs";
 }

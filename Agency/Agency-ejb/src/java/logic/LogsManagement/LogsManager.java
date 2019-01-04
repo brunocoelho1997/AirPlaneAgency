@@ -5,6 +5,7 @@
  */
 package logic.LogsManagement;
 
+import logic.TLogDTO;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -27,7 +28,7 @@ public class LogsManager implements LogsManagerLocal {
     }
 
     @Override
-    public List<TLogDTO> getAllLogs() {
+    public List<TLogDTO> getLogs(int lines) {
         List<TLogDTO> logList = new ArrayList<>();
         for (TLog log : logFacade.findAll()) {
             logList.add(DTOFactory.getTLogDTOFromTLog(log));

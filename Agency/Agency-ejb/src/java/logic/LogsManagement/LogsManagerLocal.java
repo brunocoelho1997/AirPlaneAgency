@@ -5,13 +5,14 @@
  */
 package logic.LogsManagement;
 
+import logic.TLogDTO;
 import java.util.List;
 import javax.ejb.Local;
 
 @Local
 public interface LogsManagerLocal {
     
-    List<TLogDTO> getAllLogs();
+    List<TLogDTO> getLogs(int lines);
     
     TLogDTO getLogsByUser(String username);
     
