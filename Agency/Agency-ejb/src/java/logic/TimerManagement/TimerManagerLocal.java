@@ -14,6 +14,7 @@ import javax.ejb.Local;
 @Local
 public interface TimerManagerLocal {
     int getDate();
+    boolean setDate(int date);
     boolean setDurationTimer(long durationMinuts);
     String getTimerInformation();
 }

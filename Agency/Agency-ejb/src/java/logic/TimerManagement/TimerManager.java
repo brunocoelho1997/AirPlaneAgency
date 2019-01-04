@@ -24,43 +24,39 @@ public class TimerManager implements TimerManagerLocal {
     @Resource
     private TimerService timerService;
     
-    private int time;
+    private int date;
     private long timerDuration;
     static String timerName = "IntervalTimer_Info";
     
     @PostConstruct
     private void init() {
-        timerService.createTimer(1000, Config.DEFAULT_TIMER, timerName);
-    }
-    
-    
-    public TimerManager() {
-        this.time = 0;
+        this.date = 0;
+        this.timerDuration = Config.DEFAULT_TIMER / 1000; //converted miliseconds to seconds
+        timerService.createTimer(1000, toMiliSeconds(Config.DEFAULT_TIMER), timerName);
     }
     
     @Timeout
     public void incrementDate(Timer timer) {
-        time++;
+        date++;
     }
-    
 
     @Override
     public int getDate() {
-        return time;
+        return date;
+    }
+    @Override
+    public boolean setDate(int date) {
+        this.date = date;
+        return true;
     }
 
     @Override
-    public boolean setDurationTimer(long durationMinuts) {
-        
-        long durationSeconds = 60 * durationMinuts;
+    public boolean setDurationTimer(long durationSeconds) {
         
         if(!stopTimer())
             return false;
-        
-        this.timerDuration = durationSeconds;
-        
-        this.timerService.createTimer(1000, durationSeconds, timerName);
-        
+        this.timerDuration = durationSeconds;        
+        this.timerService.createTimer(1000, toMiliSeconds(durationSeconds), timerName);
         return true;
     }
     
@@ -70,9 +66,10 @@ public class TimerManager implements TimerManagerLocal {
         String info = new String();
         
         info += "\n-------Timer-------\n";
-        info += "Atual Duration: " + timerDuration;
+        info += "\nAtual Date: " + date;
+        info += "\nAtual Duration: " + timerDuration + " (seconds)";
         info += "\nTimer Remaining: " + getTimer(timerName).getTimeRemaining();
-        info += "-----------------\n";
+        info += "\n-----------------\n";
 
         return info;
     }
@@ -99,6 +96,11 @@ public class TimerManager implements TimerManagerLocal {
         }
         return null;
     }
+    
+    private long toMiliSeconds(long seconds){
+        return seconds * 1000;
+    }
 
+    
     
 }

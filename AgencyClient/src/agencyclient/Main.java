@@ -140,6 +140,9 @@ public class Main {
                     case Command.REMOVETRIPFEEDBACK:
                         processRemoveTripFeedback();
                         break;
+                    case Command.SETATUALDATE:
+                        processSetAtualDate();
+                        break;
                     case Command.GETATUALDATE:
                         processGetAtualDate();
                         break;
@@ -988,16 +991,31 @@ public class Main {
     private static void processGetAtualDate(){
         System.out.println("Atual Date: " + sAgencyManager.getDate());
     }
-    
+    private static void processSetAtualDate(){
+        Scanner sc = new Scanner(System.in);
+        int date;
+        boolean result = false;
+        
+        System.out.println("Atual date pretended:");
+        date = Integer.parseInt(sc.nextLine());
+        
+        
+        result = sAgencyManager.setDate(date);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't setted the new date.");
+        else
+            System.out.println("Atual date edited with success!"); 
+        
+    }
     private static void processSetDurationTimer(){
         Scanner sc = new Scanner(System.in);
         boolean result;
-         int durationMinuts;
+        int durationSeconds;
         
-        System.out.println("Duration (minuts) :");
-        durationMinuts = Integer.parseInt(sc.nextLine());
+        System.out.println("Duration (seconds) :");
+        durationSeconds = Integer.parseInt(sc.nextLine());
         
-        result = sAgencyManager.setDurationTimer(durationMinuts);
+        result = sAgencyManager.setDurationTimer(durationSeconds);
         if(!result)
             System.out.println("A problem occurred. The system didn't setted the duration timer.");
         else
@@ -1100,6 +1118,7 @@ public class Main {
         //time
         System.out.println("\n-------Time--------");
         System.out.println(Command.GETATUALDATE+ " - Get atual time of the system");
+        System.out.println(Command.SETATUALDATE+ " - Set atual time of the system");
         System.out.println(Command.SETDURATIONTIMER + " - Set (in minuts) the increment of time");
         System.out.println(Command.GETTIMERINFORMATION + " - Get information of the timer");
         

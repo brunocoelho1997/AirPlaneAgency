@@ -14,8 +14,6 @@ public interface AgencyManagerRemote {
     TUserDTO getTUserDTO(String username);
     boolean depositToAccount(float amount);
     List<TUserDTO> findAllUsers();
-
-
         
     //planes
     List<TPlaneDTO> findAllPlanes() throws NoPermissionException;
@@ -61,7 +59,8 @@ public interface AgencyManagerRemote {
     
     //date
     int getDate();
-    boolean setDurationTimer(long duration);
+    boolean setDate(int date);
+    boolean setDurationTimer(long durationSeconds);
     String getTimerInformation();
 
     // logs

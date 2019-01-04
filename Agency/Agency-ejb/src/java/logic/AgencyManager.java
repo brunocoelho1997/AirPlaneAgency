@@ -235,8 +235,13 @@ public class AgencyManager implements AgencyManagerRemote {
     }
 
     @Override
-    public boolean setDurationTimer(long durationMinuts) {
-        return timerManagerLocal.setDurationTimer(durationMinuts);
+    public boolean setDate(int date) {
+        return timerManagerLocal.setDate(date);
+    }
+    
+    @Override
+    public boolean setDurationTimer(long durationSeconds) {
+        return timerManagerLocal.setDurationTimer(durationSeconds);
     }
 
     @Override

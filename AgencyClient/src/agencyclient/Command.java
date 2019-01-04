@@ -6,7 +6,6 @@ public class Command {
     public static final String HELP = "help";
     public static final String CLS = "cls";
     
-    
     //users
     public static final String SIGNIN = "signin";
     public static final String SIGNUP = "signup";
@@ -15,9 +14,6 @@ public class Command {
     public static final String ACCEPTUSER = "acceptuser";
     public static final String DEPOSITTOACCOUNT = "deposittoaccount";
     public static final String FINDALLUSERS = "findallusers";
-
-
-    
     
     //planes
     public static final String FINDALLPLANES = "findallplanes";
@@ -57,6 +53,7 @@ public class Command {
     
     //date
     public static final String GETATUALDATE = "getatualdate";
+    public static final String SETATUALDATE = "setatualdate";
     public static final String SETDURATIONTIMER = "setdurationtimer";
     public static final String GETTIMERINFORMATION = "gettimerinformation";
     

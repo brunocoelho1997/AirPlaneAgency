@@ -242,7 +242,7 @@ public class Config {
     public static final String MSG_NO_PERMISSION_FEEDBACK = "No permission to change the place's feedback of other user.";
     public static final String MSG_NO_PERMISSION_LOG = "No permission to add logg: user does not exist.";
 
-    public static final long DEFAULT_TIMER= 60;
+    public static final long DEFAULT_TIMER= 1000;
 
     
 }
