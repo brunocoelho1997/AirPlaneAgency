@@ -153,7 +153,7 @@ public class Main {
                         processGetLogs(input);
                         break;
                     case Command.REMOVE_LOGS:
-                        processDeleteLogs();
+                        processRemoveLogs();
                         break;
                     
                     default:
@@ -1026,7 +1026,7 @@ public class Main {
         }
     }
     
-    private static void processDeleteLogs() {
+    private static void processRemoveLogs() {
         sAgencyManager.removeLogs();
         System.out.println("Logs removed");
     }
