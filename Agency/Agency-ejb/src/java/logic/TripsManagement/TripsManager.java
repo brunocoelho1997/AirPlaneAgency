@@ -16,6 +16,7 @@ import javax.jms.JMSContext;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import logic.Config;
+import logic.DTOFactory;
 import logic.LogTypes;
 import logic.TLogDTO;
 import logic.NoPermissionException;
@@ -23,6 +24,8 @@ import logic.TAirlineDTO;
 import logic.TPlaceFeedbackDTO;
 import logic.TPlaceDTO;
 import logic.TPlaneDTO;
+import logic.TPurchaseDTO;
+import logic.TSeatDTO;
 import logic.TTripDTO;
 import logic.TTripFeedbackDTO;
 import logic.TUserDTO;
@@ -76,7 +79,7 @@ public class TripsManager implements TripsManagerLocal {
         List<TPlaneDTO> tPlaneDTOList = new ArrayList<>();
         for(TPlane tplane : planeFacade.findAll())
         {
-            tPlaneDTOList.add(planeToDTO(tplane));
+            tPlaneDTOList.add(DTOFactory.getTPlaneDTOFromTPlane(tplane));
         }
         return tPlaneDTOList;
     }
@@ -91,7 +94,7 @@ public class TripsManager implements TripsManagerLocal {
         if(plane == null)
             return null;
         
-        return planeToDTO(plane);
+        return DTOFactory.getTPlaneDTOFromTPlane(plane);
     }
     
     @Override
@@ -143,11 +146,7 @@ public class TripsManager implements TripsManagerLocal {
         planeFacade.remove(tplane);
         return true;
     }
-    
-    private TPlaneDTO planeToDTO(TPlane tplane){
-        return new TPlaneDTO(tplane.getId(), tplane.getPlanename(), tplane.getPlanelimit());
-    }
-    
+        
     private boolean validatePlaneDTO(TPlaneDTO planeDTO)
     {
         if(planeDTO.getPlaneName()== null || planeDTO.getPlaneName().isEmpty())
@@ -167,7 +166,7 @@ public class TripsManager implements TripsManagerLocal {
         List<TAirlineDTO> tAirlineDTOList = new ArrayList<>();
         for(TAirline tairline : airlineFacade.findAll())
         {
-            tAirlineDTOList.add(airlineToDTO(tairline));
+            tAirlineDTOList.add(DTOFactory.getTAirlineDTOFromTAirline(tairline));
         }
         return tAirlineDTOList;
     }
@@ -181,7 +180,7 @@ public class TripsManager implements TripsManagerLocal {
         if(airline == null)
             return null;
         
-        return airlineToDTO(airline);
+        return DTOFactory.getTAirlineDTOFromTAirline(airline);
     }
 
     @Override
@@ -232,10 +231,6 @@ public class TripsManager implements TripsManagerLocal {
         return true;
     }
     
-    private TAirlineDTO airlineToDTO(TAirline airline){
-        return new TAirlineDTO(airline.getId(), airline.getAirlinename(), airline.getPhonenumber());
-    }
-    
     private boolean validateAirlineDTO(TAirlineDTO airlineDTO)
     {
         if(airlineDTO.getAirlineName()== null || airlineDTO.getAirlineName().isEmpty())
@@ -253,7 +248,7 @@ public class TripsManager implements TripsManagerLocal {
         List<TPlaceDTO> tplaceDTOList = new ArrayList<>();
         for(TPlace place : placeFacade.findAll())
         {
-            tplaceDTOList.add(placeToDTO(place));
+            tplaceDTOList.add(DTOFactory.getTPlaceDTOFromTPlace(place));
         }
         return tplaceDTOList;
     }
@@ -265,7 +260,7 @@ public class TripsManager implements TripsManagerLocal {
         if(place == null)
             return null;
         
-        return placeToDTO(place);
+        return DTOFactory.getTPlaceDTOFromTPlace(place);
         
     }
 
@@ -323,17 +318,7 @@ public class TripsManager implements TripsManagerLocal {
         placeFacade.remove(place);
         return true;
     }
-    
-    private TPlaceDTO placeToDTO(TPlace place){
-        List<TPlaceFeedbackDTO> placeFeedBackList = new ArrayList();
-        for(TPlacefeedback placeFeedback : place.getTPlacefeedbackCollection())
-        {
-            placeFeedBackList.add(placeFeedbackToDTO(placeFeedback));
-        }
-        
-        return new TPlaceDTO(place.getId(), place.getCountry(), place.getCity(), place.getAddress(),placeFeedBackList);
-    }
-    
+   
     private boolean validatePlaceDTO(TPlaceDTO placeDTO)
     {
         if(placeDTO == null)
@@ -389,7 +374,7 @@ public class TripsManager implements TripsManagerLocal {
         if(placeFeedback == null)
             return null;
         
-        return placeFeedbackToDTO(placeFeedback);
+        return DTOFactory.getTPlacefeedbackDTOFromTPlacefeedback(placeFeedback);
     }
     
     @Override
@@ -413,10 +398,6 @@ public class TripsManager implements TripsManagerLocal {
         placeFeedbackFacade.edit(placeFeedback);
         
         return true;
-    }
-    
-    private TPlaceFeedbackDTO placeFeedbackToDTO(TPlacefeedback feedback){
-        return new TPlaceFeedbackDTO(feedback.getId(), feedback.getScore());
     }
     
     private boolean validatePlaceFeedbackDTO(TPlaceFeedbackDTO placeFeedback)
@@ -465,7 +446,7 @@ public class TripsManager implements TripsManagerLocal {
         List<TTripDTO> tTripDTOList = new ArrayList<>();
         for(TTrip trip : tripFacade.findAll())
         {
-            tTripDTOList.add(tripToDTO(trip));
+            tTripDTOList.add(DTOFactory.getTTripDTOFromTTrip(trip));
         }
         return tTripDTOList;
     }
@@ -477,7 +458,7 @@ public class TripsManager implements TripsManagerLocal {
         if(trip == null)
             return null;
         
-        return tripToDTO(trip);
+        return DTOFactory.getTTripDTOFromTTrip(trip);
     }
 
     @Override
@@ -598,15 +579,6 @@ public class TripsManager implements TripsManagerLocal {
         return true;
     }
     
-    private TTripDTO tripToDTO(TTrip trip){
-        List<TTripFeedbackDTO> tripFeedBackList = new ArrayList();
-        for(TTripfeedback tripfeedback : trip.getTTripfeedbackCollection())
-        {
-            tripFeedBackList.add(tripFeedbackToDTO(tripfeedback));
-        }             
-        return new TTripDTO(trip.getId(), trip.getPrice(), trip.getDone(), trip.getCanceled(), trip.getDatetrip(),airlineToDTO(trip.getAirlineid()), placeToDTO(trip.getPlaceid()), planeToDTO(trip.getPlaneid()), tripFeedBackList);
-    }
-
     private boolean validateTripDTO(TTripDTO tripDTO)
     {
         if(tripDTO == null)
@@ -628,7 +600,7 @@ public class TripsManager implements TripsManagerLocal {
         if(tripFeedback == null)
             return null;
         
-        return tripFeedbackToDTO(tripFeedback);
+        return DTOFactory.getTTripfeedbackDTOFromTTripfeedback(tripFeedback);
     }
 
     @Override
@@ -717,10 +689,6 @@ public class TripsManager implements TripsManagerLocal {
         return true;
     }
     
-    private TTripFeedbackDTO tripFeedbackToDTO(TTripfeedback feedback){
-        return new TTripFeedbackDTO(feedback.getId(), feedback.getScore());
-    }
-    
     private boolean validateTripFeedbackDTO(TTripFeedbackDTO tripFeedback, TTrip trip, TUser user)
     {
         boolean userDoneTripTemp = false;
@@ -753,6 +721,40 @@ public class TripsManager implements TripsManagerLocal {
         
         return true;
     }
+    
+    
+    //-------------------------------------------------------------------------------------------------------------------
+    //purchase
+    @Override
+    public List<TPurchaseDTO> findAllPurchases(String username) throws NoPermissionException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<TPurchaseDTO> findAllPurchasesOfUser(String username) throws NoPermissionException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean addSeatToPurchase(TTripDTO tripDTO, TSeatDTO seatDTO, String username) throws NoPermissionException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean editSeatOfPurchase(TSeatDTO seatDTO, String username) throws NoPermissionException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean removeSeatOfPurchase(TSeatDTO seatDTO, String username) throws NoPermissionException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean finishPurchase(TPurchaseDTO purchaseDTO) throws NoPermissionException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     
 //-----------------------------------------------------------------------------------------------------------------
     //auxiliar methods
@@ -793,5 +795,7 @@ public class TripsManager implements TripsManagerLocal {
         ObjectMessage message = jmsContext.createObjectMessage(log);
         jmsContext.createProducer().send(logsQueue, message);
     }
+
+    
 
 }

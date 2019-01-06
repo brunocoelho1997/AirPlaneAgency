@@ -61,8 +61,7 @@ public class LogsManager implements LogsManagerLocal {
         if (user == null) {
             return false;
         }
-        
-        
+                
         TLog newLog = DTOFactory.getTLogFromTLogDTO(log);
         newLog.setUserid(user);
         

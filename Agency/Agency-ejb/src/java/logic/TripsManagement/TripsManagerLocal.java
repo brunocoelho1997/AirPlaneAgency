@@ -12,6 +12,8 @@ import logic.TAirlineDTO;
 import logic.TPlaceFeedbackDTO;
 import logic.TPlaceDTO;
 import logic.TPlaneDTO;
+import logic.TPurchaseDTO;
+import logic.TSeatDTO;
 import logic.TTripDTO;
 import logic.TTripFeedbackDTO;
 
@@ -49,8 +51,6 @@ public interface TripsManagerLocal {
     boolean editFeedbackOfPlace(TPlaceFeedbackDTO feedbackDTO, String username) throws NoPermissionException;
     boolean removeFeedbackOfPlace(TPlaceFeedbackDTO feedbackDTO, String username) throws NoPermissionException;
     
-    
-    
     //trip
     List<TTripDTO> findAllTrips();
     TTripDTO findTrip(int id);
@@ -65,4 +65,15 @@ public interface TripsManagerLocal {
     boolean addFeedbackToTrip(TTripDTO tripDTO, TTripFeedbackDTO tripFeedbackDTO, String username) throws NoPermissionException;
     boolean editFeedbackOfTrip(TTripFeedbackDTO tripFeedbackDTO, String username) throws NoPermissionException;
     boolean removeFeedbackOfTrip(TTripFeedbackDTO tripFeedbackDTO, String username) throws NoPermissionException;
+
+    //purchase
+    List<TPurchaseDTO> findAllPurchases(String username) throws NoPermissionException;
+    List<TPurchaseDTO> findAllPurchasesOfUser(String username) throws NoPermissionException;
+    boolean addSeatToPurchase(TTripDTO tripDTO, TSeatDTO seatDTO, String username) throws NoPermissionException;
+    boolean editSeatOfPurchase(TSeatDTO seatDTO, String username) throws NoPermissionException;
+    boolean removeSeatOfPurchase(TSeatDTO seatDTO, String username) throws NoPermissionException;
+    boolean finishPurchase(TPurchaseDTO purchaseDTO) throws NoPermissionException;
+
+
+
 }

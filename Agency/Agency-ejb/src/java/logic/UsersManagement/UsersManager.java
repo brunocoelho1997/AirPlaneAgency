@@ -106,7 +106,7 @@ public class UsersManager implements UsersManagerLocal {
         if(user == null)
             return false;
         
-        if(amount <= ((double)0))
+        if(amount <= 0)
             return false;
         
         user.setBalance(user.getBalance() + amount);
