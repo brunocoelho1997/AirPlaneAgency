@@ -8,6 +8,7 @@ package logic.TimerManagement;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import javax.ejb.Timeout;
 import javax.ejb.Timer;
 import javax.ejb.TimerConfig;
@@ -19,6 +20,7 @@ import logic.Config;
  * @author bruno
  */
 @Singleton
+@Startup
 public class TimerManager implements TimerManagerLocal {
 
     @Resource
@@ -31,7 +33,7 @@ public class TimerManager implements TimerManagerLocal {
     @PostConstruct
     private void init() {
         this.date = 0;
-        this.timerDuration = Config.DEFAULT_TIMER / 1000;
+        this.timerDuration = Config.DEFAULT_TIMER;
         timerService.createTimer(1000, secondsToMiliSeconds(Config.DEFAULT_TIMER), timerName);
     }
     
