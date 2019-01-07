@@ -31,8 +31,8 @@ public class TimerManager implements TimerManagerLocal {
     @PostConstruct
     private void init() {
         this.date = 0;
-        this.timerDuration = Config.DEFAULT_TIMER / 1000 + 1; //converted miliseconds to seconds
-        timerService.createTimer(1000, toMiliSeconds(Config.DEFAULT_TIMER), timerName);
+        this.timerDuration = Config.DEFAULT_TIMER / 1000;
+        timerService.createTimer(1000, secondsToMiliSeconds(Config.DEFAULT_TIMER), timerName);
     }
     
     @Timeout
@@ -56,7 +56,7 @@ public class TimerManager implements TimerManagerLocal {
         if(!stopTimer())
             return false;
         this.timerDuration = durationSeconds;        
-        this.timerService.createTimer(1000, toMiliSeconds(durationSeconds), timerName);
+        this.timerService.createTimer(1000, secondsToMiliSeconds(durationSeconds), timerName);
         return true;
     }
     
@@ -97,7 +97,7 @@ public class TimerManager implements TimerManagerLocal {
         return null;
     }
     
-    private long toMiliSeconds(long seconds){
+    private long secondsToMiliSeconds(long seconds){
         return seconds * 1000;
     }
 

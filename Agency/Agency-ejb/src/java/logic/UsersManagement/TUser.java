@@ -19,7 +19,10 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import logic.LogsManagement.TLog;
+import logic.TripsManagement.TPurchase;
+import logic.TripsManagement.TSeat;
 
 /**
  *
@@ -41,6 +44,11 @@ public class TUser implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userid")
     private Collection<TLog> tLogCollection;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userid")
+    private Collection<TSeat> tSeatCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userid")
+    private Collection<TPurchase> tPurchaseCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -160,6 +168,25 @@ public class TUser implements Serializable {
         return "logic.UsersManagement.TUser[ id=" + id + " ]";
     }
 
+    @XmlTransient
+    public Collection<TSeat> getTSeatCollection() {
+        return tSeatCollection;
+    }
+
+    public void setTSeatCollection(Collection<TSeat> tSeatCollection) {
+        this.tSeatCollection = tSeatCollection;
+    }
+
+    @XmlTransient
+    public Collection<TPurchase> getTPurchaseCollection() {
+        return tPurchaseCollection;
+    }
+
+    public void setTPurchaseCollection(Collection<TPurchase> tPurchaseCollection) {
+        this.tPurchaseCollection = tPurchaseCollection;
+    }
+
+    @XmlTransient
     public Collection<TLog> getTLogCollection() {
         return tLogCollection;
     }

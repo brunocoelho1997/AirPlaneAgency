@@ -19,6 +19,7 @@ public interface UsersManagerLocal {
     boolean signIn(String username, String password);
     boolean signUp(TUserDTO userDTO);
     boolean acceptTUser(TUserDTO userDTO, String username);
+    boolean editTUser(TUser userTmp);
     TUserDTO getTUserDTO(String username);
     TUser getTUserByUsername(String usernameOfWantedUser);
     boolean depositToAccount(float amount,String username);

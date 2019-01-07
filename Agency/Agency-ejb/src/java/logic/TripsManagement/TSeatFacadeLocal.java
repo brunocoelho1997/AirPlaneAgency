@@ -17,6 +17,8 @@ public interface TSeatFacadeLocal {
 
     void create(TSeat tSeat);
 
+    TSeat createAndGetEntity(TSeat tSeat);
+
     void edit(TSeat tSeat);
 
     void remove(TSeat tSeat);

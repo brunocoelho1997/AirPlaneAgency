@@ -17,10 +17,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 import logic.UsersManagement.TUser;
 
+/**
+ *
+ * @author bruno
+ */
 @Entity
 @Table(name = "t_log")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "TLog.findAll", query = "SELECT t FROM TLog t")
     , @NamedQuery(name = "TLog.findById", query = "SELECT t FROM TLog t WHERE t.id = :id")
@@ -56,7 +62,7 @@ public class TLog implements Serializable {
         this.msg = msg;
         this.datelog = datelog;
     }
-    
+
     public Integer getId() {
         return id;
     }
@@ -111,7 +117,7 @@ public class TLog implements Serializable {
 
     @Override
     public String toString() {
-        return "logic.TLog[ id=" + id + " ]";
+        return "logic.LogsManagement.TLog[ id=" + id + " ]";
     }
     
 }

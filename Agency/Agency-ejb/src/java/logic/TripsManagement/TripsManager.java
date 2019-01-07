@@ -63,6 +63,9 @@ public class TripsManager implements TripsManagerLocal {
     @EJB
     TPurchaseFacadeLocal purchaseFacade;
     
+    @EJB
+    TSeatFacadeLocal seatFacade;
+    
     @Resource(mappedName = "jms/MyQueue")
     Queue logsQueue;
     
@@ -727,17 +730,102 @@ public class TripsManager implements TripsManagerLocal {
     //purchase
     @Override
     public List<TPurchaseDTO> findAllPurchases(String username) throws NoPermissionException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        verifyPermission(username, Config.OPERATOR);
+        
+        List<TPurchaseDTO> purchaseDTOList = new ArrayList<>();
+        for(TPurchase purchase : purchaseFacade.findAll())
+        {
+            purchaseDTOList.add(DTOFactory.getTPurchaseDTOFromTPurchase(purchase));
+        }
+        return purchaseDTOList;
     }
 
     @Override
     public List<TPurchaseDTO> findAllPurchasesOfUser(String username) throws NoPermissionException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        verifyPermission(username, Config.CLIENT);
+
+        TUser user = userManager.getTUserByUsername(username);
+        
+        List<TPurchaseDTO> purchaseDTOList = new ArrayList<>();
+        
+        for(TPurchase purchase : user.getTPurchaseCollection())
+        {
+            purchaseDTOList.add(DTOFactory.getTPurchaseDTOFromTPurchase(purchase));
+        }
+
+        return purchaseDTOList;
     }
 
     @Override
-    public boolean addSeatToPurchase(TTripDTO tripDTO, TSeatDTO seatDTO, String username) throws NoPermissionException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public TPurchaseDTO findPurchase(int id, String username) throws NoPermissionException {
+        TPurchase purchase = purchaseFacade.find(id);
+        
+        if(purchase == null)
+            return null;
+        
+        return DTOFactory.getTPurchaseDTOFromTPurchase(purchase);
+    }
+    
+    @Override
+    public boolean buySeatsToTrip(TTripDTO tripDTO, List<TSeatDTO> seatDTOList, String username) throws NoPermissionException {
+        
+        verifyPermission(username, Config.CLIENT);
+        
+        //user----------------
+        TUser user = userManager.getTUserByUsername(username);
+        
+        if(user == null)
+            return false;
+        
+        //trip----------------
+        TTrip trip = tripFacade.find(tripDTO.getId());
+        
+        if(trip == null)
+            return false;
+        
+        //purchase----------------
+        TPurchase purchase = null;
+        
+        for(TPurchase purchaseTmp : user.getTPurchaseCollection()){
+            if(!purchaseTmp.getDone())
+            {
+                purchase = purchaseTmp;
+                break;
+            }
+        }
+        
+        if(purchase == null)
+        {
+            purchase = new TPurchase();
+            purchase.setDone(false);
+            purchase.setTSeatCollection(new ArrayList());
+            purchase.setUserid(user);
+            purchaseFacade.create(purchase);
+        }
+        
+        for(TSeatDTO seatDTO : seatDTOList)
+        {
+            //create seat----------------
+            TSeat seat = new TSeat();
+            seat.setAuctioned(seatDTO.getAuctioned());
+            seat.setLuggage(seatDTO.getLuggage());
+            seat.setPrice(trip.getPrice());
+            seat.setTripid(trip);
+            seat.setUserid(user);
+            seat.setPurchaseid(purchase);
+
+            seat = seatFacade.createAndGetEntity(seat);
+
+            purchase.getTSeatCollection().add(seat);
+            user.getTSeatCollection().add(seat);
+            user.getTPurchaseCollection().add(purchase);
+            trip.getTSeatCollection().add(seat);
+        }
+        purchaseFacade.edit(purchase);
+        userManager.editTUser(user);
+        tripFacade.edit(trip);
+        
+        return true;
     }
 
     @Override
@@ -751,7 +839,7 @@ public class TripsManager implements TripsManagerLocal {
     }
 
     @Override
-    public boolean finishPurchase(TPurchaseDTO purchaseDTO) throws NoPermissionException {
+    public boolean finishPurchase(TPurchaseDTO purchaseDTO, String username) throws NoPermissionException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
@@ -795,6 +883,8 @@ public class TripsManager implements TripsManagerLocal {
         ObjectMessage message = jmsContext.createObjectMessage(log);
         jmsContext.createProducer().send(logsQueue, message);
     }
+
+    
 
     
 

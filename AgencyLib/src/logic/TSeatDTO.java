@@ -5,28 +5,27 @@
  */
 package logic;
 
+import java.io.Serializable;
+import java.util.Collection;
+
 /**
  *
  * @author bruno
  */
-public class TSeatDTO {
+public class TSeatDTO implements Serializable{
     private Integer id;
     private String luggage;
     private Boolean auctioned;
     private Double price;
-    private TTripDTO trip;
-    private TUserDTO user;
 
     public TSeatDTO() {
     }
 
-    public TSeatDTO(Integer id, String luggage, Boolean auctioned, Double price, TTripDTO trip, TUserDTO user) {
+    public TSeatDTO(Integer id, String luggage, Boolean auctioned, Double price) {
         this.id = id;
         this.luggage = luggage;
         this.auctioned = auctioned;
         this.price = price;
-        this.trip = trip;
-        this.user = user;
     }
 
     public Integer getId() {
@@ -61,26 +60,10 @@ public class TSeatDTO {
         this.price = price;
     }
 
-    public TTripDTO getTrip() {
-        return trip;
-    }
-
-    public void setTrip(TTripDTO trip) {
-        this.trip = trip;
-    }
-
-    public TUserDTO getUser() {
-        return user;
-    }
-
-    public void setUser(TUserDTO user) {
-        this.user = user;
-    }
-
     @Override
     public String toString() {
-        return "TSeatDTO{" + "id=" + id + ", luggage=" + luggage + ", auctioned=" + auctioned + ", price=" + price + ", trip=" + trip + ", user=" + user + '}';
+        return "TSeatDTO{" + "id=" + id + ", luggage=" + luggage + ", auctioned=" + auctioned + ", price=" + price + '}';
     }
-    
+
     
 }

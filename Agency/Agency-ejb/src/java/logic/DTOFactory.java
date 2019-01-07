@@ -12,6 +12,7 @@ import logic.TripsManagement.TAirline;
 import logic.TripsManagement.TPlace;
 import logic.TripsManagement.TPlacefeedback;
 import logic.TripsManagement.TPlane;
+import logic.TripsManagement.TPurchase;
 import logic.TripsManagement.TSeat;
 import logic.TripsManagement.TTrip;
 import logic.TripsManagement.TTripfeedback;
@@ -29,6 +30,13 @@ public class DTOFactory {
         tUserDTO.setAccepted(user.getAccepted());
         tUserDTO.setUsertype(user.getUsertype());
         tUserDTO.setId(user.getId());
+        
+        List<TPurchaseDTO> purchaseDTOList = new ArrayList();
+        for(TPurchase purchaseTmp : user.getTPurchaseCollection())
+        {
+            purchaseDTOList.add(getTPurchaseDTOFromTPurchase(purchaseTmp));
+        }
+        tUserDTO.settPurchaseCollection(purchaseDTOList);
         
         if(user.getUsertype() == Config.CLIENT)
         {
@@ -106,7 +114,15 @@ public class DTOFactory {
     }
     
     public static TSeatDTO getTSeatDTOFromTSeat(TSeat seat){
-        return new TSeatDTO(seat.getId(), seat.getLuggage(), seat.getAuctioned(), seat.getPrice(), getTTripDTOFromTTrip(seat.getTripid()), getTUserDTOFromTUser(seat.getUserid()));
+        return new TSeatDTO(seat.getId(), seat.getLuggage(), seat.getAuctioned(), seat.getPrice());
     }
     
+    
+    public static TPurchaseDTO getTPurchaseDTOFromTPurchase(TPurchase purchase){
+        List<TSeatDTO> seatDTOList = new ArrayList();
+        for(TSeat seat : purchase.getTSeatCollection()){
+            seatDTOList.add(getTSeatDTOFromTSeat(seat));
+        }
+        return new TPurchaseDTO(purchase.getId(), purchase.getDone(), seatDTOList);
+    }
 }

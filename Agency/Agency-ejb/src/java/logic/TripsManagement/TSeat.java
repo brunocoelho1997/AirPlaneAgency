@@ -6,7 +6,6 @@
 package logic.TripsManagement;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,13 +13,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import logic.UsersManagement.TUser;
 
 /**
@@ -38,9 +35,6 @@ import logic.UsersManagement.TUser;
     , @NamedQuery(name = "TSeat.findByPrice", query = "SELECT t FROM TSeat t WHERE t.price = :price")})
 public class TSeat implements Serializable {
 
-    @ManyToMany(mappedBy = "tSeatCollection")
-    private Collection<TPurchase> tPurchaseCollection;
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,6 +49,9 @@ public class TSeat implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "price")
     private Double price;
+    @JoinColumn(name = "purchaseid", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private TPurchase purchaseid;
     @JoinColumn(name = "tripid", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private TTrip tripid;
@@ -106,6 +103,14 @@ public class TSeat implements Serializable {
         this.price = price;
     }
 
+    public TPurchase getPurchaseid() {
+        return purchaseid;
+    }
+
+    public void setPurchaseid(TPurchase purchaseid) {
+        this.purchaseid = purchaseid;
+    }
+
     public TTrip getTripid() {
         return tripid;
     }
@@ -145,15 +150,6 @@ public class TSeat implements Serializable {
     @Override
     public String toString() {
         return "logic.TripsManagement.TSeat[ id=" + id + " ]";
-    }
-
-    @XmlTransient
-    public Collection<TPurchase> getTPurchaseCollection() {
-        return tPurchaseCollection;
-    }
-
-    public void setTPurchaseCollection(Collection<TPurchase> tPurchaseCollection) {
-        this.tPurchaseCollection = tPurchaseCollection;
     }
     
 }

@@ -1,6 +1,7 @@
 package agencyclient;
 
 import static agencyclient.Utils.getFormattedLogMessage;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
@@ -14,6 +15,8 @@ import logic.TLogDTO;
 import logic.TPlaceDTO;
 import logic.TPlaceFeedbackDTO;
 import logic.TPlaneDTO;
+import logic.TPurchaseDTO;
+import logic.TSeatDTO;
 import logic.TTripDTO;
 import logic.TTripFeedbackDTO;
 import logic.TUserDTO;
@@ -157,6 +160,15 @@ public class Main {
                         break;
                     case Command.REMOVE_LOGS:
                         processRemoveLogs();
+                        break;
+                    case Command.FINDALLPURCHASES:
+                        processFindAllPurchases();
+                        break;
+                    case Command.FINDALLPURCHASESOFUSER:
+                        processFindAllPurchasesOfUser();
+                        break;
+                    case Command.BUYSEATSTOTRIP:
+                        processBuySeatsToTrip();
                         break;
                     
                     default:
@@ -1056,7 +1068,62 @@ public class Main {
         }
     }
     
-//----------------------------------------------------
+    //----------------------------------------------------
+    //purchases
+    private static void processFindAllPurchases() throws NoPermissionException{
+        System.out.println("All Purchases in the system:");
+       
+        for(TPurchaseDTO purchaseDTO : sAgencyManager.findAllPurchases())
+            System.out.println(purchaseDTO);
+    }
+    
+    private static void processFindAllPurchasesOfUser() throws NoPermissionException{
+        
+    }
+    
+    private static void processBuySeatsToTrip() throws NoPermissionException{
+        Scanner sc = new Scanner(System.in);
+        TTripDTO tripDTO = null;
+        List<TSeatDTO> seatDTOList = new ArrayList();
+        TSeatDTO seatDTO = null;
+        int tripid, numberOfSeats;
+        boolean result = false;
+        
+        System.out.println("Trip Id:");
+        tripid = Integer.parseInt(sc.nextLine());
+        tripDTO = sAgencyManager.findTrip(tripid);
+
+        if(tripDTO == null)
+        {
+            System.out.println("Not found a trip with that id. Try again.");
+            return;
+        }
+
+        System.out.println("Trip: " + tripDTO);
+        
+        System.out.println("Number of seats: ");
+        numberOfSeats = Integer.parseInt(sc.nextLine());
+        while(numberOfSeats>0)
+        {
+            seatDTO = new TSeatDTO();
+            seatDTO.setAuctioned(false);
+            System.out.println("Luggage of seat " + numberOfSeats + ":");
+            seatDTO.setLuggage(sc.nextLine());
+            seatDTOList.add(seatDTO);
+            numberOfSeats--;
+        }
+        
+        
+                
+        result = sAgencyManager.buySeatsToTrip(tripDTO, seatDTOList);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't bought the seat of the trip "  +tripDTO +".");
+        else
+            System.out.println("You bought the seat to the trip " + tripDTO +" with sucess.");
+        
+    }
+    
+    //----------------------------------------------------
     //Auxiliar methods
     private static void printCommandList(){
         System.out.println("\n-- Help --");
@@ -1124,6 +1191,13 @@ public class Main {
         System.out.println("\n-------Logs--------");
         System.out.println(Command.GET_LOGS + " - Get logs. Syntax: getlogs [n] (n: number of lines - optional)");
         System.out.println(Command.REMOVE_LOGS + " - Remove all logs");
+        
+        //Purchases
+        System.out.println("\n-------Purchases--------");
+        System.out.println(Command.FINDALLPURCHASES+ " - Find all purchases in the system");
+        System.out.println(Command.FINDALLPURCHASESOFUSER+ " - Find all purchases of an user in the system");
+        System.out.println(Command.BUYSEATSTOTRIP+ " - Buy seats to a trip");
+    
         
         System.out.println("----------------");
     }

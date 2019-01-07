@@ -69,4 +69,13 @@ public interface AgencyManagerRemote {
     */
     List<TLogDTO> getLogs(int lines);
     void removeLogs();
+    
+    //purchase
+    List<TPurchaseDTO> findAllPurchases() throws NoPermissionException;
+    List<TPurchaseDTO> findAllPurchasesOfUser() throws NoPermissionException;
+    TPurchaseDTO findPurchase(int id) throws NoPermissionException;
+    boolean buySeatsToTrip(TTripDTO tripDTO, List<TSeatDTO> seatDTOList) throws NoPermissionException;
+    boolean editSeatOfPurchase(TSeatDTO seatDTO) throws NoPermissionException;
+    boolean removeSeatOfPurchase(TSeatDTO seatDTO) throws NoPermissionException;
+    boolean finishPurchase(TPurchaseDTO purchaseDTO) throws NoPermissionException;
 }

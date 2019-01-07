@@ -5,24 +5,25 @@
  */
 package logic;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
  *
  * @author bruno
  */
-public class TPurchaseDTO {
+public class TPurchaseDTO implements Serializable{
     private Integer id;
+    private Boolean done;
     private Collection<TSeatDTO> tSeatCollection;
-    private TUserDTO user;
 
     public TPurchaseDTO() {
     }
 
-    public TPurchaseDTO(Integer id, Collection<TSeatDTO> tSeatCollection, TUserDTO user) {
+    public TPurchaseDTO(Integer id, Boolean done, Collection<TSeatDTO> tSeatCollection) {
         this.id = id;
+        this.done = done;
         this.tSeatCollection = tSeatCollection;
-        this.user = user;
     }
 
     public Integer getId() {
@@ -33,6 +34,14 @@ public class TPurchaseDTO {
         this.id = id;
     }
 
+    public Boolean getDone() {
+        return done;
+    }
+
+    public void setDone(Boolean done) {
+        this.done = done;
+    }
+
     public Collection<TSeatDTO> gettSeatCollection() {
         return tSeatCollection;
     }
@@ -41,18 +50,10 @@ public class TPurchaseDTO {
         this.tSeatCollection = tSeatCollection;
     }
 
-    public TUserDTO getUser() {
-        return user;
-    }
-
-    public void setUser(TUserDTO user) {
-        this.user = user;
-    }
-
     @Override
     public String toString() {
-        return "TPurchaseDTO{" + "id=" + id + ", tSeatCollection=" + tSeatCollection + ", user=" + user + '}';
+        return "TPurchaseDTO{" + "id=" + id + ", done=" + done + ", tSeatCollection=" + tSeatCollection + '}';
     }
-    
+
     
 }

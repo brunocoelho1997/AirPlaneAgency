@@ -249,6 +249,8 @@ public class AgencyManager implements AgencyManagerRemote {
         return timerManagerLocal.getTimerInformation();
     }    
 
+    //---------------------
+    // logs
     @Override
     public List<TLogDTO> getLogs(int lines) {
         return logsManagerLocal.getLogs(lines);
@@ -257,5 +259,42 @@ public class AgencyManager implements AgencyManagerRemote {
     @Override
     public void removeLogs() {
         logsManagerLocal.removeLogs();
+    }
+
+    //---------------------
+    // purchases
+    @Override
+    public List<TPurchaseDTO> findAllPurchases() throws NoPermissionException {
+        return tripsManagerLocal.findAllPurchases(username);
+    }
+
+    @Override
+    public List<TPurchaseDTO> findAllPurchasesOfUser() throws NoPermissionException {
+        return tripsManagerLocal.findAllPurchasesOfUser(username);
+    }
+
+    @Override
+    public TPurchaseDTO findPurchase(int id) throws NoPermissionException {
+        return tripsManagerLocal.findPurchase(id, username);
+    }
+
+    @Override
+    public boolean buySeatsToTrip(TTripDTO tripDTO, List<TSeatDTO> seatDTOList) throws NoPermissionException {
+        return tripsManagerLocal.buySeatsToTrip(tripDTO, seatDTOList, username);
+    }
+
+    @Override
+    public boolean editSeatOfPurchase(TSeatDTO seatDTO) throws NoPermissionException {
+        return tripsManagerLocal.editSeatOfPurchase(seatDTO, username);
+    }
+
+    @Override
+    public boolean removeSeatOfPurchase(TSeatDTO seatDTO) throws NoPermissionException {
+        return tripsManagerLocal.removeSeatOfPurchase(seatDTO, username);
+    }
+
+    @Override
+    public boolean finishPurchase(TPurchaseDTO purchaseDTO) throws NoPermissionException {
+        return tripsManagerLocal.finishPurchase(purchaseDTO, username);
     }
 }

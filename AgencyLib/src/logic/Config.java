@@ -138,6 +138,26 @@ create table t_trip(
 
 
 --------------------------------------------------------------------
+
+- purchase
+
+drop sequence if exists purchase_seq;
+
+create sequence purchase_seq;
+
+drop table if exists t_purchase;
+
+
+create table t_purchase(
+    id int primary key default nextval('purchase_seq'),
+    done boolean,
+    userid int not null,
+
+    constraint fk foreign key (userid) references t_user (id)
+);
+
+--------------------------------------------------------------------
+
 -seat
 
 drop sequence if exists seat_seq;
@@ -154,42 +174,17 @@ create table t_seat(
     price float,
     tripid int not null,
     userid int not null,
+    purchaseid int not null,
+
 
     constraint fk1 foreign key (tripid) references t_trip (id),
-    constraint fk2 foreign key (userid) references t_user (id)
+    constraint fk2 foreign key (userid) references t_user (id),
+    constraint fk3 foreign key (purchaseid) references t_purchase (id)
+
 );
 
 --------------------------------------------------------------------
-- purchase
 
-drop sequence if exists purchase_seq;
-
-create sequence purchase_seq;
-
-drop table if exists t_purchase;
-
-
-create table t_purchase(
-    id int primary key default nextval('purchase_seq'),
-    userid int not null,
-
-    constraint fk foreign key (userid) references t_user (id)
-);
-
---------------------------------------------------------------------
-- purchase and trip (JOIN)
-
-drop table if exists t_purchase_trip;
-
-create table t_purchase_trip(
-    purchaseid int not null,    
-    seatid int not null,
-   
-    
-    constraint fk1 foreign key (purchaseid) references t_purchase (id),
-    constraint fk2 foreign key (seatid) references t_seat (id)
-);
---------------------------------------------------------------------
 - trip feedback
 drop sequence if exists tripfeedback_seq;
 
@@ -242,7 +237,7 @@ public class Config {
     public static final String MSG_NO_PERMISSION_FEEDBACK = "No permission to change the place's feedback of other user.";
     public static final String MSG_NO_PERMISSION_LOG = "No permission to add logg: user does not exist.";
 
-    public static final long DEFAULT_TIMER= 1000;
+    public static final long DEFAULT_TIMER= 60;
 
     
 }

@@ -6,6 +6,7 @@
 package logic;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 /**
  *
@@ -19,8 +20,21 @@ public class TUserDTO implements Serializable{
     private String clientName;
     private Double balance;
     private Boolean accepted;
+    private Collection<TPurchaseDTO> tPurchaseCollection;
 
+    
     public TUserDTO() {
+    }
+
+    public TUserDTO(Integer id, int usertype, String username, String password, String clientName, Double balance, Boolean accepted, Collection<TPurchaseDTO> tPurchaseCollection) {
+        this.id = id;
+        this.usertype = usertype;
+        this.username = username;
+        this.password = password;
+        this.clientName = clientName;
+        this.balance = balance;
+        this.accepted = accepted;
+        this.tPurchaseCollection = tPurchaseCollection;
     }
 
     public Integer getId() {
@@ -38,7 +52,7 @@ public class TUserDTO implements Serializable{
     public void setUsertype(int usertype) {
         this.usertype = usertype;
     }
-    
+
     public String getUsername() {
         return username;
     }
@@ -53,6 +67,14 @@ public class TUserDTO implements Serializable{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
     }
 
     public Double getBalance() {
@@ -71,20 +93,18 @@ public class TUserDTO implements Serializable{
         this.accepted = accepted;
     }
 
-    public String getClientName() {
-        return clientName;
+    public Collection<TPurchaseDTO> gettPurchaseCollection() {
+        return tPurchaseCollection;
     }
 
-    public void setClientName(String clientName) {
-        this.clientName = clientName;
+    public void settPurchaseCollection(Collection<TPurchaseDTO> tPurchaseCollection) {
+        this.tPurchaseCollection = tPurchaseCollection;
     }
 
     @Override
     public String toString() {
-        return "TUserDTO{" + "id=" + id + ", usertype=" + usertype + ", username=" + username + ", password=" + password + ", clientName=" + clientName + ", balance=" + balance + ", accepted=" + accepted + '}';
+        return "TUserDTO{" + "id=" + id + ", usertype=" + usertype + ", username=" + username + ", password=" + password + ", clientName=" + clientName + ", balance=" + balance + ", accepted=" + accepted + ", tPurchaseCollection=" + tPurchaseCollection + '}';
     }
 
-    
-    
     
 }

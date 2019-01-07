@@ -61,6 +61,8 @@ public class UsersManager implements UsersManagerLocal {
         newUser.setUsertype(userDTO.getUsertype());
         newUser.setAccepted(false);
         newUser.setBalance((double) 0);
+        newUser.setTPurchaseCollection(new ArrayList());
+        newUser.setTSeatCollection(new ArrayList());
         
         if(userDTO.getUsertype()==Config.CLIENT)
         {
@@ -142,6 +144,14 @@ public class UsersManager implements UsersManagerLocal {
             
             userFacade.create(admin);
         }
+    }
+
+    @Override
+    public boolean editTUser(TUser userTmp) {
+        if(userTmp == null)
+            return false;
+        userFacade.edit(userTmp);
+        return true;
     }
     
 }

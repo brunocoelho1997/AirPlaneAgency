@@ -8,17 +8,17 @@ package logic.TripsManagement;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -33,8 +33,12 @@ import logic.UsersManagement.TUser;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "TPurchase.findAll", query = "SELECT t FROM TPurchase t")
-    , @NamedQuery(name = "TPurchase.findById", query = "SELECT t FROM TPurchase t WHERE t.id = :id")})
+    , @NamedQuery(name = "TPurchase.findById", query = "SELECT t FROM TPurchase t WHERE t.id = :id")
+    , @NamedQuery(name = "TPurchase.findByDone", query = "SELECT t FROM TPurchase t WHERE t.done = :done")})
 public class TPurchase implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "purchaseid")
+    private Collection<TSeat> tSeatCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -42,11 +46,8 @@ public class TPurchase implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @JoinTable(name = "t_purchase_trip", joinColumns = {
-        @JoinColumn(name = "purchaseid", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "seatid", referencedColumnName = "id")})
-    @ManyToMany
-    private Collection<TSeat> tSeatCollection;
+    @Column(name = "done")
+    private Boolean done;
     @JoinColumn(name = "userid", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private TUser userid;
@@ -66,13 +67,12 @@ public class TPurchase implements Serializable {
         this.id = id;
     }
 
-    @XmlTransient
-    public Collection<TSeat> getTSeatCollection() {
-        return tSeatCollection;
+    public Boolean getDone() {
+        return done;
     }
 
-    public void setTSeatCollection(Collection<TSeat> tSeatCollection) {
-        this.tSeatCollection = tSeatCollection;
+    public void setDone(Boolean done) {
+        this.done = done;
     }
 
     public TUser getUserid() {
@@ -106,6 +106,15 @@ public class TPurchase implements Serializable {
     @Override
     public String toString() {
         return "logic.TripsManagement.TPurchase[ id=" + id + " ]";
+    }
+
+    @XmlTransient
+    public Collection<TSeat> getTSeatCollection() {
+        return tSeatCollection;
+    }
+
+    public void setTSeatCollection(Collection<TSeat> tSeatCollection) {
+        this.tSeatCollection = tSeatCollection;
     }
     
 }
