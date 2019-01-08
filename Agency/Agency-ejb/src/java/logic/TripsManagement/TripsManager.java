@@ -30,6 +30,7 @@ import logic.TTripDTO;
 import logic.TTripFeedbackDTO;
 import logic.TUserDTO;
 import logic.UsersManagement.TUser;
+import logic.UsersManagement.UsersManager;
 import logic.UsersManagement.UsersManagerLocal;
 
 /**
@@ -77,7 +78,7 @@ public class TripsManager implements TripsManagerLocal {
     @Override
     public List<TPlaneDTO> findAllPlanes(String username) throws NoPermissionException {
                
-        verifyPermission(username, Config.OPERATOR);
+        userManager.verifyPermission(username, Config.OPERATOR);
         
         List<TPlaneDTO> tPlaneDTOList = new ArrayList<>();
         for(TPlane tplane : planeFacade.findAll())
@@ -90,7 +91,7 @@ public class TripsManager implements TripsManagerLocal {
     @Override
     public TPlaneDTO findPlane(int id, String username) throws NoPermissionException {
         
-        verifyPermission(username, Config.OPERATOR);
+        userManager.verifyPermission(username, Config.OPERATOR);
 
         TPlane plane = planeFacade.find(id);
         
@@ -103,7 +104,7 @@ public class TripsManager implements TripsManagerLocal {
     @Override
     public boolean addPlane(TPlaneDTO planeDTO, String username) throws NoPermissionException {
         
-        verifyPermission(username, Config.OPERATOR);
+        userManager.verifyPermission(username, Config.OPERATOR);
 
         TPlane tplane = new TPlane();
         
@@ -120,7 +121,7 @@ public class TripsManager implements TripsManagerLocal {
     @Override
     public boolean editPlane(TPlaneDTO planeDTO, String username) throws NoPermissionException {
         
-        verifyPermission(username, Config.OPERATOR);
+        userManager.verifyPermission(username, Config.OPERATOR);
         
         TPlane tplane = planeFacade.find(planeDTO.getId());
         
@@ -140,7 +141,7 @@ public class TripsManager implements TripsManagerLocal {
     @Override
     public boolean removePlane(TPlaneDTO planeDTO, String username) throws NoPermissionException {
         
-        verifyPermission(username, Config.OPERATOR);
+        userManager.verifyPermission(username, Config.OPERATOR);
         
         TPlane tplane = planeFacade.find(planeDTO.getId());
         
@@ -164,7 +165,7 @@ public class TripsManager implements TripsManagerLocal {
     //Airline
     @Override
     public List<TAirlineDTO> findAllAirlines(String username) throws NoPermissionException {
-        verifyPermission(username, Config.OPERATOR);
+        userManager.verifyPermission(username, Config.OPERATOR);
         
         List<TAirlineDTO> tAirlineDTOList = new ArrayList<>();
         for(TAirline tairline : airlineFacade.findAll())
@@ -176,7 +177,7 @@ public class TripsManager implements TripsManagerLocal {
 
     @Override
     public TAirlineDTO findAirline(int id, String username) throws NoPermissionException {
-        verifyPermission(username, Config.OPERATOR);
+        userManager.verifyPermission(username, Config.OPERATOR);
         
         TAirline airline = airlineFacade.find(id);
         
@@ -188,7 +189,7 @@ public class TripsManager implements TripsManagerLocal {
 
     @Override
     public boolean addAirline(TAirlineDTO airlineDTO, String username) throws NoPermissionException {
-        verifyPermission(username, Config.OPERATOR);
+        userManager.verifyPermission(username, Config.OPERATOR);
 
         TAirline tairline = new TAirline();
         
@@ -205,7 +206,7 @@ public class TripsManager implements TripsManagerLocal {
     @Override
     public boolean editAirline(TAirlineDTO airlineDTO, String username) throws NoPermissionException {
         
-        verifyPermission(username, Config.OPERATOR);
+        userManager.verifyPermission(username, Config.OPERATOR);
         
         TAirline tairline = airlineFacade.find(airlineDTO.getId());
         
@@ -224,7 +225,7 @@ public class TripsManager implements TripsManagerLocal {
 
     @Override
     public boolean removeAirline(TAirlineDTO airlineDTO, String username) throws NoPermissionException {
-        verifyPermission(username, Config.OPERATOR);
+        userManager.verifyPermission(username, Config.OPERATOR);
         
         TAirline tairline = airlineFacade.find(airlineDTO.getId());
         
@@ -269,7 +270,7 @@ public class TripsManager implements TripsManagerLocal {
 
     @Override
     public boolean addPlace(TPlaceDTO placeDTO, String username) throws NoPermissionException {
-        verifyPermission(username, Config.OPERATOR);
+        userManager.verifyPermission(username, Config.OPERATOR);
 
         TPlace tplace = new TPlace();
           
@@ -290,7 +291,7 @@ public class TripsManager implements TripsManagerLocal {
     @Override
     public boolean editPlace(TPlaceDTO placeDTO, String username) throws NoPermissionException {
         
-        verifyPermission(username, Config.OPERATOR);
+        userManager.verifyPermission(username, Config.OPERATOR);
         
         TPlace place = placeFacade.find(placeDTO.getId());
         
@@ -312,7 +313,7 @@ public class TripsManager implements TripsManagerLocal {
 
     @Override
     public boolean removePlace(TPlaceDTO placeDTO, String username) throws NoPermissionException {
-        verifyPermission(username, Config.OPERATOR);
+        userManager.verifyPermission(username, Config.OPERATOR);
         
         TPlace place = placeFacade.find(placeDTO.getId());
         
@@ -342,7 +343,7 @@ public class TripsManager implements TripsManagerLocal {
     @Override
     public boolean addFeedbackToPlace(TPlaceDTO placeDTO, TPlaceFeedbackDTO feedbackDTO, String username ) throws NoPermissionException {
         
-        verifyPermission(username, Config.CLIENT);
+        userManager.verifyPermission(username, Config.CLIENT);
         
         TPlace place = placeFacade.find(placeDTO.getId());
         
@@ -382,7 +383,7 @@ public class TripsManager implements TripsManagerLocal {
     
     @Override
     public boolean editFeedbackOfPlace(TPlaceFeedbackDTO feedbackDTO, String username) throws NoPermissionException {
-        verifyPermission(username, Config.CLIENT);
+        userManager.verifyPermission(username, Config.CLIENT);
         
         TPlacefeedback placeFeedback = placeFeedbackFacade.find(feedbackDTO.getId());
         
@@ -416,7 +417,7 @@ public class TripsManager implements TripsManagerLocal {
     
     @Override
     public boolean removeFeedbackOfPlace(TPlaceFeedbackDTO feedbackDTO, String username) throws NoPermissionException {
-        verifyPermission(username, Config.CLIENT);
+        userManager.verifyPermission(username, Config.CLIENT);
         
         TPlacefeedback placeFeedback = placeFeedbackFacade.find(feedbackDTO.getId());
         
@@ -466,7 +467,7 @@ public class TripsManager implements TripsManagerLocal {
 
     @Override
     public boolean addTrip(TTripDTO tripDTO, String username) throws NoPermissionException {
-        verifyPermission(username, Config.OPERATOR);
+        userManager.verifyPermission(username, Config.OPERATOR);
         
         TPlace place = placeFacade.find(tripDTO.getPlaceDTO().getId());     
         if(place == null)
@@ -506,7 +507,7 @@ public class TripsManager implements TripsManagerLocal {
     @Override
     public boolean editTrip(TTripDTO tripDTO, String username) throws NoPermissionException {
         
-        verifyPermission(username, Config.OPERATOR);
+        userManager.verifyPermission(username, Config.OPERATOR);
         
         TTrip trip = tripFacade.find(tripDTO.getId());     
         if(trip == null)
@@ -547,7 +548,7 @@ public class TripsManager implements TripsManagerLocal {
     
     @Override
     public boolean removeTrip(TTripDTO tripDTO, String username) throws NoPermissionException {
-        verifyPermission(username, Config.OPERATOR);
+        userManager.verifyPermission(username, Config.OPERATOR);
         
         TTrip trip = tripFacade.find(tripDTO.getId());
         if(trip == null)
@@ -561,7 +562,7 @@ public class TripsManager implements TripsManagerLocal {
     public boolean cancelTrip(TTripDTO tripDTO, String username) throws NoPermissionException {
         boolean resultTmp = false;
         
-        verifyPermission(username, Config.OPERATOR);
+        userManager.verifyPermission(username, Config.OPERATOR);
         
         TTrip trip = tripFacade.find(tripDTO.getId());     
         if(trip == null)
@@ -599,7 +600,7 @@ public class TripsManager implements TripsManagerLocal {
 
     @Override
     public boolean setTripDone(TTripDTO tripDTO, String username) throws NoPermissionException {
-        verifyPermission(username, Config.OPERATOR);
+        userManager.verifyPermission(username, Config.OPERATOR);
         
         TTrip trip = tripFacade.find(tripDTO.getId());     
         if(trip == null)
@@ -637,7 +638,7 @@ public class TripsManager implements TripsManagerLocal {
 
     @Override
     public boolean addFeedbackToTrip(TTripDTO tripDTO, TTripFeedbackDTO tripFeedbackDTO, String username) throws NoPermissionException {
-        verifyPermission(username, Config.CLIENT);
+        userManager.verifyPermission(username, Config.CLIENT);
         
         TTrip trip = tripFacade.find(tripDTO.getId());
         
@@ -668,7 +669,7 @@ public class TripsManager implements TripsManagerLocal {
 
     @Override
     public boolean editFeedbackOfTrip(TTripFeedbackDTO tripFeedbackDTO, String username) throws NoPermissionException {
-        verifyPermission(username, Config.CLIENT);
+        userManager.verifyPermission(username, Config.CLIENT);
         
         TTripfeedback tripFeedback = tripFeedbackFacade.find(tripFeedbackDTO.getId());
         
@@ -697,7 +698,7 @@ public class TripsManager implements TripsManagerLocal {
 
     @Override
     public boolean removeFeedbackOfTrip(TTripFeedbackDTO tripFeedbackDTO, String username) throws NoPermissionException {
-        verifyPermission(username, Config.CLIENT);
+        userManager.verifyPermission(username, Config.CLIENT);
         
         TTripfeedback tripFeedback = tripFeedbackFacade.find(tripFeedbackDTO.getId());
         
@@ -759,7 +760,7 @@ public class TripsManager implements TripsManagerLocal {
     //purchase
     @Override
     public List<TPurchaseDTO> findAllPurchases(String username) throws NoPermissionException {
-        verifyPermission(username, Config.OPERATOR);
+        userManager.verifyPermission(username, Config.OPERATOR);
         
         List<TPurchaseDTO> purchaseDTOList = new ArrayList<>();
         for(TPurchase purchase : purchaseFacade.findAll())
@@ -771,7 +772,7 @@ public class TripsManager implements TripsManagerLocal {
 
     @Override
     public List<TPurchaseDTO> findAllPurchasesOfUser(String username) throws NoPermissionException {
-        verifyPermission(username, Config.CLIENT);
+        userManager.verifyPermission(username, Config.CLIENT);
 
         TUser user = userManager.getTUserByUsername(username);
         
@@ -798,7 +799,7 @@ public class TripsManager implements TripsManagerLocal {
     @Override
     public boolean buySeatsToTrip(TTripDTO tripDTO, List<TSeatDTO> seatDTOList, String username) throws NoPermissionException {
         
-        verifyPermission(username, Config.CLIENT);
+        userManager.verifyPermission(username, Config.CLIENT);
         
         //user----------------
         TUser user = userManager.getTUserByUsername(username);
@@ -863,8 +864,7 @@ public class TripsManager implements TripsManagerLocal {
 
     //if user has money return true, otherwise return false
     private boolean verifyIfUserHasMoneyToPay(TUser user, TTrip trip, int numberOfSeats) {
-        double total = trip.getPrice() * numberOfSeats;
-        
+        double total = trip.getPrice() * numberOfSeats;      
         return ( (user.getBalance() - total) > 0 ? true : false );
     }
     
@@ -887,26 +887,6 @@ public class TripsManager implements TripsManagerLocal {
 //-----------------------------------------------------------------------------------------------------------------
     //auxiliar methods
     
-    private void verifyPermission(String username, int permissionType) throws NoPermissionException{
-        
-        String errorMessage = (Config.CLIENT == permissionType? Config.MSG_NO_PERMISSION: Config.MSG_NO_PERMISSION_OPERATOR);
-        
-        if(username == null || username.isEmpty())
-            throw new NoPermissionException(errorMessage);
-        
-        TUserDTO userDTO = userManager.getTUserDTO(username);
-        
-        if(userDTO == null)
-            throw new NoPermissionException(errorMessage);
-        
-        if(!userDTO.getAccepted())
-            throw new NoPermissionException(errorMessage);       
-
-        //se for um cliente e a permissao exigida for do tipo de cliente permite... caso contrario nao deixa (os operadores podem fazer tudo, portanto nao fiz validacao para os operadores)
-        if(userDTO.getUsertype() == Config.CLIENT && permissionType != Config.CLIENT)
-            throw new NoPermissionException(errorMessage);       
-    }
-
     private void sendLogMessage(String username, String msg, int date) throws NoPermissionException {        
         if (username == null || username.isEmpty())
                 throw new NoPermissionException(Config.MSG_NO_PERMISSION_LOG);

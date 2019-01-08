@@ -12,6 +12,7 @@ import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import logic.Config;
 import logic.DTOFactory;
+import logic.NoPermissionException;
 import logic.TUserDTO;
 
 /**
@@ -153,4 +154,24 @@ public class UsersManager implements UsersManagerLocal {
         return true;
     }
     
+    @Override
+    public void verifyPermission(String username, int permissionType) throws NoPermissionException{
+        
+        String errorMessage = (Config.CLIENT == permissionType? Config.MSG_NO_PERMISSION: Config.MSG_NO_PERMISSION_OPERATOR);
+        
+        if(username == null || username.isEmpty())
+            throw new NoPermissionException(errorMessage);
+        
+        TUserDTO userDTO = getTUserDTO(username);
+        
+        if(userDTO == null)
+            throw new NoPermissionException(errorMessage);
+        
+        if(!userDTO.getAccepted())
+            throw new NoPermissionException(errorMessage);       
+
+        //se for um cliente e a permissao exigida for do tipo de cliente permite... caso contrario nao deixa (os operadores podem fazer tudo, portanto nao fiz validacao para os operadores)
+        if(userDTO.getUsertype() == Config.CLIENT && permissionType != Config.CLIENT)
+            throw new NoPermissionException(errorMessage);       
+    }
 }

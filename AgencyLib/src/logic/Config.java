@@ -232,6 +232,7 @@ public class Config {
     public static final int OPERATOR = 0;
     public static final int CLIENT = 1;
     
+    
     public static final String MSG_NO_PERMISSION = "No permissions to invoke the method. Just an accepted operator or client has permissions.";
     public static final String MSG_NO_PERMISSION_OPERATOR = "No permissions to invoke the method. Just an accepted operator has permissions.";
     public static final String MSG_NO_PERMISSION_FEEDBACK = "No permission to change the place's feedback of other user.";

@@ -25,4 +25,5 @@ public interface UsersManagerLocal {
     boolean depositToAccount(float amount,String username);
     List<TUserDTO> findAllUsers();
 
+    void verifyPermission(String username, int permissionType) throws NoPermissionException;
 }
