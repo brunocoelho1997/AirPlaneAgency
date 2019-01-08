@@ -11,9 +11,11 @@ import java.util.Collections;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
+import logic.Config;
 import logic.DTOFactory;
+import logic.NoPermissionException;
 import logic.UsersManagement.TUser;
-import logic.UsersManagement.TUserFacadeLocal;
+import logic.UsersManagement.UsersManagerLocal;
 
 @Singleton
 public class LogsManager implements LogsManagerLocal {
@@ -22,16 +24,18 @@ public class LogsManager implements LogsManagerLocal {
     
     @EJB
     TLogFacadeLocal logFacade;
-    
+  
     @EJB
-    TUserFacadeLocal userFacade;
+    UsersManagerLocal userManager;
     
     public LogsManager() {
         // Do nothing
     }
 
     @Override
-    public List<TLogDTO> getLogs(int lines) {
+    public List<TLogDTO> getLogs(int lines, String username) throws NoPermissionException {
+        userManager.verifyPermission(username, lines);
+
         List<TLog> retrievedList;
         
         if (lines > 0) {
@@ -51,13 +55,8 @@ public class LogsManager implements LogsManagerLocal {
     }
 
     @Override
-    public TLogDTO getLogsByUser(String username) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public boolean addLog(TLogDTO log) {
-        TUser user = userFacade.find(log.getUser().getId());
+        TUser user = userManager.getTUserByUsername(log.getUser().getUsername());
         if (user == null) {
             return false;
         }
@@ -70,7 +69,9 @@ public class LogsManager implements LogsManagerLocal {
     }
 
     @Override
-    public void removeLogs() {
+    public void removeLogs(String username) throws NoPermissionException {
+        userManager.verifyPermission(username, Config.OPERATOR);
+
         logFacade.removeAll();
     }
 }

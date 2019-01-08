@@ -1038,7 +1038,7 @@ public class Main {
     
     // logs
     
-    private static void processGetLogs(String input) {
+    private static void processGetLogs(String input) throws NoPermissionException {
         String[] inputs = input.split(" ");
         if (inputs.length == 1) {
             printLogs(0);
@@ -1054,12 +1054,12 @@ public class Main {
         }
     }
     
-    private static void processRemoveLogs() {
+    private static void processRemoveLogs() throws NoPermissionException {
         sAgencyManager.removeLogs();
         System.out.println("Logs removed");
     }
     
-    private static void printLogs(int lines) {
+    private static void printLogs(int lines) throws NoPermissionException {
         List<TLogDTO> logs = sAgencyManager.getLogs(lines);
         
         System.out.println("\nLOGS (" + logs.size() + " logs):");

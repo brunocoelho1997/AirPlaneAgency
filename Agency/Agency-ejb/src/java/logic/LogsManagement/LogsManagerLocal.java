@@ -8,15 +8,14 @@ package logic.LogsManagement;
 import logic.TLogDTO;
 import java.util.List;
 import javax.ejb.Local;
+import logic.NoPermissionException;
 
 @Local
 public interface LogsManagerLocal {
     
-    List<TLogDTO> getLogs(int lines);
-    
-    TLogDTO getLogsByUser(String username);
+    List<TLogDTO> getLogs(int lines, String username) throws NoPermissionException;
     
     boolean addLog(TLogDTO logDTO);
     
-    void removeLogs();
+    void removeLogs(String username) throws NoPermissionException;
 }
