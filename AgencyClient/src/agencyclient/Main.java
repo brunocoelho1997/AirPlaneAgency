@@ -1112,9 +1112,7 @@ public class Main {
             seatDTOList.add(seatDTO);
             numberOfSeats--;
         }
-        
-        
-                
+          
         result = sAgencyManager.buySeatsToTrip(tripDTO, seatDTOList);
         if(!result)
             System.out.println("A problem occurred. The system didn't bought the seat of the trip "  +tripDTO +".");

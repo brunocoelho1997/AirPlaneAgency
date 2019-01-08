@@ -512,6 +512,9 @@ public class TripsManager implements TripsManagerLocal {
         if(trip == null)
             return false;
         
+        if(!trip.getTSeatCollection().isEmpty()) //se a viagem ja tem lugares comprados mandar excecao
+            throw new NoPermissionException(Config.MSG_NO_PERMISSION_CHANGE_TRIP);
+        
         TPlace place = placeFacade.find(tripDTO.getPlaceDTO().getId());     
         if(place == null)
             return false;
