@@ -29,8 +29,8 @@ import logic.TSeatDTO;
 import logic.TTripDTO;
 import logic.TTripFeedbackDTO;
 import logic.TUserDTO;
+import logic.TimerManagement.TimerManagerLocal;
 import logic.UsersManagement.TUser;
-import logic.UsersManagement.UsersManager;
 import logic.UsersManagement.UsersManagerLocal;
 
 /**
@@ -66,6 +66,9 @@ public class TripsManager implements TripsManagerLocal {
     
     @EJB
     TSeatFacadeLocal seatFacade;
+    
+    @EJB
+    TimerManagerLocal timerManager;
     
     @Resource(mappedName = "jms/MyQueue")
     Queue logsQueue;
@@ -499,7 +502,7 @@ public class TripsManager implements TripsManagerLocal {
 
         tripFacade.create(trip);
         
-        sendLogMessage(username, LogTypes.CREATE_TRIP, 0);
+        sendLogMessage(username, LogTypes.CREATE_TRIP, timerManager.getDate());
         
         return true;
     }
@@ -903,11 +906,5 @@ public class TripsManager implements TripsManagerLocal {
         ObjectMessage message = jmsContext.createObjectMessage(log);
         jmsContext.createProducer().send(logsQueue, message);
     }
-
-    
-
-    
-
-    
 
 }

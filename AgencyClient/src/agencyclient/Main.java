@@ -143,10 +143,10 @@ public class Main {
                     case Command.REMOVETRIPFEEDBACK:
                         processRemoveTripFeedback();
                         break;
-                    case Command.SETATUALDATE:
+                    case Command.SETACTUALDATE:
                         processSetAtualDate();
                         break;
-                    case Command.GETATUALDATE:
+                    case Command.GETACTUALDATE:
                         processGetAtualDate();
                         break;
                     case Command.SETDURATIONTIMER:
@@ -1180,8 +1180,8 @@ public class Main {
         
         //time
         System.out.println("\n-------Time--------");
-        System.out.println(Command.GETATUALDATE+ " - Get atual time of the system");
-        System.out.println(Command.SETATUALDATE+ " - Set atual time of the system");
+        System.out.println(Command.GETACTUALDATE+ " - Get atual time of the system");
+        System.out.println(Command.SETACTUALDATE+ " - Set atual time of the system");
         System.out.println(Command.SETDURATIONTIMER + " - Set (in minuts) the increment of time");
         System.out.println(Command.GETTIMERINFORMATION + " - Get information of the timer");
         

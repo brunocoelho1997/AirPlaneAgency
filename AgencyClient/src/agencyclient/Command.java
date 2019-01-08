@@ -52,8 +52,8 @@ public class Command {
     public static final String REMOVETRIPFEEDBACK = "removetripfeedback";
     
     //date
-    public static final String GETATUALDATE = "getatualdate";
-    public static final String SETATUALDATE = "setatualdate";
+    public static final String GETACTUALDATE = "getactualdate";
+    public static final String SETACTUALDATE = "setactualdate";
     public static final String SETDURATIONTIMER = "setdurationtimer";
     public static final String GETTIMERINFORMATION = "gettimerinformation";
     

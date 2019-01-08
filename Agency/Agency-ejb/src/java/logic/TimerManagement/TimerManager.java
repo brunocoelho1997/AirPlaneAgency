@@ -11,7 +11,6 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.ejb.Timeout;
 import javax.ejb.Timer;
-import javax.ejb.TimerConfig;
 import javax.ejb.TimerService;
 import logic.Config;
 
