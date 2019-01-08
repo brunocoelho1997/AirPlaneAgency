@@ -236,8 +236,11 @@ public class Config {
     public static final String MSG_NO_PERMISSION_OPERATOR = "No permissions to invoke the method. Just an accepted operator has permissions.";
     public static final String MSG_NO_PERMISSION_FEEDBACK = "No permission to change the place's feedback of other user.";
     public static final String MSG_NO_PERMISSION_LOG = "No permission to add logg: user does not exist.";
-    public static final String MSG_NO_PERMISSION_CHANGE_TRIP = "No permissions to change the trip. The trip has seats bought. To perform any alteration you need cancel the trip.";
+    public static final String MSG_NO_PERMISSION_CHANGE_TRIP = "No permissions to change the trip. It already has bought seats. To perform any alteration, you must cancel the trip.";
+    public static final String MSG_NO_PERMISSION_MONEY = "No permissions to buy the seat/seats to the trip. The user doesn't have money.";
 
+    
+            
     public static final long DEFAULT_TIMER= 60;
 
     

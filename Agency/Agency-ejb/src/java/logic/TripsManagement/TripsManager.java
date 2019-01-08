@@ -543,7 +543,7 @@ public class TripsManager implements TripsManagerLocal {
     }
 
     
-    //este metodo nao convem ser usado... Deve ser usado o canceltrip()
+    //this method should not be used. We should use canceltrip()
     
     @Override
     public boolean removeTrip(TTripDTO tripDTO, String username) throws NoPermissionException {
@@ -559,6 +559,8 @@ public class TripsManager implements TripsManagerLocal {
     
     @Override
     public boolean cancelTrip(TTripDTO tripDTO, String username) throws NoPermissionException {
+        boolean resultTmp = false;
+        
         verifyPermission(username, Config.OPERATOR);
         
         TTrip trip = tripFacade.find(tripDTO.getId());     
@@ -567,7 +569,31 @@ public class TripsManager implements TripsManagerLocal {
         
         trip.setCanceled(true);
         
+        //when we cancel a trip we need to refund the users who bought seats
+        resultTmp = refundUsers(trip);
+        if(!resultTmp)
+            return false;
+        
         tripFacade.edit(trip);
+        return true;
+    }
+    
+    private boolean refundUsers(TTrip trip){
+        boolean result = false;
+        
+        if(!trip.getTSeatCollection().isEmpty())
+        {
+            for(TSeat seatTmp : trip.getTSeatCollection()){
+                TUser userTmp = seatTmp.getUserid();
+                userTmp.setBalance(userTmp.getBalance() + trip.getPrice());
+                
+                result = userManager.editTUser(userTmp);
+                
+                if(!result)
+                    return false;
+            }
+        }
+        
         return true;
     }
 
@@ -806,6 +832,9 @@ public class TripsManager implements TripsManagerLocal {
             purchaseFacade.create(purchase);
         }
         
+        if(!verifyIfUserHasMoneyToPay(user, trip, seatDTOList.size()))
+            throw new NoPermissionException(Config.MSG_NO_PERMISSION_MONEY);
+        
         for(TSeatDTO seatDTO : seatDTOList)
         {
             //create seat----------------
@@ -821,6 +850,7 @@ public class TripsManager implements TripsManagerLocal {
 
             purchase.getTSeatCollection().add(seat);
             user.getTSeatCollection().add(seat);
+            user.setBalance(user.getBalance() - trip.getPrice());
             user.getTPurchaseCollection().add(purchase);
             trip.getTSeatCollection().add(seat);
         }
@@ -831,6 +861,13 @@ public class TripsManager implements TripsManagerLocal {
         return true;
     }
 
+    //if user has money return true, otherwise return false
+    private boolean verifyIfUserHasMoneyToPay(TUser user, TTrip trip, int numberOfSeats) {
+        double total = trip.getPrice() * numberOfSeats;
+        
+        return ( (user.getBalance() - total) > 0 ? true : false );
+    }
+    
     @Override
     public boolean editSeatOfPurchase(TSeatDTO seatDTO, String username) throws NoPermissionException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -886,6 +923,8 @@ public class TripsManager implements TripsManagerLocal {
         ObjectMessage message = jmsContext.createObjectMessage(log);
         jmsContext.createProducer().send(logsQueue, message);
     }
+
+    
 
     
 
