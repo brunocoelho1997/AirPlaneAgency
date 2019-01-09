@@ -65,5 +65,7 @@ public class Command {
     public static final String FINDALLPURCHASES = "findallpurchases";
     public static final String FINDALLPURCHASESOFUSER = "findallpurchasesofuser";
     public static final String BUYSEATSTOTRIP = "buyseatstotrip";
+    public static final String EDITSEAT = "editseat";
+
     
 }

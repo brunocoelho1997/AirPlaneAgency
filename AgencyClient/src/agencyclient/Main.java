@@ -170,7 +170,10 @@ public class Main {
                     case Command.BUYSEATSTOTRIP:
                         processBuySeatsToTrip();
                         break;
-                    
+                    case Command.EDITSEAT:
+                        processEditSeat();
+                        break;
+                        
                     default:
                         System.out.println("Command not found. Type help to get a command list.");
                         break;
@@ -1118,6 +1121,42 @@ public class Main {
             System.out.println("A problem occurred. The system didn't bought the seat of the trip "  +tripDTO +".");
         else
             System.out.println("You bought the seat to the trip " + tripDTO +" with sucess.");
+        
+    }
+    
+    private static void processEditSeat() throws NoPermissionException{
+        //TODO....
+        
+        /*
+        Scanner sc = new Scanner(System.in);
+        TSeatDTO seatDTO;
+        boolean result;
+        int id;
+        
+
+        System.out.println("Seat Id:");
+        id = Integer.parseInt(sc.nextLine());
+        seatDTO = sAgencyManager.findS.....(id);
+
+        if(planeDTO == null)
+        {
+            System.out.println("Not found a plane with that id. Try again.");
+            return;
+        }
+
+        System.out.println("Plane: " + planeDTO);
+
+        System.out.println("New plane Name:");
+        planeDTO.setPlaneName(sc.nextLine());
+        System.out.println("New plane Limit:");
+        planeDTO.setPlaneLimit(Integer.parseInt(sc.nextLine()));
+
+        result = sAgencyManager.editPlane(planeDTO);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't edit the plane.");
+        else
+            System.out.println("Plane edited with success!");
+        */
         
     }
     

@@ -836,8 +836,12 @@ public class TripsManager implements TripsManagerLocal {
             purchaseFacade.create(purchase);
         }
         
-        if(!verifyIfUserHasMoneyToPay(user, trip, seatDTOList.size()))
-            throw new NoPermissionException(Config.MSG_NO_PERMISSION_MONEY);
+        //validate all seats...
+        for(TSeatDTO seatDTO : seatDTOList)
+        {
+            if(!validateTSeatDTO(seatDTO))
+                return false;
+        }
         
         for(TSeatDTO seatDTO : seatDTOList)
         {
@@ -854,7 +858,6 @@ public class TripsManager implements TripsManagerLocal {
 
             purchase.getTSeatCollection().add(seat);
             user.getTSeatCollection().add(seat);
-            user.setBalance(user.getBalance() - trip.getPrice());
             user.getTPurchaseCollection().add(purchase);
             trip.getTSeatCollection().add(seat);
         }
@@ -864,18 +867,34 @@ public class TripsManager implements TripsManagerLocal {
         
         return true;
     }
-
-    //if user has money return true, otherwise return false
-    private boolean verifyIfUserHasMoneyToPay(TUser user, TTrip trip, int numberOfSeats) {
-        double total = trip.getPrice() * numberOfSeats;      
-        return ( (user.getBalance() - total) > 0 ? true : false );
-    }
     
     @Override
     public boolean editSeatOfPurchase(TSeatDTO seatDTO, String username) throws NoPermissionException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        userManager.verifyPermission(username, Config.CLIENT);
+        
+        TSeat seat = seatFacade.find(seatDTO.getId());
+        
+        if(seat == null)
+            return false;
+        
+        if(!validateTSeatDTO(seatDTO))
+            return false;
+        
+        seat.setAuctioned(seatDTO.getAuctioned());
+        seat.setLuggage(seatDTO.getLuggage());
+        seat.setPrice(seatDTO.getPrice());
+        
+        seatFacade.edit(seat);
+        return true;
     }
 
+    public boolean validateTSeatDTO(TSeatDTO seatDTO){
+        
+        if(seatDTO == null)
+            return false;
+        
+        return true;
+    }
     @Override
     public boolean removeSeatOfPurchase(TSeatDTO seatDTO, String username) throws NoPermissionException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -883,9 +902,51 @@ public class TripsManager implements TripsManagerLocal {
 
     @Override
     public boolean finishPurchase(TPurchaseDTO purchaseDTO, String username) throws NoPermissionException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        userManager.verifyPermission(username, Config.CLIENT);
+        
+        //user----------------
+        TUser user = userManager.getTUserByUsername(username);
+        
+        if(user == null)
+            return false;
+      
+        //purchase----------------
+        TPurchase purchase = null;
+        
+        for(TPurchase purchaseTmp : user.getTPurchaseCollection()){
+            if(!purchaseTmp.getDone())
+            {
+                purchase = purchaseTmp;
+                break;
+            }
+        }
+        
+        if(purchase == null)
+            return false;
+        
+        if(purchase.getTSeatCollection().isEmpty())
+            return false;
+        
+        
+        
+        if(!verifyIfUserHasMoneyToPay(user, purchase))
+            throw new NoPermissionException(Config.MSG_NO_PERMISSION_MONEY);
+        
+        
+        //TODO: ainda incompleto 
+        return true;
     }
     
+    //if user has money return true, otherwise return false
+    private boolean verifyIfUserHasMoneyToPay(TUser user, TPurchase purchase) {
+        double total = 0;
+        
+        for(TSeat seat : purchase.getTSeatCollection())    
+            total += seat.getTripid().getPrice();
+        
+        return ( (user.getBalance() - total) > 0 ? true : false );
+    }
     
 //-----------------------------------------------------------------------------------------------------------------
     //auxiliar methods
