@@ -869,22 +869,46 @@ public class TripsManager implements TripsManagerLocal {
     }
     
     @Override
-    public boolean editSeatOfPurchase(TSeatDTO seatDTO, String username) throws NoPermissionException {
+    public boolean editPurchase(TPurchaseDTO purchaseDTO, String username) throws NoPermissionException {
         userManager.verifyPermission(username, Config.CLIENT);
         
-        TSeat seat = seatFacade.find(seatDTO.getId());
-        
-        if(seat == null)
+        TPurchase purchase = purchaseFacade.find(purchaseDTO.getId());
+        if(purchase == null)
             return false;
         
-        if(!validateTSeatDTO(seatDTO))
+        if(purchase.getDone())
             return false;
         
-        seat.setAuctioned(seatDTO.getAuctioned());
-        seat.setLuggage(seatDTO.getLuggage());
-        seat.setPrice(seatDTO.getPrice());
+        //validate all seats...
+        for(TSeatDTO seatDTO : purchaseDTO.gettSeatCollection())
+        {
+            if(!validateTSeatDTO(seatDTO))
+                return false;
+        }
         
-        seatFacade.edit(seat);
+        for(TSeatDTO seatDTO : purchaseDTO.gettSeatCollection()){
+            TSeat seat = seatFacade.find(seatDTO.getId());
+        
+            if(seat == null)
+                return false;
+
+            
+            /*
+            TODO:
+            a alterar uma purchase... e se tiver menos seats?? Temos de resolver esse problema! So' sera' possivel testar isto com uma front end web!
+            */
+            if(purchase.getTSeatCollection().contains(seat))
+            
+            if(!validateTSeatDTO(seatDTO))
+                return false;
+
+            seat.setAuctioned(seatDTO.getAuctioned());
+            seat.setLuggage(seatDTO.getLuggage());
+            seat.setPrice(seatDTO.getPrice());
+
+            seatFacade.edit(seat);
+        }
+        
         return true;
     }
 
@@ -896,7 +920,7 @@ public class TripsManager implements TripsManagerLocal {
         return true;
     }
     @Override
-    public boolean removeSeatOfPurchase(TSeatDTO seatDTO, String username) throws NoPermissionException {
+    public boolean removePurchase(TPurchaseDTO purchaseDTO, String username) throws NoPermissionException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
