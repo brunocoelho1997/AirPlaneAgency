@@ -284,13 +284,13 @@ public class AgencyManager implements AgencyManagerRemote {
     }
 
     @Override
-    public boolean editSeatOfPurchase(TSeatDTO seatDTO) throws NoPermissionException {
-        return tripsManagerLocal.editSeatOfPurchase(seatDTO, username);
+    public boolean editPurchase(TPurchaseDTO purchaseDTO) throws NoPermissionException {
+        return tripsManagerLocal.editPurchase(purchaseDTO, username);
     }
 
     @Override
-    public boolean removeSeatOfPurchase(TSeatDTO seatDTO) throws NoPermissionException {
-        return tripsManagerLocal.removeSeatOfPurchase(seatDTO, username);
+    public boolean removePurchase(TPurchaseDTO purchaseDTO) throws NoPermissionException {
+        return tripsManagerLocal.removePurchase(purchaseDTO, username);
     }
 
     @Override

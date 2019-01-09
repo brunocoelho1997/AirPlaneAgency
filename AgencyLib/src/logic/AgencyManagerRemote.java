@@ -75,7 +75,7 @@ public interface AgencyManagerRemote {
     List<TPurchaseDTO> findAllPurchasesOfUser() throws NoPermissionException;
     TPurchaseDTO findPurchase(int id) throws NoPermissionException;
     boolean buySeatsToTrip(TTripDTO tripDTO, List<TSeatDTO> seatDTOList) throws NoPermissionException;
-    boolean editSeatOfPurchase(TSeatDTO seatDTO) throws NoPermissionException;
-    boolean removeSeatOfPurchase(TSeatDTO seatDTO) throws NoPermissionException;
+    boolean editPurchase(TPurchaseDTO purchaseDTO) throws NoPermissionException;
+    boolean removePurchase(TPurchaseDTO purchaseDTO) throws NoPermissionException;
     boolean finishPurchase(TPurchaseDTO purchaseDTO) throws NoPermissionException;
 }
