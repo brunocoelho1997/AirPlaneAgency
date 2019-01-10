@@ -986,18 +986,18 @@ public class TripsManager implements TripsManagerLocal {
             purchase.getTSeatCollection().remove(seatTmp);
             
         purchaseFacade.edit(purchase);
-        
-        
-                        
+                    
         return true;
     }
     
     @Override
     public boolean removePurchase(TPurchaseDTO purchaseDTO, String username) throws NoPermissionException {
-        TTrip trip = null;
         
         userManager.verifyPermission(username, Config.CLIENT);
         
+        TTrip trip = null;
+        List<TSeat> seatsToRemove = new ArrayList();
+       
         TPurchase purchase = purchaseFacade.find(purchaseDTO.getId());
         if(purchase == null)
             return false;
@@ -1008,17 +1008,30 @@ public class TripsManager implements TripsManagerLocal {
             return false;
         
         for(TSeat seatTmp : purchase.getTSeatCollection()){
-            
-            user.getTSeatCollection().remove(seatTmp);
-            trip = seatTmp.getTripid();
-            trip.getTSeatCollection().remove(seatTmp);
-            
-            seatFacade.remove(seatTmp);
-
+            if(seatTmp.getTripid().equals(trip))
+            {
+                
+                seatsToRemove.add(seatTmp);
+                
+                seatFacade.remove(seatTmp);
+                
+            }
         }
-        userManager.editTUser(user);
-        tripFacade.edit(trip);
+        /*
+        if(!removedSeats)
+            return false;
+           
+        
+         for(TSeat seatTmp : seatsToRemove)     
+            purchase.getTSeatCollection().remove(seatTmp);
+        */
+       
+            
         purchaseFacade.remove(purchase);
+        
+        user.getTPurchaseCollection().remove(purchase);
+        userManager.editTUser(user);
+        
         return true;
         
     }
