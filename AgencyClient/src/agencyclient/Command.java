@@ -64,8 +64,11 @@ public class Command {
     //purchases
     public static final String FINDALLPURCHASES = "findallpurchases";
     public static final String FINDALLPURCHASESOFUSER = "findallpurchasesofuser";
+    public static final String GETACTUALPURCHASE = "getactualpurchase";
     public static final String BUYSEATSTOTRIP = "buyseatstotrip";
-    public static final String EDITSEAT = "editseat";
-
+    public static final String EDITPURCHASE = "editpurchase";
+    public static final String REMOVESEATSOFPURCHASE = "removeseatsofpurchase";
+    public static final String REMOVEPURCHASE = "removepurchase";
+    public static final String FINISHPURCHASE = "finishpurchase";
     
 }

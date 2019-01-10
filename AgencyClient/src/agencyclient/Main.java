@@ -167,13 +167,25 @@ public class Main {
                     case Command.FINDALLPURCHASESOFUSER:
                         processFindAllPurchasesOfUser();
                         break;
+                    case Command.GETACTUALPURCHASE:
+                        processGetActualPurchase();
+                        break;
                     case Command.BUYSEATSTOTRIP:
                         processBuySeatsToTrip();
                         break;
-                    case Command.EDITSEAT:
-                        processEditSeat();
+                    case Command.EDITPURCHASE:
+                        processEditPurchase();
                         break;
-                        
+                    case Command.REMOVESEATSOFPURCHASE:
+                        processRemoveSeatsOfPurchase();
+                        break;
+                    case Command.REMOVEPURCHASE:
+                        processRemovePurchase();
+                        break;
+                    case Command.FINISHPURCHASE:
+                        processFinishPurchase();
+                        break;
+                    
                     default:
                         System.out.println("Command not found. Type help to get a command list.");
                         break;
@@ -1124,41 +1136,93 @@ public class Main {
         
     }
     
-    private static void processEditSeat() throws NoPermissionException{
-        //TODO....
-        
-        /*
-        Scanner sc = new Scanner(System.in);
-        TSeatDTO seatDTO;
-        boolean result;
-        int id;
-        
-
-        System.out.println("Seat Id:");
-        id = Integer.parseInt(sc.nextLine());
-        seatDTO = sAgencyManager.findS.....(id);
-
-        if(planeDTO == null)
+    private static void processGetActualPurchase() throws NoPermissionException {
+        TPurchaseDTO purchaseDTO;
+        purchaseDTO = sAgencyManager.getUndonePurchase();
+      
+        if(purchaseDTO == null)
         {
-            System.out.println("Not found a plane with that id. Try again.");
+            System.out.println("Not found an uncompleted purchase. Try again.");
             return;
         }
-
-        System.out.println("Plane: " + planeDTO);
-
-        System.out.println("New plane Name:");
-        planeDTO.setPlaneName(sc.nextLine());
-        System.out.println("New plane Limit:");
-        planeDTO.setPlaneLimit(Integer.parseInt(sc.nextLine()));
-
-        result = sAgencyManager.editPlane(planeDTO);
-        if(!result)
-            System.out.println("A problem occurred. The system didn't edit the plane.");
-        else
-            System.out.println("Plane edited with success!");
-        */
         
+        System.out.println("Atual purchase (undone): " + purchaseDTO);
     }
+    
+    private static void processEditPurchase() throws NoPermissionException {
+        Scanner sc = new Scanner(System.in);
+        TPurchaseDTO purchaseDTO;
+        int purchaseid;
+        boolean result = false;
+        
+        purchaseDTO = sAgencyManager.getUndonePurchase();
+      
+        if(purchaseDTO == null)
+        {
+            System.out.println("Not found an uncompleted purchase. Try again.");
+            return;
+        }
+        
+        System.out.println("Atual purchase (undone): " + purchaseDTO);
+        
+        for(TSeatDTO seatDTO : purchaseDTO.gettSeatCollection())
+        {
+            System.out.println("Atual seat: " + seatDTO);
+            System.out.println("New luggage :");
+            seatDTO.setLuggage(sc.nextLine());
+        }
+        
+        result = sAgencyManager.editPurchase(purchaseDTO);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't edited the purchase.");
+        else
+            System.out.println("You edited the purchase with sucess.");
+
+    }
+    
+    private static void processRemoveSeatsOfPurchase() throws NoPermissionException {
+        Scanner sc = new Scanner(System.in);
+        TPurchaseDTO purchaseDTO;
+        int tripid;
+        TTripDTO tripDTO;
+        boolean result = false;
+        
+        purchaseDTO = sAgencyManager.getUndonePurchase();
+      
+        if(purchaseDTO == null)
+        {
+            System.out.println("Not found an uncompleted purchase. Try again.");
+            return;
+        }
+        
+        System.out.println("Atual purchase (undone): " + purchaseDTO);
+        
+        System.out.println("Trip Id to remove of purchase:");
+        tripid = Integer.parseInt(sc.nextLine());
+        tripDTO = sAgencyManager.findTrip(tripid);
+
+        if(tripDTO == null)
+        {
+            System.out.println("Not found a trip with that id. Try again.");
+            return;
+        }
+      
+        
+        result = sAgencyManager.removeSeatsOfPurchase(purchaseDTO, tripDTO);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't removed the seats to the trip: " + tripDTO + " of the purchase.");
+        else
+            System.out.println("You removed the seats to the trip: " + tripDTO + " of the purchase with sucess.");
+    }
+
+    private static void processRemovePurchase() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private static void processFinishPurchase() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     
     //----------------------------------------------------
     //Auxiliar methods
@@ -1232,9 +1296,14 @@ public class Main {
         //Purchases
         System.out.println("\n-------Purchases--------");
         System.out.println(Command.FINDALLPURCHASES+ " - Find all purchases in the system");
+        System.out.println(Command.GETACTUALPURCHASE+ " - Get actual purchase.");
         System.out.println(Command.FINDALLPURCHASESOFUSER+ " - Find all purchases of an user in the system");
+
         System.out.println(Command.BUYSEATSTOTRIP+ " - Buy seats to a trip");
-    
+        System.out.println(Command.EDITPURCHASE+ " - Edit actual purchase");
+        System.out.println(Command.REMOVESEATSOFPURCHASE+ " - Remove seats of a purchase. Will remove from the actual purchase.");
+        System.out.println(Command.REMOVEPURCHASE+ " - Remove the actual purchase");
+        System.out.println(Command.FINISHPURCHASE+ " - Finish the actual purchase");
         
         System.out.println("----------------");
     }
@@ -1276,4 +1345,8 @@ public class Main {
            System.out.println(e.getMessage());
         }
     }
+
+    
+
+    
 }

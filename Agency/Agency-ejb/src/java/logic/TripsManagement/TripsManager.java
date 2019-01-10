@@ -800,6 +800,32 @@ public class TripsManager implements TripsManagerLocal {
     }
     
     @Override
+    public TPurchaseDTO getUndonePurchase(String username) throws NoPermissionException {
+        
+        userManager.verifyPermission(username, Config.CLIENT);
+        
+        TUser user = userManager.getTUserByUsername(username);
+        if(user == null)
+            return null;
+        
+        //purchase---------------- get the atual purchase - the only which is undone
+        TPurchase purchase = null;
+        
+        for(TPurchase purchaseTmp : user.getTPurchaseCollection()){
+            if(!purchaseTmp.getDone())
+            {
+                purchase = purchaseTmp;
+                break;
+            }
+        }
+        
+        if(purchase == null)
+            return null;
+        
+        return DTOFactory.getTPurchaseDTOFromTPurchase(purchase);
+    }
+    
+    @Override
     public boolean buySeatsToTrip(TTripDTO tripDTO, List<TSeatDTO> seatDTOList, String username) throws NoPermissionException {
         
         userManager.verifyPermission(username, Config.CLIENT);
@@ -872,12 +898,24 @@ public class TripsManager implements TripsManagerLocal {
     public boolean editPurchase(TPurchaseDTO purchaseDTO, String username) throws NoPermissionException {
         userManager.verifyPermission(username, Config.CLIENT);
         
-        TPurchase purchase = purchaseFacade.find(purchaseDTO.getId());
+        TUser user = userManager.getTUserByUsername(username);
+        if(user == null)
+            return false;
+        
+        //purchase---------------- get the atual purchase - the only which is undone
+        TPurchase purchase = null;
+        
+        for(TPurchase purchaseTmp : user.getTPurchaseCollection()){
+            if(!purchaseTmp.getDone())
+            {
+                purchase = purchaseTmp;
+                break;
+            }
+        }
+        
         if(purchase == null)
             return false;
         
-        if(purchase.getDone())
-            return false;
         
         //validate all seats...
         for(TSeatDTO seatDTO : purchaseDTO.gettSeatCollection())
@@ -890,16 +928,6 @@ public class TripsManager implements TripsManagerLocal {
             TSeat seat = seatFacade.find(seatDTO.getId());
         
             if(seat == null)
-                return false;
-
-            
-            /*
-            TODO:
-            a alterar uma purchase... e se tiver menos seats?? Temos de resolver esse problema! So' sera' possivel testar isto com uma front end web!
-            */
-            if(purchase.getTSeatCollection().contains(seat))
-            
-            if(!validateTSeatDTO(seatDTO))
                 return false;
 
             seat.setAuctioned(seatDTO.getAuctioned());
@@ -919,9 +947,80 @@ public class TripsManager implements TripsManagerLocal {
         
         return true;
     }
+    
+    @Override
+    public boolean removeSeatsOfPurchase(TPurchaseDTO purchaseDTO, TTripDTO tripDTO, String username) throws NoPermissionException {
+        boolean removedSeats = false;
+        List<TSeat> seatsToRemove = new ArrayList();
+        userManager.verifyPermission(username, Config.CLIENT);
+        
+        TPurchase purchase = purchaseFacade.find(purchaseDTO.getId());
+        if(purchase == null)
+            return false;
+        
+        TUser user = userManager.getTUserByUsername(username);
+        //if the purchase belongs to the user who is editing
+        if(!purchase.getUserid().equals(user))
+            return false;
+        
+        TTrip trip = tripFacade.find(tripDTO.getId());     
+        if(trip == null)
+            return false;
+        
+        for(TSeat seatTmp : purchase.getTSeatCollection()){
+            if(seatTmp.getTripid().equals(trip))
+            {
+                removedSeats = true;
+                seatsToRemove.add(seatTmp);
+                
+                seatFacade.remove(seatTmp);
+                
+            }
+        }
+        
+        if(!removedSeats)
+            return false;
+           
+        
+        for(TSeat seatTmp : seatsToRemove)     
+            purchase.getTSeatCollection().remove(seatTmp);
+            
+        purchaseFacade.edit(purchase);
+        
+        
+                        
+        return true;
+    }
+    
     @Override
     public boolean removePurchase(TPurchaseDTO purchaseDTO, String username) throws NoPermissionException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        TTrip trip = null;
+        
+        userManager.verifyPermission(username, Config.CLIENT);
+        
+        TPurchase purchase = purchaseFacade.find(purchaseDTO.getId());
+        if(purchase == null)
+            return false;
+        
+        TUser user = userManager.getTUserByUsername(username);
+        //if the purchase belongs to the user who is editing
+        if(!purchase.getUserid().equals(user))
+            return false;
+        
+        for(TSeat seatTmp : purchase.getTSeatCollection()){
+            
+            user.getTSeatCollection().remove(seatTmp);
+            trip = seatTmp.getTripid();
+            trip.getTSeatCollection().remove(seatTmp);
+            
+            seatFacade.remove(seatTmp);
+
+        }
+        userManager.editTUser(user);
+        tripFacade.edit(trip);
+        purchaseFacade.remove(purchase);
+        return true;
+        
     }
 
     @Override
@@ -991,5 +1090,9 @@ public class TripsManager implements TripsManagerLocal {
         ObjectMessage message = jmsContext.createObjectMessage(log);
         jmsContext.createProducer().send(logsQueue, message);
     }
+
+    
+
+    
 
 }
