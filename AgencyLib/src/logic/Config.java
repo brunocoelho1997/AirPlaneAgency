@@ -239,6 +239,8 @@ public class Config {
     public static final String MSG_NO_PERMISSION_LOG = "No permission to add logg: user does not exist.";
     public static final String MSG_NO_PERMISSION_CHANGE_TRIP = "No permissions to change the trip. It already has bought seats. To perform any alteration, you must cancel the trip.";
     public static final String MSG_NO_PERMISSION_MONEY = "No permissions to buy the seat/seats to the trip. The user doesn't have money.";
+    public static final String MSG_NO_PERMISSION_TRIP_DONE = "No permissions to finish the purchase because one trip is already done.";
+    public static final String MSG_NO_PERMISSION_PLANE_LIMIT_EXCEDED = "No permissions to finish the purchase because a plane already fullfit";
 
     
             

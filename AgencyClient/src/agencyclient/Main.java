@@ -1245,8 +1245,34 @@ public class Main {
             System.out.println("You removed the actual purchase.");
     }
 
-    private static void processFinishPurchase() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private static void processFinishPurchase() throws NoPermissionException {
+        Scanner sc = new Scanner(System.in);
+        TPurchaseDTO purchaseDTO;
+        int op;
+        TTripDTO tripDTO;
+        boolean result = false;
+        
+        purchaseDTO = sAgencyManager.getUndonePurchase();
+      
+        if(purchaseDTO == null)
+        {
+            System.out.println("Not found an uncompleted purchase. Try again.");
+            return;
+        }
+        
+        System.out.println("Atual purchase (undone): " + purchaseDTO);
+        
+        System.out.println("The purchase: " + purchaseDTO + "? Will cost X€. Do you want finish? [1/0]");
+        op = Integer.parseInt(sc.nextLine());
+
+        if(op == 0)
+            return;
+        
+        result = sAgencyManager.finishPurchase(purchaseDTO);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't finished the actual purchase.");
+        else
+            System.out.println("You finished the actual purchase.");
     }
 
     

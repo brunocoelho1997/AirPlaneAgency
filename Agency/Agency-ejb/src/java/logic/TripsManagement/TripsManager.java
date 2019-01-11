@@ -981,8 +981,6 @@ public class TripsManager implements TripsManagerLocal {
         
         if(!removedSeats)
             return false;
-           
-        
         
         for(TSeat seatTmp : seatsToRemove)     
         {
@@ -990,22 +988,6 @@ public class TripsManager implements TripsManagerLocal {
         }
             
         purchaseFacade.edit(purchase);
-        
-        
-        /*
-        for(TPurchase purchaseTmp : user.getTPurchaseCollection())
-        {
-            if(purchaseTmp.equals(purchase))
-            {
-                for(TSeat seatTmp : seatsToRemove)     
-                {
-                    purchaseTmp.getTSeatCollection().remove(seatTmp);
-                }
-            }
-        }
-        userManager.editTUser(user);
-        */
-        
         
         return true;
     }
@@ -1058,39 +1040,63 @@ public class TripsManager implements TripsManagerLocal {
 
     @Override
     public boolean finishPurchase(TPurchaseDTO purchaseDTO, String username) throws NoPermissionException {
-        
+        int countTmp;
+        double totalCostPurchase = 0; //the cost that client will need to pay
         userManager.verifyPermission(username, Config.CLIENT);
         
-        //user----------------
-        TUser user = userManager.getTUserByUsername(username);
-        
-        if(user == null)
-            return false;
-      
-        //purchase----------------
-        TPurchase purchase = null;
-        
-        for(TPurchase purchaseTmp : user.getTPurchaseCollection()){
-            if(!purchaseTmp.getDone())
-            {
-                purchase = purchaseTmp;
-                break;
-            }
-        }
-        
+        //purchase
+        TPurchase purchase = purchaseFacade.find(purchaseDTO.getId());
         if(purchase == null)
             return false;
         
         if(purchase.getTSeatCollection().isEmpty())
             return false;
         
-        
-        
-        if(!verifyIfUserHasMoneyToPay(user, purchase))
+        if(!verifyIfUserHasMoneyToPay(purchase.getUserid(), purchase))
             throw new NoPermissionException(Config.MSG_NO_PERMISSION_MONEY);
         
+        //verifying if some trip already done
+        for(TSeat seatTmp : purchase.getTSeatCollection())
+        {
+            if(seatTmp.getTripid().getDone())
+                throw new NoPermissionException(Config.MSG_NO_PERMISSION_TRIP_DONE);
+        }
         
-        //TODO: ainda incompleto 
+        //verifying if planes has space for all seats:
+        List<TTrip> differentTrips = new ArrayList();
+        //get all different trips and the total of money that client will pay
+        for(TSeat seatTmp : purchase.getTSeatCollection()){
+            TTrip tripTmp = seatTmp.getTripid();
+            if(!differentTrips.contains(tripTmp))
+                differentTrips.add(tripTmp);
+            
+            totalCostPurchase += tripTmp.getPrice();
+        }
+        
+        //the number of all different trips (eg: one to Lisbon; another to Porto) included on the current purchase and the ones already bought are going to be counted ... if the sum between both is higher than the plan limit, then the order can't be completed.
+        for(TTrip tripTmp : differentTrips){
+            countTmp = 0; //will have the total wanted seats for this trip 
+            for(TSeat seatTmp : purchase.getTSeatCollection())
+            {
+                if(seatTmp.getTripid().equals(tripTmp))
+                    countTmp++;
+            }
+            
+            System.out.println("\n\n\n\n\n\n Trip id: " + tripTmp.getId() +" - todos os  - " + tripFacade.findBoughtSeatsOfTrip(tripTmp));
+
+            if((tripFacade.findBoughtSeatsOfTrip(tripTmp).size() + countTmp) > tripTmp.getPlaneid().getPlanelimit())
+                throw new NoPermissionException(Config.MSG_NO_PERMISSION_PLANE_LIMIT_EXCEDED);
+
+        }
+        
+        //set new balance for the user
+        TUser userTmp = purchase.getUserid();
+        userTmp.setBalance(userTmp.getBalance() - totalCostPurchase);
+        userManager.editTUser(userTmp);
+        
+        purchase.setDone(true);
+        purchaseFacade.edit(purchase);
+        
         return true;
     }
     
