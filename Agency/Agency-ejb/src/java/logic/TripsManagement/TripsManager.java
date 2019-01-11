@@ -860,6 +860,7 @@ public class TripsManager implements TripsManagerLocal {
             purchase.setTSeatCollection(new ArrayList());
             purchase.setUserid(user);
             purchaseFacade.create(purchase);
+            user.getTPurchaseCollection().add(purchase);
         }
         
         //validate all seats...
@@ -884,7 +885,7 @@ public class TripsManager implements TripsManagerLocal {
 
             purchase.getTSeatCollection().add(seat);
             user.getTSeatCollection().add(seat);
-            user.getTPurchaseCollection().add(purchase);
+            
             trip.getTSeatCollection().add(seat);
         }
         purchaseFacade.edit(purchase);
@@ -982,11 +983,30 @@ public class TripsManager implements TripsManagerLocal {
             return false;
            
         
+        
         for(TSeat seatTmp : seatsToRemove)     
+        {
             purchase.getTSeatCollection().remove(seatTmp);
+        }
             
         purchaseFacade.edit(purchase);
-                    
+        
+        
+        /*
+        for(TPurchase purchaseTmp : user.getTPurchaseCollection())
+        {
+            if(purchaseTmp.equals(purchase))
+            {
+                for(TSeat seatTmp : seatsToRemove)     
+                {
+                    purchaseTmp.getTSeatCollection().remove(seatTmp);
+                }
+            }
+        }
+        userManager.editTUser(user);
+        */
+        
+        
         return true;
     }
     

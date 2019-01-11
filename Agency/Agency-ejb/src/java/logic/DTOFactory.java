@@ -31,15 +31,14 @@ public class DTOFactory {
         tUserDTO.setUsertype(user.getUsertype());
         tUserDTO.setId(user.getId());
         
-        List<TPurchaseDTO> purchaseDTOList = new ArrayList();
-        for(TPurchase purchaseTmp : user.getTPurchaseCollection())
-        {
-            purchaseDTOList.add(getTPurchaseDTOFromTPurchase(purchaseTmp));
-        }
-        tUserDTO.settPurchaseCollection(purchaseDTOList);
-        
         if(user.getUsertype() == Config.CLIENT)
         {
+            List<TPurchaseDTO> purchaseDTOList = new ArrayList();
+            for(TPurchase purchaseTmp : user.getTPurchaseCollection())
+            {
+                purchaseDTOList.add(getTPurchaseDTOFromTPurchase(purchaseTmp));
+            }
+            tUserDTO.settPurchaseCollection(purchaseDTOList);
             tUserDTO.setBalance(user.getBalance());
             tUserDTO.setClientName(user.getClientname());
         }
