@@ -800,7 +800,7 @@ public class TripsManager implements TripsManagerLocal {
     }
     
     @Override
-    public TPurchaseDTO getUndonePurchase(String username) throws NoPermissionException {
+    public TPurchaseDTO getActualPurchase(String username) throws NoPermissionException {
         
         userManager.verifyPermission(username, Config.CLIENT);
         
@@ -896,7 +896,7 @@ public class TripsManager implements TripsManagerLocal {
     }
     
     @Override
-    public boolean editPurchase(TPurchaseDTO purchaseDTO, String username) throws NoPermissionException {
+    public boolean editActualPurchase(TPurchaseDTO purchaseDTO, String username) throws NoPermissionException {
         userManager.verifyPermission(username, Config.CLIENT);
         
         TUser user = userManager.getTUserByUsername(username);
@@ -950,7 +950,7 @@ public class TripsManager implements TripsManagerLocal {
     }
     
     @Override
-    public boolean removeSeatsOfPurchase(TPurchaseDTO purchaseDTO, TTripDTO tripDTO, String username) throws NoPermissionException {
+    public boolean removeSeatsOfActualPurchase(TPurchaseDTO purchaseDTO, TTripDTO tripDTO, String username) throws NoPermissionException {
         boolean removedSeats = false;
         List<TSeat> seatsToRemove = new ArrayList();
         userManager.verifyPermission(username, Config.CLIENT);
@@ -993,7 +993,7 @@ public class TripsManager implements TripsManagerLocal {
     }
     
     @Override
-    public boolean removePurchase(TPurchaseDTO purchaseDTO, String username) throws NoPermissionException {
+    public boolean removeActualPurchase(TPurchaseDTO purchaseDTO, String username) throws NoPermissionException {
         
         userManager.verifyPermission(username, Config.CLIENT);
         
@@ -1039,7 +1039,7 @@ public class TripsManager implements TripsManagerLocal {
     }
 
     @Override
-    public boolean finishPurchase(TPurchaseDTO purchaseDTO, String username) throws NoPermissionException {
+    public boolean finishActualPurchase(TPurchaseDTO purchaseDTO, String username) throws NoPermissionException {
         int countTmp;
         double totalCostPurchase = 0; //the cost that client will need to pay
         userManager.verifyPermission(username, Config.CLIENT);
@@ -1082,7 +1082,7 @@ public class TripsManager implements TripsManagerLocal {
                     countTmp++;
             }
             
-            System.out.println("\n\n\n\n\n\n Trip id: " + tripTmp.getId() +" - todos os  - " + tripFacade.findBoughtSeatsOfTrip(tripTmp));
+            //System.out.println("\n\n\n\n\n\n Trip id: " + tripTmp.getId() +" - todos os  - " + tripFacade.findBoughtSeatsOfTrip(tripTmp));
 
             if((tripFacade.findBoughtSeatsOfTrip(tripTmp).size() + countTmp) > tripTmp.getPlaneid().getPlanelimit())
                 throw new NoPermissionException(Config.MSG_NO_PERMISSION_PLANE_LIMIT_EXCEDED);

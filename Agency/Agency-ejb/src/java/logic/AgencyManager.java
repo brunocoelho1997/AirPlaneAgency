@@ -284,27 +284,27 @@ public class AgencyManager implements AgencyManagerRemote {
     }
 
     @Override
-    public boolean editPurchase(TPurchaseDTO purchaseDTO) throws NoPermissionException {
-        return tripsManagerLocal.editPurchase(purchaseDTO, username);
+    public boolean editActualPurchase(TPurchaseDTO purchaseDTO) throws NoPermissionException {
+        return tripsManagerLocal.editActualPurchase(purchaseDTO, username);
     }
 
     @Override
-    public boolean removePurchase(TPurchaseDTO purchaseDTO) throws NoPermissionException {
-        return tripsManagerLocal.removePurchase(purchaseDTO, username);
+    public boolean removeActualPurchase(TPurchaseDTO purchaseDTO) throws NoPermissionException {
+        return tripsManagerLocal.removeActualPurchase(purchaseDTO, username);
     }
 
     @Override
-    public boolean finishPurchase(TPurchaseDTO purchaseDTO) throws NoPermissionException {
-        return tripsManagerLocal.finishPurchase(purchaseDTO, username);
+    public boolean finishActualPurchase(TPurchaseDTO purchaseDTO) throws NoPermissionException {
+        return tripsManagerLocal.finishActualPurchase(purchaseDTO, username);
     }
 
     @Override
-    public boolean removeSeatsOfPurchase(TPurchaseDTO purchaseDTO, TTripDTO tripDTO) throws NoPermissionException {
-        return tripsManagerLocal.removeSeatsOfPurchase(purchaseDTO, tripDTO, username);
+    public boolean removeSeatsOfActualPurchase(TPurchaseDTO purchaseDTO, TTripDTO tripDTO) throws NoPermissionException {
+        return tripsManagerLocal.removeSeatsOfActualPurchase(purchaseDTO, tripDTO, username);
     }
 
     @Override
-    public TPurchaseDTO getUndonePurchase() throws NoPermissionException {
-        return tripsManagerLocal.getUndonePurchase(username);
+    public TPurchaseDTO getActualPurchase() throws NoPermissionException {
+        return tripsManagerLocal.getActualPurchase(username);
     }
 }
