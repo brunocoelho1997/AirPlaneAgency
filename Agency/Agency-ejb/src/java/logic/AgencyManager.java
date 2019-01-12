@@ -8,8 +8,6 @@ import logic.TimerManagement.TimerManagerLocal;
 import logic.TripsManagement.TripsManagerLocal;
 import logic.UsersManagement.UsersManagerLocal;
 
-
-
 @Stateful
 public class AgencyManager implements AgencyManagerRemote {
 

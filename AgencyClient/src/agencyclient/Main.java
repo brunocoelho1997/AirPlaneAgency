@@ -209,7 +209,7 @@ public class Main {
         if(!result)
             System.out.println("Username or Password wrong.");
         else
-            System.out.println("Wellcome to the Agency, " + username + ".");
+            System.out.println("Welcome to the Agency, " + username + ".");
     }
     
     private static void processSignUp(){

@@ -877,6 +877,9 @@ public class TripsManager implements TripsManagerLocal {
             
             trip.getTSeatCollection().add(seat);
         }
+        
+        logsManager.sendLogMessage(username, LogTypes.PURCHASE_TRIP, timerManager.getDate());
+        
         purchaseFacade.edit(purchase);
         userManager.editTUser(user);
         tripFacade.edit(trip);
