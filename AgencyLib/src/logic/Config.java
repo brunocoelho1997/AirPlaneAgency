@@ -205,23 +205,6 @@ create table t_tripfeedback(
 );
 
 --------------------------------------------------------------------
-- log
-drop sequence if exists log_seq;
-
-create sequence log_seq;
-
-drop table if exists t_log;
-
-
-create table t_log(
-    id int primary key default nextval('log_seq'),
-    msg varchar(30) not null,
-    userid int not null,
-    datelog int not null,
-
-    constraint fk1 foreign key (userid) references t_user(id)
-);
-
 
 LOGS
 -- Para conseguir usar Messages Beans fazer:
