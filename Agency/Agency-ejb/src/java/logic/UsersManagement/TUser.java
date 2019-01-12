@@ -20,7 +20,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import logic.LogsManagement.TLog;
 import logic.TripsManagement.TPurchase;
 import logic.TripsManagement.TSeat;
 
@@ -41,9 +40,6 @@ import logic.TripsManagement.TSeat;
     , @NamedQuery(name = "TUser.findByBalance", query = "SELECT t FROM TUser t WHERE t.balance = :balance")
     , @NamedQuery(name = "TUser.findByAccepted", query = "SELECT t FROM TUser t WHERE t.accepted = :accepted")})
 public class TUser implements Serializable {
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userid")
-    private Collection<TLog> tLogCollection;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userid")
     private Collection<TSeat> tSeatCollection;
@@ -185,14 +181,4 @@ public class TUser implements Serializable {
     public void setTPurchaseCollection(Collection<TPurchase> tPurchaseCollection) {
         this.tPurchaseCollection = tPurchaseCollection;
     }
-
-    @XmlTransient
-    public Collection<TLog> getTLogCollection() {
-        return tLogCollection;
-    }
-
-    public void setTLogCollection(Collection<TLog> tLogCollection) {
-        this.tLogCollection = tLogCollection;
-    }
-    
 }

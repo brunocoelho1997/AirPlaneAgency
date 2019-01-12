@@ -1,6 +1,5 @@
 package agencyclient;
 
-import static agencyclient.Utils.getFormattedLogMessage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -9,9 +8,9 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import logic.AgencyManagerRemote;
 import logic.Config;
+import logic.Log;
 import logic.NoPermissionException;
 import logic.TAirlineDTO;
-import logic.TLogDTO;
 import logic.TPlaceDTO;
 import logic.TPlaceFeedbackDTO;
 import logic.TPlaneDTO;
@@ -156,11 +155,8 @@ public class Main {
                         processGetTimerInformation();
                         break;
                     case Command.GET_LOGS:
-                        processGetLogs(input);
-                        break;
-                    case Command.REMOVE_LOGS:
-                        processRemoveLogs();
-                        break;
+                        processGetLogs();
+                        break;                    
                     case Command.FINDALLPURCHASES:
                         processFindAllPurchases();
                         break;
@@ -193,7 +189,7 @@ public class Main {
                 
                 System.out.println("");
                 
-            }catch(Exception e){
+            } catch (NoPermissionException e) { 
                 System.err.println("Error - " + e);
             }
         }
@@ -261,7 +257,7 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         TUserDTO userDTO;
         String username;
-        boolean result = false;
+        boolean result;
         int op;
         
         System.out.println("Username:");
@@ -294,8 +290,7 @@ public class Main {
     private static void processDepositToAccount() {
         Scanner sc = new Scanner(System.in);
         float amoung;
-        boolean result = false;
-        int op;
+        boolean result;
         
         System.out.println("Amoung:");
         amoung = Float.parseFloat(sc.nextLine());
@@ -593,7 +588,7 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         TPlaceFeedbackDTO placeFeedbackDTO = new TPlaceFeedbackDTO();
         int placeid;
-        TPlaceDTO tPlaceDTO = null;
+        TPlaceDTO tPlaceDTO;
         boolean result;
         
         
@@ -696,9 +691,9 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         TTripDTO tripDTO = new TTripDTO();
         int placeid, planeid, airlineid;
-        TPlaceDTO tPlaceDTO = null;
-        TPlaneDTO tPlaneDTO = null;
-        TAirlineDTO tAirlineDTO = null;
+        TPlaceDTO tPlaceDTO;
+        TPlaneDTO tPlaneDTO;
+        TAirlineDTO tAirlineDTO;
         
         boolean result;
         
@@ -757,11 +752,11 @@ public class Main {
     }
     private static void processEditTrip() throws NoPermissionException{
         Scanner sc = new Scanner(System.in);
-        TTripDTO tripDTO = new TTripDTO();
+        TTripDTO tripDTO;
         int placeid, planeid, airlineid, id;
-        TPlaceDTO tPlaceDTO = null;
-        TPlaneDTO tPlaneDTO = null;
-        TAirlineDTO tAirlineDTO = null;
+        TPlaceDTO tPlaceDTO;
+        TPlaneDTO tPlaneDTO;
+        TAirlineDTO tAirlineDTO;
         
         boolean result;
         
@@ -832,7 +827,7 @@ public class Main {
 
     private static void processRemoveTrip() throws NoPermissionException{
         Scanner sc = new Scanner(System.in);
-        TTripDTO tripDTO = new TTripDTO();
+        TTripDTO tripDTO;
         int id;
         int op;
         boolean result;
@@ -861,7 +856,7 @@ public class Main {
     }
     private static void processCancelTrip() throws NoPermissionException{
         Scanner sc = new Scanner(System.in);
-        TTripDTO tripDTO = new TTripDTO();
+        TTripDTO tripDTO;
         int id;
         int op;
         boolean result;
@@ -890,7 +885,7 @@ public class Main {
     }
     private static void processSetDoneTrip() throws NoPermissionException{
         Scanner sc = new Scanner(System.in);
-        TTripDTO tripDTO = new TTripDTO();
+        TTripDTO tripDTO;
         int id;
         int op;
         boolean result;
@@ -924,7 +919,7 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         TTripFeedbackDTO fedbackDTO = new TTripFeedbackDTO();
         int tripid;
-        TTripDTO tTripDTO = null;
+        TTripDTO tTripDTO;
         boolean result;
         
         System.out.println("Trip Id:");
@@ -1019,7 +1014,7 @@ public class Main {
     private static void processSetAtualDate(){
         Scanner sc = new Scanner(System.in);
         int date;
-        boolean result = false;
+        boolean result;
         
         System.out.println("Atual date pretended:");
         date = Integer.parseInt(sc.nextLine());
@@ -1053,33 +1048,12 @@ public class Main {
     
     // logs
     
-    private static void processGetLogs(String input) throws NoPermissionException {
-        String[] inputs = input.split(" ");
-        if (inputs.length == 1) {
-            printLogs(0);
-            return;
-        }
-        
-        try {
-            int numberOfLines = Integer.parseInt(inputs[1]);
-            printLogs(numberOfLines);
-            
-        } catch(NumberFormatException e) {
-            System.out.println("Wrong number format: " + inputs[1]);
-        }
-    }
-    
-    private static void processRemoveLogs() throws NoPermissionException {
-        sAgencyManager.removeLogs();
-        System.out.println("Logs removed");
-    }
-    
-    private static void printLogs(int lines) throws NoPermissionException {
-        List<TLogDTO> logs = sAgencyManager.getLogs(lines);
+    private static void processGetLogs() throws NoPermissionException {
+        List<Log> logs = sAgencyManager.getLogs();
         
         System.out.println("\nLOGS (" + logs.size() + " logs):");
-        for (TLogDTO log : logs) {
-            System.out.println(getFormattedLogMessage(log));
+        for (Log log : logs) {
+            System.out.println(Utils.getFormattedLogMessage(log));
         }
     }
     
@@ -1098,12 +1072,12 @@ public class Main {
     
     private static void processBuySeatsToTrip() throws NoPermissionException{
         Scanner sc = new Scanner(System.in);
-        TTripDTO tripDTO = null;
+        TTripDTO tripDTO;
         List<TSeatDTO> seatDTOList = new ArrayList();
-        TSeatDTO seatDTO = null;
+        TSeatDTO seatDTO;
         int tripid, numberOfSeats;
-        boolean result = false;
-        
+        boolean result;
+    
         System.out.println("Trip Id:");
         tripid = Integer.parseInt(sc.nextLine());
         tripDTO = sAgencyManager.findTrip(tripid);
@@ -1152,8 +1126,7 @@ public class Main {
     private static void processEditActualPurchase() throws NoPermissionException {
         Scanner sc = new Scanner(System.in);
         TPurchaseDTO purchaseDTO;
-        int purchaseid;
-        boolean result = false;
+        boolean result;
         
         purchaseDTO = sAgencyManager.getActualPurchase();
       
@@ -1185,7 +1158,7 @@ public class Main {
         TPurchaseDTO purchaseDTO;
         int tripid;
         TTripDTO tripDTO;
-        boolean result = false;
+        boolean result;
         
         purchaseDTO = sAgencyManager.getActualPurchase();
       
@@ -1219,8 +1192,7 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         TPurchaseDTO purchaseDTO;
         int op;
-        TTripDTO tripDTO;
-        boolean result = false;
+        boolean result;
         
         purchaseDTO = sAgencyManager.getActualPurchase();
       
@@ -1249,8 +1221,7 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         TPurchaseDTO purchaseDTO;
         int op;
-        TTripDTO tripDTO;
-        boolean result = false;
+        boolean result;
         
         purchaseDTO = sAgencyManager.getActualPurchase();
       
@@ -1342,8 +1313,7 @@ public class Main {
         
         //logs
         System.out.println("\n-------Logs--------");
-        System.out.println(Command.GET_LOGS + " - Get logs. Syntax: getlogs [n] (n: number of lines - optional)");
-        System.out.println(Command.REMOVE_LOGS + " - Remove all logs");
+        System.out.println(Command.GET_LOGS + " - Get logs");
         
         //Purchases
         System.out.println("\n-------Purchases--------");
@@ -1397,8 +1367,4 @@ public class Main {
            System.out.println(e.getMessage());
         }
     }
-
-    
-
-    
 }

@@ -6,7 +6,7 @@
 package logic.LogsManagement;
 
 import java.io.Serializable;
-import logic.TLogDTO;
+import logic.Log;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
@@ -24,17 +24,12 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.Session;
 import logic.Config;
-import logic.DTOFactory;
 import logic.NoPermissionException;
 import logic.TUserDTO;
-import logic.UsersManagement.TUser;
 import logic.UsersManagement.UsersManagerLocal;
 
 @Singleton
 public class LogsManager implements LogsManagerLocal {
-    
-    @EJB
-    TLogFacadeLocal logFacade;
   
     @EJB
     UsersManagerLocal userManager;
@@ -66,16 +61,16 @@ public class LogsManager implements LogsManagerLocal {
         if(userDTO == null)
             throw new NoPermissionException(Config.MSG_NO_PERMISSION_LOG);
         
-        TLogDTO log = new TLogDTO(userDTO, msg, date);
+        Log log = new Log(userDTO, msg, date);
         ObjectMessage message = jmsContext.createObjectMessage(log);
         jmsContext.createProducer().send(logsQueue, message);
     }
 
     @Override
-    public List<TLogDTO> getLogs(int lines, String username) throws NoPermissionException {
-        userManager.verifyPermission(username, lines);
+    public List<Log> getLogs(String username) throws NoPermissionException {
+        userManager.verifyPermission(username, Config.OPERATOR);
 
-        List<TLogDTO> logs = new ArrayList<>();
+        List<Log> logs = new ArrayList<>();
         Connection connection;
         try {
             connection = connectionFactory.createConnection();
@@ -93,12 +88,12 @@ public class LogsManager implements LogsManagerLocal {
                     }
                     
                     Serializable log = ((ObjectMessage) message).getObject();
-                    if (!(log instanceof TLogDTO)) {
+                    if (!(log instanceof Log)) {
                         System.out.println("[LOGS] getLogs - not a TLogDTO");
                         continue;
                     }
 
-                    logs.add((TLogDTO) log);
+                    logs.add((Log) log);
                     System.out.println("[LOGS] getLogs - Retrieved message: " + message);
                     
                 } else {
@@ -112,26 +107,5 @@ public class LogsManager implements LogsManagerLocal {
         }
         
         return logs;
-    }
-
-    @Override
-    public boolean addLog(TLogDTO log) {
-        TUser user = userManager.getTUserByUsername(log.getUser().getUsername());
-        if (user == null) {
-            return false;
-        }
-                
-        TLog newLog = DTOFactory.getTLogFromTLogDTO(log);
-        newLog.setUserid(user);
-        
-        logFacade.create(newLog);
-        return true;
-    }
-
-    @Override
-    public void removeLogs(String username) throws NoPermissionException {
-        userManager.verifyPermission(username, Config.OPERATOR);
-
-        logFacade.removeAll();
     }
 }

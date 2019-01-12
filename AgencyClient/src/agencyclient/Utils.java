@@ -5,8 +5,8 @@
  */
 package agencyclient;
 
+import logic.Log;
 import logic.LogTypes;
-import logic.TLogDTO;
 
 /** Class for utility methods */
 public class Utils {
@@ -17,7 +17,7 @@ public class Utils {
     
     // logs
     
-    public static String getFormattedLogMessage(TLogDTO log) {
+    public static String getFormattedLogMessage(Log log) {
         String date = "[" + log.getDate() + "] | ";
         String user = "user=" + log.getUser().getUsername() + " | ";
         String action = "action=" + getActionTextFromLogType(log.getMsg());

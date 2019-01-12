@@ -6,15 +6,14 @@
 package logic;
 
 import java.io.Serializable;
-import logic.TUserDTO;
 
-public class TLogDTO implements Serializable {
+public class Log implements Serializable {
     
     private final TUserDTO user;
     private final String msg;
     private final int date;
     
-    public TLogDTO(TUserDTO user, String msg, int date) {
+    public Log(TUserDTO user, String msg, int date) {
         this.user = user;
         this.msg = msg;
         this.date = date;
@@ -34,7 +33,7 @@ public class TLogDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "TLogDTO {" +
+        return "Log {" +
                 "user=" + user + 
                 "msg=" + msg +
                 "date=" + date + "}";

@@ -64,11 +64,7 @@ public interface AgencyManagerRemote {
     String getTimerInformation();
 
     // logs
-    /*
-    Zero for all logs. Non-zero for defined number of log lines
-    */
-    List<TLogDTO> getLogs(int lines) throws NoPermissionException;
-    void removeLogs() throws NoPermissionException;
+    List<Log> getLogs() throws NoPermissionException;
     
     //purchase
     List<TPurchaseDTO> findAllPurchases() throws NoPermissionException;

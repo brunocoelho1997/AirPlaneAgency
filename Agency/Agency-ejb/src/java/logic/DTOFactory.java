@@ -7,7 +7,6 @@ package logic;
 
 import java.util.ArrayList;
 import java.util.List;
-import logic.LogsManagement.TLog;
 import logic.TripsManagement.TAirline;
 import logic.TripsManagement.TPlace;
 import logic.TripsManagement.TPlacefeedback;
@@ -45,11 +44,6 @@ public class DTOFactory {
         return tUserDTO;
     }
     
-    public static TLogDTO getTLogDTOFromTLog(TLog log) {
-        TUserDTO user = getTUserDTOFromTUser(log.getUserid());
-        return new TLogDTO(user, log.getMsg(), log.getDatelog());
-    }
-    
     /* From DTO to DB object */
     
     public static TUser getTUserFromTUserDTO(TUserDTO userDTO) {
@@ -68,13 +62,6 @@ public class DTOFactory {
         }
         
         return newUser;
-    }
-    
-    public static TLog getTLogFromTLogDTO(TLogDTO log) {        
-        TLog newLog = new TLog();
-        newLog.setMsg(log.getMsg());
-        newLog.setDatelog(log.getDate());
-        return newLog;
     }
     
     public static TPlaneDTO getTPlaneDTOFromTPlane(TPlane plane){
