@@ -13,9 +13,13 @@ import logic.NoPermissionException;
 @Local
 public interface LogsManagerLocal {
     
+    void sendLogMessage(String username, String msg, int date) throws NoPermissionException;
+    
     List<TLogDTO> getLogs(int lines, String username) throws NoPermissionException;
     
     boolean addLog(TLogDTO logDTO);
     
     void removeLogs(String username) throws NoPermissionException;
+    
+    
 }
