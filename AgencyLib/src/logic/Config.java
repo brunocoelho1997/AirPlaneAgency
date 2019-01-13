@@ -169,12 +169,12 @@ drop table if exists t_seat;
 
 create table t_seat(
     id int primary key default nextval('seat_seq'),
-    luggage varchar(30) not null,
+    luggage varchar(30),
     auctioned boolean,
     price float,
     tripid int not null,
-    userid int not null,
-    purchaseid int not null,
+    userid int,
+    purchaseid int,
 
 
     constraint fk1 foreign key (tripid) references t_trip (id),

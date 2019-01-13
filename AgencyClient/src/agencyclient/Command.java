@@ -70,4 +70,13 @@ public class Command {
     public static final String REMOVEACTUALPURCHASE = "removeactualpurchase";
     public static final String FINISHACTUALPURCHASE = "finishactualpurchase";
     
+    //auctioned seats
+    public static final String FINDALLAUCTIONEDSEATS = "findallauctionedseats";
+    public static final String BIDAUCTIONEDSEAT = "bidauctionedseat";
+    public static final String GETMYBIDS = "getmybids";
+    public static final String REMOVEMYBID = "removemybid";
+    public static final String REMOVEBID = "removebid";
+
+    
+
 }

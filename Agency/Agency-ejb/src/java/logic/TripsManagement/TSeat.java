@@ -41,7 +41,6 @@ public class TSeat implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
     @Column(name = "luggage")
     private String luggage;
     @Column(name = "auctioned")
@@ -50,13 +49,13 @@ public class TSeat implements Serializable {
     @Column(name = "price")
     private Double price;
     @JoinColumn(name = "purchaseid", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private TPurchase purchaseid;
     @JoinColumn(name = "tripid", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private TTrip tripid;
     @JoinColumn(name = "userid", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private TUser userid;
 
     public TSeat() {
@@ -64,11 +63,6 @@ public class TSeat implements Serializable {
 
     public TSeat(Integer id) {
         this.id = id;
-    }
-
-    public TSeat(Integer id, String luggage) {
-        this.id = id;
-        this.luggage = luggage;
     }
 
     public Integer getId() {

@@ -300,4 +300,30 @@ public class AgencyManager implements AgencyManagerRemote {
     public TPurchaseDTO getActualPurchase() throws NoPermissionException {
         return tripsManagerLocal.getActualPurchase(username);
     }
+
+    @Override
+    public List<TSeatDTO> findAllAuctionedSeats() throws NoPermissionException {
+        return tripsManagerLocal.findAllAuctionedSeats(username);
+    }
+
+    @Override
+    public boolean getMyBids() throws NoPermissionException {
+        return tripsManagerLocal.getMyBids(username);
+    }
+
+    @Override
+    public boolean bidAuctionedSeat() throws NoPermissionException {
+        return tripsManagerLocal.bidAuctionedSeat(username);
+
+    }
+
+    @Override
+    public boolean removeMyBid() throws NoPermissionException {
+        return tripsManagerLocal.removeMyBid(username);
+    }
+
+    @Override
+    public boolean removeBid() throws NoPermissionException {
+        return tripsManagerLocal.removeBid(username);
+    }
 }

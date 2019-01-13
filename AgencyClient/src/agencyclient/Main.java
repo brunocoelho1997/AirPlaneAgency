@@ -181,7 +181,23 @@ public class Main {
                     case Command.FINISHACTUALPURCHASE:
                         processFinishActualPurchase();
                         break;
+                    case Command.FINDALLAUCTIONEDSEATS:
+                        processFindAllAuctionedSeats();
+                        break;
+                    case Command.BIDAUCTIONEDSEAT:
+                        processBidActionedSeat();
+                        break;
+                    case Command.GETMYBIDS:
+                        processGetMyBids();
+                        break;
+                    case Command.REMOVEMYBID:
+                        processRemoveMyBid();
+                        break;
+                    case Command.REMOVEBID:
+                        processRemoveBid();
+                        break;
                     
+    
                     default:
                         System.out.println("Command not found. Type help to get a command list.");
                         break;
@@ -191,6 +207,8 @@ public class Main {
                 
             } catch (NoPermissionException e) { 
                 System.err.println("Error - " + e);
+            } catch(Exception ex){
+                System.err.println("Error - " + ex);
             }
         }
     }
@@ -1246,6 +1264,30 @@ public class Main {
             System.out.println("You finished the actual purchase.");
     }
 
+    //----------------------------------------------------
+    //auctioned seats
+    private static void processFindAllAuctionedSeats() throws NoPermissionException {
+        System.out.println("All Actioned seats in the system:");
+       
+        for(TSeatDTO seatDTO : sAgencyManager.findAllAuctionedSeats())
+            System.out.println(seatDTO);
+    }
+
+    private static void processBidActionedSeat() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private static void processGetMyBids() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private static void processRemoveMyBid() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private static void processRemoveBid() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     //----------------------------------------------------
     //Auxiliar methods
@@ -1327,6 +1369,15 @@ public class Main {
         System.out.println(Command.REMOVEACTUALPURCHASE+ " - Remove the actual purchase");
         System.out.println(Command.FINISHACTUALPURCHASE+ " - Finish the actual purchase");
         
+        
+        //auctioned seats
+        System.out.println("\n-------Actioned Seats--------");
+        System.out.println(Command.FINDALLAUCTIONEDSEATS+ " - Find all actioned seats in the system");
+        System.out.println(Command.BIDAUCTIONEDSEAT+ " - Bid auctioned seat in the system");
+        System.out.println(Command.GETMYBIDS+ " - Get all my bids in the system");
+        System.out.println(Command.REMOVEMYBID+ " - Remove my bids in the system");
+        System.out.println(Command.REMOVEBID+ " - Remove bids in the system");
+
         System.out.println("----------------");
     }
     
@@ -1367,4 +1418,6 @@ public class Main {
            System.out.println(e.getMessage());
         }
     }
+
+    
 }

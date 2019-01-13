@@ -11,6 +11,7 @@ import logic.TPlaceDTO;
 import logic.TTripDTO;
 import logic.TripsManagement.TripsManagerLocal;
 
+
 @Singleton
 public class FlightManager implements FlightManagerLocal {
     

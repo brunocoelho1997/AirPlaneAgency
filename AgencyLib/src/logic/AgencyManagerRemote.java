@@ -76,4 +76,11 @@ public interface AgencyManagerRemote {
     boolean removeSeatsOfActualPurchase(TPurchaseDTO purchaseDTO, TTripDTO tripDTO) throws NoPermissionException;
     boolean removeActualPurchase(TPurchaseDTO purchaseDTO) throws NoPermissionException;
     boolean finishActualPurchase(TPurchaseDTO purchaseDTO) throws NoPermissionException;
+    
+    //acutioned seats
+    List<TSeatDTO> findAllAuctionedSeats() throws NoPermissionException;
+    boolean getMyBids() throws NoPermissionException;
+    boolean bidAuctionedSeat() throws NoPermissionException;
+    boolean removeMyBid() throws NoPermissionException;
+    boolean removeBid() throws NoPermissionException;
 }

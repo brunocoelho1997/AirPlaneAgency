@@ -29,6 +29,4 @@ public interface TTripFacadeLocal {
 
     int count();
     
-    List<TSeat> findBoughtSeatsOfTrip(TTrip trip);
-    
 }

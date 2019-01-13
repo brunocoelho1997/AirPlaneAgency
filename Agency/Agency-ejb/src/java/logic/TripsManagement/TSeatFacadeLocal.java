@@ -18,7 +18,7 @@ public interface TSeatFacadeLocal {
     void create(TSeat tSeat);
 
     TSeat createAndGetEntity(TSeat tSeat);
-
+    
     void edit(TSeat tSeat);
 
     void remove(TSeat tSeat);
@@ -31,4 +31,11 @@ public interface TSeatFacadeLocal {
 
     int count();
     
+    List<TSeat> findBoughtSeatsOfTrip(TTrip trip);
+    
+    List<TSeat> findAuctionedSeats();
+    
+    List<TSeat> findAuctionedSeatsOfTrip(TTrip trip);
+    
+
 }

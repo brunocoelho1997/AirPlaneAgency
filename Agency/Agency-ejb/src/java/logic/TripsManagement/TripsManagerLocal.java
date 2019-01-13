@@ -77,4 +77,12 @@ public interface TripsManagerLocal {
     boolean removeActualPurchase(TPurchaseDTO purchaseDTO, String username) throws NoPermissionException;
     boolean finishActualPurchase(TPurchaseDTO purchaseDTO, String username) throws NoPermissionException;
 
+    
+    //acutioned seats
+    List<TSeatDTO> findAllAuctionedSeats(String username) throws NoPermissionException;
+    boolean getMyBids(String username) throws NoPermissionException;
+    boolean bidAuctionedSeat(String username) throws NoPermissionException;
+    boolean removeMyBid(String username) throws NoPermissionException;
+    boolean removeBid(String username) throws NoPermissionException;
+
 }
