@@ -80,9 +80,10 @@ public interface TripsManagerLocal {
     
     //acutioned seats
     List<TSeatDTO> findAllAuctionedSeats(String username) throws NoPermissionException;
-    boolean getMyBids(String username) throws NoPermissionException;
-    boolean bidAuctionedSeat(String username) throws NoPermissionException;
-    boolean removeMyBid(String username) throws NoPermissionException;
-    boolean removeBid(String username) throws NoPermissionException;
+    TSeatDTO findAuctionedSeat(int id, String username) throws NoPermissionException;
+    List<TSeatDTO> getMyBids(String username) throws NoPermissionException;
+    boolean bidAuctionedSeat(TSeatDTO seatDTO, String username) throws NoPermissionException;
+    boolean removeMyBid(TSeatDTO seatDTO, String username) throws NoPermissionException;
+    boolean removeBid(TSeatDTO seatDTO, String username) throws NoPermissionException;
 
 }

@@ -1159,64 +1159,108 @@ public class TripsManager implements TripsManagerLocal {
 
         userManager.verifyPermission(username, Config.CLIENT);
         
-        for(TTrip tripTmp : tripFacade.findAll()){
-            int boughtSeatsForTripCount = seatFacade.findBoughtSeatsOfTrip(tripTmp).size();
-
-            int freeSeatsCount = tripTmp.getPlaneid().getPlanelimit() - boughtSeatsForTripCount;
-            
-            int condition = (int) (tripTmp.getPlaneid().getPlanelimit() * 0.1);
-                    
-            if(freeSeatsCount <= condition)
-                ;
-        }
-        
-        
-        /*
-        //find all seast which where the trip is not done and it's not canceled
-        List<TSeat> boughtSeats = seatFacade.findBoughtSeatsOfNotDoneAndNotCanceledTrips();
-        
-        for(TSeat seat : boughtSeats){
-            TTrip tripTemp = seat.getTripid();
-            int boughtSeatsForTripCount = seatFacade.findBoughtSeatsOfTrip(tripTemp).size();
-            
-            int freeSeatsCount = tripTemp.getPlaneid().getPlanelimit() - boughtSeatsForTripCount;
-            
-            int condition = (int) (tripTemp.getPlaneid().getPlanelimit() * 0.1);
-                    
-            if(freeSeatsCount <= condition)
-                auctionedSeatsDTO.add(DTOFactory.getTSeatDTOFromTSeat(seat));
-
-        }
-        */
-        
-        
-        //all seats which already had a bid (has auctioned = true)
-        auctionedSeats.addAll(seatFacade.findAuctionedSeats());
-        
-        for(TSeat seat : auctionedSeats)
+        for(TSeat seat : seatFacade.findAuctionedSeats())
             auctionedSeatsDTO.add(DTOFactory.getTSeatDTOFromTSeat(seat));
-
-        
+      
         return auctionedSeatsDTO;
     }
+    
+    @Override
+    public TSeatDTO findAuctionedSeat(int id, String username) throws NoPermissionException {
+        TSeat seat = seatFacade.find(id);
+        
+        if(seat == null)
+            return null;
+        
+        if(!seat.getAuctioned())
+            return null;
+        
+        return DTOFactory.getTSeatDTOFromTSeat(seat);
+    }
 
     @Override
-    public boolean getMyBids(String username) throws NoPermissionException {
+    public List<TSeatDTO> getMyBids(String username) throws NoPermissionException {
+        userManager.verifyPermission(username, Config.CLIENT);
+        
+        List<TSeatDTO> auctionedSeats = new ArrayList();
+        TUser user = userManager.getTUserByUsername(username);
+        
+        for(TSeat seatTmp : seatFacade.findAuctionedSeatsOfUser(user))
+            auctionedSeats.add(DTOFactory.getTSeatDTOFromTSeat(seatTmp));
+        return auctionedSeats;
+    }
+
+    @Override
+    public boolean bidAuctionedSeat(TSeatDTO seatDTO, String username) throws NoPermissionException {
+        userManager.verifyPermission(username, Config.CLIENT);
+        
+        if(!validateAuctionedSeat(seatDTO))
+            return false;
+        
+        TTrip trip = tripFacade.find(seatDTO.getTripDTO().getId());
+        if(trip == null)
+            return false;
+        
+        TUser user = userManager.getTUserByUsername(username);
+        
+        if(user == null)
+            return false;
+        
+        TSeat greatestAuctionedSeat = getGreatestAuctionedSeat(seatFacade.findAuctionedSeatsOfTrip(trip));
+        
+        if(greatestAuctionedSeat != null && (seatDTO.getPrice() < greatestAuctionedSeat.getPrice()))
+            return false;
+        
+        
+        greatestAuctionedSeat.setAuctioned(seatDTO.getAuctioned());
+        if(seatDTO.getLuggage()!= null)
+            greatestAuctionedSeat.setLuggage(seatDTO.getLuggage());
+        greatestAuctionedSeat.setPrice(seatDTO.getPrice());
+        greatestAuctionedSeat.setTripid(trip);
+        greatestAuctionedSeat.setUserid(user);
+        
+        seatFacade.edit(greatestAuctionedSeat);
+        
+        return true;
+        
+    }
+
+    @Override
+    public boolean removeMyBid(TSeatDTO seatDTO, String username) throws NoPermissionException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean bidAuctionedSeat(String username) throws NoPermissionException {
+    public boolean removeBid(TSeatDTO seatDTO, String username) throws NoPermissionException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public boolean removeMyBid(String username) throws NoPermissionException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private boolean validateAuctionedSeat(TSeatDTO seatDTO) {
+        if(seatDTO == null)
+            return false;
+        if(!seatDTO.getAuctioned())
+            return false;
+        if(seatDTO.getPrice()<=0)
+            return false;
+        return true;
     }
-
-    @Override
-    public boolean removeBid(String username) throws NoPermissionException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    private TSeat getGreatestAuctionedSeat(List<TSeat>seatList)
+    {
+        if(seatList == null)
+            return null;
+        
+        if(seatList.isEmpty())
+            return null;
+        
+        TSeat greatestActionedSeat = seatList.get(0);
+        
+        for(TSeat seat : seatList)
+        {
+            if(seat.getPrice() > greatestActionedSeat.getPrice())
+                greatestActionedSeat = seat;
+        }
+        
+        return greatestActionedSeat;
     }
 }

@@ -100,7 +100,10 @@ public class DTOFactory {
     }
     
     public static TSeatDTO getTSeatDTOFromTSeat(TSeat seat){
-        return new TSeatDTO(seat.getId(), seat.getLuggage(), seat.getAuctioned(), seat.getPrice());
+        if(seat.getTripid() != null)
+            return new TSeatDTO(seat.getId(), seat.getLuggage(), seat.getAuctioned(), seat.getPrice(), getTTripDTOFromTTrip(seat.getTripid()));
+        else
+            return new TSeatDTO(seat.getId(), seat.getLuggage(), seat.getAuctioned(), seat.getPrice());
     }
     
     

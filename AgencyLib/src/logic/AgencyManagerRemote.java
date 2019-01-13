@@ -79,8 +79,9 @@ public interface AgencyManagerRemote {
     
     //acutioned seats
     List<TSeatDTO> findAllAuctionedSeats() throws NoPermissionException;
-    boolean getMyBids() throws NoPermissionException;
-    boolean bidAuctionedSeat() throws NoPermissionException;
-    boolean removeMyBid() throws NoPermissionException;
-    boolean removeBid() throws NoPermissionException;
+    TSeatDTO findAuctionedSeat(int id) throws NoPermissionException;
+    List<TSeatDTO> getMyBids() throws NoPermissionException;
+    boolean bidAuctionedSeat(TSeatDTO seatDTO) throws NoPermissionException;
+    boolean removeMyBid(TSeatDTO seatDTO) throws NoPermissionException;
+    boolean removeBid(TSeatDTO seatDTO) throws NoPermissionException;
 }

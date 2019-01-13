@@ -17,7 +17,8 @@ public class TSeatDTO implements Serializable{
     private String luggage;
     private Boolean auctioned;
     private Double price;
-
+    private TTripDTO tripDTO;
+    
     public TSeatDTO() {
     }
 
@@ -27,6 +28,16 @@ public class TSeatDTO implements Serializable{
         this.auctioned = auctioned;
         this.price = price;
     }
+
+    public TSeatDTO(Integer id, String luggage, Boolean auctioned, Double price, TTripDTO tripDTO) {
+        this.id = id;
+        this.luggage = luggage;
+        this.auctioned = auctioned;
+        this.price = price;
+        this.tripDTO = tripDTO;
+    }
+    
+    
 
     public Integer getId() {
         return id;
@@ -58,6 +69,14 @@ public class TSeatDTO implements Serializable{
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public TTripDTO getTripDTO() {
+        return tripDTO;
+    }
+
+    public void setTripDTO(TTripDTO tripDTO) {
+        this.tripDTO = tripDTO;
     }
 
     @Override

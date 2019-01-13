@@ -13,6 +13,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import logic.UsersManagement.TUser;
 
 /**
  *
@@ -82,6 +83,19 @@ public class TSeatFacade extends AbstractFacade<TSeat> implements TSeatFacadeLoc
         Root<TSeat> seat = cq.from(TSeat.class);
         
         cq.where(cb.and(cb.equal(seat.get(TSeat_.tripid).get(TTrip_.id), trip.getId()), cb.equal(seat.get(TSeat_.auctioned), true)));
+
+        Query q = getEntityManager().createQuery(cq);
+        return q.getResultList();
+    }
+
+    @Override
+    public List<TSeat> findAuctionedSeatsOfUser(TUser user) {
+        CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        
+        Root<TSeat> seat = cq.from(TSeat.class);
+        
+        cq.where(cb.and(cb.equal(seat.get(TSeat_.userid), user), cb.equal(seat.get(TSeat_.auctioned), true)));
 
         Query q = getEntityManager().createQuery(cq);
         return q.getResultList();

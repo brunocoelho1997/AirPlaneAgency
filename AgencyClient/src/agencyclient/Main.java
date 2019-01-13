@@ -1273,12 +1273,43 @@ public class Main {
             System.out.println(seatDTO);
     }
 
-    private static void processBidActionedSeat() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private static void processBidActionedSeat() throws NoPermissionException {
+        Scanner sc = new Scanner(System.in);
+        
+        TSeatDTO seatDTO;
+        int seatId; double price;
+        boolean result;
+    
+        System.out.println("Seat Id:");
+        seatId = Integer.parseInt(sc.nextLine());
+        seatDTO = sAgencyManager.findAuctionedSeat(seatId);
+
+        if(seatDTO == null)
+        {
+            System.out.println("Not found a auctioned seat with that id. Try again.");
+            return;
+        }
+
+        System.out.println("Auctioned Seat: " + seatDTO);
+        
+        System.out.println("New bid for the seat: ");
+        seatDTO.setPrice(Double.parseDouble(sc.nextLine()));
+
+        System.out.println("Luggage: ");
+        seatDTO.setLuggage(sc.nextLine());
+
+        result = sAgencyManager.bidAuctionedSeat(seatDTO);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't bid the seat.");
+        else
+            System.out.println("You did the bid to the seat with success.");
     }
 
-    private static void processGetMyBids() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private static void processGetMyBids() throws NoPermissionException {
+        System.out.println("All Actioned seats in the system:");
+       
+        for(TSeatDTO seatDTO : sAgencyManager.getMyBids())
+            System.out.println(seatDTO);
     }
 
     private static void processRemoveMyBid() {

@@ -7,6 +7,7 @@ package logic.TripsManagement;
 
 import java.util.List;
 import javax.ejb.Local;
+import logic.UsersManagement.TUser;
 
 /**
  *
@@ -37,5 +38,6 @@ public interface TSeatFacadeLocal {
     
     List<TSeat> findAuctionedSeatsOfTrip(TTrip trip);
     
+    List<TSeat> findAuctionedSeatsOfUser(TUser user);
 
 }
