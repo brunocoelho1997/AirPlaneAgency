@@ -49,7 +49,7 @@ drop table if exists t_user;
 create table t_user(
     id int primary key default nextval('user_seq'),
     usertype int not null,
-    username varchar(30) not null,
+    username varchar(30) not null unique,
     password varchar(30) not null,
     clientname varchar(30),
     balance float,
@@ -85,7 +85,7 @@ create table t_place(
     id int primary key default nextval('place_seq'),
     country varchar(30) not null,
     city varchar(30) not null,
-    address varchar(150) not null
+    address varchar(150)
 );
 
 --------------------------------------------------------------------
@@ -126,13 +126,15 @@ create table t_trip(
     done boolean,
     canceled boolean,
     datetrip int,
-    placeid int not null,
+    fromplaceid int not null,
+    toplaceid int not null,
     airlineid int not null,
     planeid int not null,
 
-    constraint fk1 foreign key (placeid) references t_place (id),
-    constraint fk2 foreign key (airlineid) references t_airline (id),
-    constraint fk3 foreign key (planeid) references t_plane (id)
+    constraint fk1 foreign key (fromplaceid) references t_place (id),
+    constraint fk2 foreign key (toplaceid) references t_place (id),
+    constraint fk3 foreign key (airlineid) references t_airline (id),
+    constraint fk4 foreign key (planeid) references t_plane (id)
 
 );
 
@@ -173,13 +175,11 @@ create table t_seat(
     auctioned boolean,
     price float,
     tripid int not null,
-    userid int,
     purchaseid int,
 
 
     constraint fk1 foreign key (tripid) references t_trip (id),
-    constraint fk2 foreign key (userid) references t_user (id),
-    constraint fk3 foreign key (purchaseid) references t_purchase (id)
+    constraint fk2 foreign key (purchaseid) references t_purchase (id)
 
 );
 

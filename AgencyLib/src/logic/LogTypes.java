@@ -7,7 +7,7 @@ package logic;
 
 public class LogTypes {
     
-    public static final String PURCHASE_TRIP = "purchase";
+    public static final String FINISH_PURCHASE = "purchase";
     public static final String CREATE_TRIP = "create";
     public static final String FINISH_TRIP = "finish";
     

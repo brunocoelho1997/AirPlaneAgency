@@ -160,11 +160,11 @@ public class Main {
                     case Command.FINDALLPURCHASES:
                         processFindAllPurchases();
                         break;
-                    case Command.FINDALLPURCHASESOFUSER:
-                        processFindAllPurchasesOfUser();
+                    case Command.FINDALLMYPURCHASES:
+                        processFindAllMyPurchases();
                         break;
-                    case Command.GETACTUALPURCHASE:
-                        processGetActualPurchase();
+                    case Command.FINDACTUALPURCHASE:
+                        processFindActualPurchase();
                         break;
                     case Command.BUYSEATSTOTRIP:
                         processBuySeatsToTrip();
@@ -178,6 +178,9 @@ public class Main {
                     case Command.REMOVEACTUALPURCHASE:
                         processRemoveActualPurchase();
                         break;
+                    case Command.REMOVEDONEPURCHASE:
+                        processRemoveDonePurchase();
+                        break;
                     case Command.FINISHACTUALPURCHASE:
                         processFinishActualPurchase();
                         break;
@@ -187,7 +190,7 @@ public class Main {
                     case Command.BIDAUCTIONEDSEAT:
                         processBidActionedSeat();
                         break;
-                    case Command.GETMYBIDS:
+                    case Command.FINDMYBIDS:
                         processGetMyBids();
                         break;
                     case Command.REMOVEMYBID:
@@ -708,23 +711,35 @@ public class Main {
     private static void processAddTrip() throws NoPermissionException{
         Scanner sc = new Scanner(System.in);
         TTripDTO tripDTO = new TTripDTO();
-        int placeid, planeid, airlineid;
-        TPlaceDTO tPlaceDTO;
+        int placeid,toPlaceid, planeid, airlineid;
+        TPlaceDTO tFromPlaceDTO, tToPlaceDTO;
         TPlaneDTO tPlaneDTO;
         TAirlineDTO tAirlineDTO;
         
         boolean result;
         
-        System.out.println("Place Id:");
+        System.out.println("From Place Id:");
         placeid = Integer.parseInt(sc.nextLine());
-        tPlaceDTO = sAgencyManager.findPlace(placeid);
+        tFromPlaceDTO = sAgencyManager.findPlace(placeid);
 
-        if(tPlaceDTO == null)
+        if(tFromPlaceDTO == null)
         {
             System.out.println("Not found a place with that id. Try again.");
             return;
         }
-        System.out.println("Place: " + tPlaceDTO);
+        System.out.println("From Place: " + tFromPlaceDTO);
+        
+        //----------
+        System.out.println("To Place Id:");
+        placeid = Integer.parseInt(sc.nextLine());
+        tToPlaceDTO = sAgencyManager.findPlace(placeid);
+
+        if(tToPlaceDTO == null)
+        {
+            System.out.println("Not found a place with that id. Try again.");
+            return;
+        }
+        System.out.println("To Place: " + tToPlaceDTO);
         
         //-------------
         System.out.println("Plane Id:");
@@ -751,7 +766,8 @@ public class Main {
         
         //-----------------
         
-        tripDTO.setPlaceDTO(tPlaceDTO);
+        tripDTO.setFromPlaceDTO(tFromPlaceDTO);
+        tripDTO.setToPlaceDTO(tToPlaceDTO);
         tripDTO.setAirlineDTO(tAirlineDTO);
         tripDTO.setPlaneDTO(tPlaneDTO);
               
@@ -772,7 +788,7 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         TTripDTO tripDTO;
         int placeid, planeid, airlineid, id;
-        TPlaceDTO tPlaceDTO;
+        TPlaceDTO tFromPlaceDTO,tToPlaceDTO;
         TPlaneDTO tPlaneDTO;
         TAirlineDTO tAirlineDTO;
         
@@ -790,16 +806,28 @@ public class Main {
         
         System.out.println("Editing the trip: " + tripDTO);
         
-        System.out.println("Place Id:");
+        System.out.println("From Place Id:");
         placeid = Integer.parseInt(sc.nextLine());
-        tPlaceDTO = sAgencyManager.findPlace(placeid);
+        tFromPlaceDTO = sAgencyManager.findPlace(placeid);
 
-        if(tPlaceDTO == null)
+        if(tFromPlaceDTO == null)
         {
             System.out.println("Not found a place with that id. Try again.");
             return;
         }
-        System.out.println("Place: " + tPlaceDTO);
+        System.out.println("From Place: " + tFromPlaceDTO);
+        
+        //----------
+        System.out.println("To Place Id:");
+        placeid = Integer.parseInt(sc.nextLine());
+        tToPlaceDTO = sAgencyManager.findPlace(placeid);
+
+        if(tToPlaceDTO == null)
+        {
+            System.out.println("Not found a place with that id. Try again.");
+            return;
+        }
+        System.out.println("To Place: " + tToPlaceDTO);
         
         //-------------
         System.out.println("Plane Id:");
@@ -826,7 +854,8 @@ public class Main {
         
         //-----------------
         
-        tripDTO.setPlaceDTO(tPlaceDTO);
+        tripDTO.setFromPlaceDTO(tFromPlaceDTO);
+        tripDTO.setToPlaceDTO(tToPlaceDTO);
         tripDTO.setAirlineDTO(tAirlineDTO);
         tripDTO.setPlaneDTO(tPlaneDTO);
               
@@ -1084,8 +1113,11 @@ public class Main {
             System.out.println(purchaseDTO);
     }
     
-    private static void processFindAllPurchasesOfUser() throws NoPermissionException{
-        
+    private static void processFindAllMyPurchases() throws NoPermissionException {
+        System.out.println("All of your purchases in the system:");
+       
+        for(TPurchaseDTO purchaseDTO : sAgencyManager.findAllMyPurchases())
+            System.out.println(purchaseDTO);
     }
     
     private static void processBuySeatsToTrip() throws NoPermissionException{
@@ -1128,7 +1160,7 @@ public class Main {
         
     }
     
-    private static void processGetActualPurchase() throws NoPermissionException {
+    private static void processFindActualPurchase() throws NoPermissionException {
         TPurchaseDTO purchaseDTO;
         purchaseDTO = sAgencyManager.getActualPurchase();
       
@@ -1264,6 +1296,37 @@ public class Main {
             System.out.println("You finished the actual purchase.");
     }
 
+    private static void processRemoveDonePurchase() throws NoPermissionException {
+        Scanner sc = new Scanner(System.in);
+        TPurchaseDTO purchaseDTO;
+        int op;
+        boolean result;
+        int purchaseid;
+        
+        System.out.println("ID of Purchase to remove: ");
+        purchaseid = Integer.parseInt(sc.nextLine());
+
+        purchaseDTO = sAgencyManager.findPurchase(purchaseid);
+      
+        if(purchaseDTO == null)
+        {
+            System.out.println("Not found a purchase with that id. Try again.");
+            return;
+        }
+        
+        System.out.println("Do you want remove the purchase: " + purchaseDTO + "? [1/0]");
+        op = Integer.parseInt(sc.nextLine());
+
+        if(op == 0)
+            return;
+        
+        result = sAgencyManager.removeDonePurchase(purchaseDTO);
+        if(!result)
+            System.out.println("A problem occurred. The system didn't removed done purchase.");
+        else
+            System.out.println("You removed the done purchase.");
+    }
+    
     //----------------------------------------------------
     //auctioned seats
     private static void processFindAllAuctionedSeats() throws NoPermissionException {
@@ -1391,21 +1454,23 @@ public class Main {
         //Purchases
         System.out.println("\n-------Purchases--------");
         System.out.println(Command.FINDALLPURCHASES+ " - Find all purchases in the system");
-        System.out.println(Command.GETACTUALPURCHASE+ " - Get actual purchase.");
-        System.out.println(Command.FINDALLPURCHASESOFUSER+ " - Find all purchases of an user in the system");
-
+        System.out.println(Command.FINDACTUALPURCHASE+ " - Get actual purchase.");
+        System.out.println(Command.FINDALLMYPURCHASES+ " - Find all your purchases in the system");
         System.out.println(Command.BUYSEATSTOTRIP+ " - Buy seats to a trip");
         System.out.println(Command.EDITACTUALPURCHASE+ " - Edit actual purchase");
         System.out.println(Command.REMOVESEATSOFACTUALPURCHASE+ " - Remove seats of a purchase. Will remove from the actual purchase.");
         System.out.println(Command.REMOVEACTUALPURCHASE+ " - Remove the actual purchase");
         System.out.println(Command.FINISHACTUALPURCHASE+ " - Finish the actual purchase");
+        System.out.println(Command.REMOVEDONEPURCHASE+ " - Remove a done purchase");
+
+        
         
         
         //auctioned seats
         System.out.println("\n-------Actioned Seats--------");
         System.out.println(Command.FINDALLAUCTIONEDSEATS+ " - Find all actioned seats in the system");
         System.out.println(Command.BIDAUCTIONEDSEAT+ " - Bid auctioned seat in the system");
-        System.out.println(Command.GETMYBIDS+ " - Get all my bids in the system");
+        System.out.println(Command.FINDMYBIDS+ " - Find all my bids in the system");
         System.out.println(Command.REMOVEMYBID+ " - Remove my bids in the system");
         System.out.println(Command.REMOVEBID+ " - Remove bids in the system");
 

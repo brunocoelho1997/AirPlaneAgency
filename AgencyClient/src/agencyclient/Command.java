@@ -62,18 +62,19 @@ public class Command {
     
     //purchases
     public static final String FINDALLPURCHASES = "findallpurchases";
-    public static final String FINDALLPURCHASESOFUSER = "findallpurchasesofuser";
-    public static final String GETACTUALPURCHASE = "getactualpurchase";
+    public static final String FINDALLMYPURCHASES = "findallmypurchases";
+    public static final String FINDACTUALPURCHASE = "findactualpurchase";
     public static final String BUYSEATSTOTRIP = "buyseatstotrip";
     public static final String EDITACTUALPURCHASE = "editactualpurchase";
     public static final String REMOVESEATSOFACTUALPURCHASE = "removeseatsofactualpurchase";
     public static final String REMOVEACTUALPURCHASE = "removeactualpurchase";
     public static final String FINISHACTUALPURCHASE = "finishactualpurchase";
-    
+    public static final String REMOVEDONEPURCHASE = "removedonepurchase";
+
     //auctioned seats
     public static final String FINDALLAUCTIONEDSEATS = "findallauctionedseats";
     public static final String BIDAUCTIONEDSEAT = "bidauctionedseat";
-    public static final String GETMYBIDS = "getmybids";
+    public static final String FINDMYBIDS = "findmybids";
     public static final String REMOVEMYBID = "removemybid";
     public static final String REMOVEBID = "removebid";
 

@@ -35,9 +35,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "TAirline.findByPhonenumber", query = "SELECT t FROM TAirline t WHERE t.phonenumber = :phonenumber")})
 public class TAirline implements Serializable {
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "airlineid")
-    private Collection<TTrip> tTripCollection;
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,6 +47,8 @@ public class TAirline implements Serializable {
     @Basic(optional = false)
     @Column(name = "phonenumber")
     private String phonenumber;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "airlineid")
+    private Collection<TTrip> tTripCollection;
 
     public TAirline() {
     }
@@ -88,6 +87,15 @@ public class TAirline implements Serializable {
         this.phonenumber = phonenumber;
     }
 
+    @XmlTransient
+    public Collection<TTrip> getTTripCollection() {
+        return tTripCollection;
+    }
+
+    public void setTTripCollection(Collection<TTrip> tTripCollection) {
+        this.tTripCollection = tTripCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -111,15 +119,6 @@ public class TAirline implements Serializable {
     @Override
     public String toString() {
         return "logic.TripsManagement.TAirline[ id=" + id + " ]";
-    }
-
-    @XmlTransient
-    public Collection<TTrip> getTTripCollection() {
-        return tTripCollection;
-    }
-
-    public void setTTripCollection(Collection<TTrip> tTripCollection) {
-        this.tTripCollection = tTripCollection;
     }
     
 }

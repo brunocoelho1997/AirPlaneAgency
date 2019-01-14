@@ -19,21 +19,23 @@ public class TTripDTO implements Serializable{
     private Boolean canceled;
     private Integer datetrip;
     private TAirlineDTO airlineDTO;
-    private TPlaceDTO placeDTO;
+    private TPlaceDTO fromPlaceDTO;
+    private TPlaceDTO toPlaceDTO;
     private TPlaneDTO planeDTO;
     private Collection<TTripFeedbackDTO> tTripfeedbackCollection;
 
     public TTripDTO() {
     }
 
-    public TTripDTO(Integer id, Double price, Boolean done, Boolean canceled, Integer datetrip, TAirlineDTO airlineDTO, TPlaceDTO placeDTO, TPlaneDTO planeDTO, Collection<TTripFeedbackDTO> tTripfeedbackCollection) {
+    public TTripDTO(Integer id, Double price, Boolean done, Boolean canceled, Integer datetrip, TAirlineDTO airlineDTO, TPlaceDTO fromPlaceDTO, TPlaceDTO toPlaceDTO, TPlaneDTO planeDTO, Collection<TTripFeedbackDTO> tTripfeedbackCollection) {
         this.id = id;
         this.price = price;
         this.done = done;
         this.canceled = canceled;
         this.datetrip = datetrip;
         this.airlineDTO = airlineDTO;
-        this.placeDTO = placeDTO;
+        this.fromPlaceDTO = fromPlaceDTO;
+        this.toPlaceDTO = toPlaceDTO;
         this.planeDTO = planeDTO;
         this.tTripfeedbackCollection = tTripfeedbackCollection;
     }
@@ -86,12 +88,20 @@ public class TTripDTO implements Serializable{
         this.airlineDTO = airlineDTO;
     }
 
-    public TPlaceDTO getPlaceDTO() {
-        return placeDTO;
+    public TPlaceDTO getFromPlaceDTO() {
+        return fromPlaceDTO;
     }
 
-    public void setPlaceDTO(TPlaceDTO placeDTO) {
-        this.placeDTO = placeDTO;
+    public void setFromPlaceDTO(TPlaceDTO fromPlaceDTO) {
+        this.fromPlaceDTO = fromPlaceDTO;
+    }
+
+    public TPlaceDTO getToPlaceDTO() {
+        return toPlaceDTO;
+    }
+
+    public void setToPlaceDTO(TPlaceDTO toPlaceDTO) {
+        this.toPlaceDTO = toPlaceDTO;
     }
 
     public TPlaneDTO getPlaneDTO() {
@@ -112,10 +122,7 @@ public class TTripDTO implements Serializable{
 
     @Override
     public String toString() {
-        return "TTripDTO{" + "id=" + id + ", price=" + price + ", done=" + done + ", canceled=" + canceled + ", datetrip=" + datetrip + ", \n airlineDTO=" + airlineDTO + ", \n placeDTO=" + placeDTO + ", \n planeDTO=" + planeDTO + ", \n tTripfeedbackCollection=" + tTripfeedbackCollection + "} \n";
+        return "TTripDTO{" + "id=" + id + ", price=" + price + ", done=" + done + ", canceled=" + canceled + ", datetrip=" + datetrip + ", airlineDTO=" + airlineDTO + ", fromPlaceDTO=" + fromPlaceDTO + ", toPlaceDTO=" + toPlaceDTO + ", planeDTO=" + planeDTO + ", tTripfeedbackCollection=" + tTripfeedbackCollection + '}';
     }
 
-    
-
-    
 }

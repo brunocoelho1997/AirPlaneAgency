@@ -18,7 +18,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import logic.UsersManagement.TUser;
 
 /**
  *
@@ -54,9 +53,6 @@ public class TSeat implements Serializable {
     @JoinColumn(name = "tripid", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private TTrip tripid;
-    @JoinColumn(name = "userid", referencedColumnName = "id")
-    @ManyToOne
-    private TUser userid;
 
     public TSeat() {
     }
@@ -111,14 +107,6 @@ public class TSeat implements Serializable {
 
     public void setTripid(TTrip tripid) {
         this.tripid = tripid;
-    }
-
-    public TUser getUserid() {
-        return userid;
-    }
-
-    public void setUserid(TUser userid) {
-        this.userid = userid;
     }
 
     @Override

@@ -262,8 +262,8 @@ public class AgencyManager implements AgencyManagerRemote {
     }
 
     @Override
-    public List<TPurchaseDTO> findAllPurchasesOfUser() throws NoPermissionException {
-        return tripsManagerLocal.findAllPurchasesOfUser(username);
+    public List<TPurchaseDTO> findAllMyPurchases() throws NoPermissionException {
+        return tripsManagerLocal.findAllMyPurchases(username);
     }
 
     @Override
@@ -300,6 +300,15 @@ public class AgencyManager implements AgencyManagerRemote {
     public TPurchaseDTO getActualPurchase() throws NoPermissionException {
         return tripsManagerLocal.getActualPurchase(username);
     }
+    @Override
+    public boolean removeDonePurchase(TPurchaseDTO purchaseDTO) throws NoPermissionException {
+        return tripsManagerLocal.removeDonePurchase(purchaseDTO, username);
+
+    }
+    
+    
+    
+    //AUCTIONED SEATS
 
     @Override
     public List<TSeatDTO> findAllAuctionedSeats() throws NoPermissionException {
@@ -331,4 +340,6 @@ public class AgencyManager implements AgencyManagerRemote {
     public TSeatDTO findAuctionedSeat(int id) throws NoPermissionException {
         return tripsManagerLocal.findAuctionedSeat(id, username);
     }
+
+    
 }

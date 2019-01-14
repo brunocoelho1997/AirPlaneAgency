@@ -68,7 +68,7 @@ public interface TripsManagerLocal {
 
     //purchase
     List<TPurchaseDTO> findAllPurchases(String username) throws NoPermissionException;
-    List<TPurchaseDTO> findAllPurchasesOfUser(String username) throws NoPermissionException;
+    List<TPurchaseDTO> findAllMyPurchases(String username) throws NoPermissionException;
     TPurchaseDTO findPurchase(int id, String username) throws NoPermissionException;
     TPurchaseDTO getActualPurchase(String username) throws NoPermissionException;
     boolean buySeatsToTrip(TTripDTO tripDTO, List<TSeatDTO> seatDTOList, String username) throws NoPermissionException;
@@ -76,6 +76,7 @@ public interface TripsManagerLocal {
     boolean removeSeatsOfActualPurchase(TPurchaseDTO purchaseDTO, TTripDTO tripDTO, String username) throws NoPermissionException;
     boolean removeActualPurchase(TPurchaseDTO purchaseDTO, String username) throws NoPermissionException;
     boolean finishActualPurchase(TPurchaseDTO purchaseDTO, String username) throws NoPermissionException;
+    boolean removeDonePurchase(TPurchaseDTO purchaseDTO, String username) throws NoPermissionException;
 
     
     //acutioned seats

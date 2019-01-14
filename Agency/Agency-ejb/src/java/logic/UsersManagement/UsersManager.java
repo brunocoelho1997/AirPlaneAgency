@@ -62,7 +62,6 @@ public class UsersManager implements UsersManagerLocal {
         newUser.setUsertype(userDTO.getUsertype());
         newUser.setAccepted(false);     
         newUser.setTPurchaseCollection(new ArrayList());
-        newUser.setTSeatCollection(new ArrayList());
         
         if(userDTO.getUsertype()==Config.CLIENT)
         {

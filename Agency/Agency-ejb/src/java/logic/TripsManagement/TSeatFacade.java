@@ -95,7 +95,7 @@ public class TSeatFacade extends AbstractFacade<TSeat> implements TSeatFacadeLoc
         
         Root<TSeat> seat = cq.from(TSeat.class);
         
-        cq.where(cb.and(cb.equal(seat.get(TSeat_.userid), user), cb.equal(seat.get(TSeat_.auctioned), true)));
+        cq.where(cb.and(cb.equal(seat.get(TSeat_.purchaseid).get(TPurchase_.userid), user), cb.equal(seat.get(TSeat_.auctioned), true)));
 
         Query q = getEntityManager().createQuery(cq);
         return q.getResultList();

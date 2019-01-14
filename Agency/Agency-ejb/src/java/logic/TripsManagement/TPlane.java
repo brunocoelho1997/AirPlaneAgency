@@ -35,9 +35,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "TPlane.findByPlanelimit", query = "SELECT t FROM TPlane t WHERE t.planelimit = :planelimit")})
 public class TPlane implements Serializable {
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "planeid")
-    private Collection<TTrip> tTripCollection;
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,6 +47,8 @@ public class TPlane implements Serializable {
     @Basic(optional = false)
     @Column(name = "planelimit")
     private int planelimit;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "planeid")
+    private Collection<TTrip> tTripCollection;
 
     public TPlane() {
     }
@@ -88,6 +87,15 @@ public class TPlane implements Serializable {
         this.planelimit = planelimit;
     }
 
+    @XmlTransient
+    public Collection<TTrip> getTTripCollection() {
+        return tTripCollection;
+    }
+
+    public void setTTripCollection(Collection<TTrip> tTripCollection) {
+        this.tTripCollection = tTripCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -111,15 +119,6 @@ public class TPlane implements Serializable {
     @Override
     public String toString() {
         return "logic.TripsManagement.TPlane[ id=" + id + " ]";
-    }
-
-    @XmlTransient
-    public Collection<TTrip> getTTripCollection() {
-        return tTripCollection;
-    }
-
-    public void setTTripCollection(Collection<TTrip> tTripCollection) {
-        this.tTripCollection = tTripCollection;
     }
     
 }

@@ -27,9 +27,11 @@ public class FlightManager implements FlightManagerLocal {
         System.out.println("[FlightManager] getFlight. origin=" + origin);
         
         for (TTripDTO trip : tripsManager.findAllTrips()) {
-            TPlaceDTO place = trip.getPlaceDTO();
-            if (origin.compareToIgnoreCase(place.getCity()) == 0) {
-                Flight flight = new Flight(0, 0, place.getCity(), null);
+            TPlaceDTO fromPlace = trip.getFromPlaceDTO();
+            TPlaceDTO toPlaceDTO = trip.getToPlaceDTO();
+            
+            if (origin.compareToIgnoreCase(fromPlace.getCity()) == 0) {
+                Flight flight = new Flight(0, 0, fromPlace.getCity(), toPlaceDTO.getCity());
                 System.out.println("[FlightManager] getFlight. return=" + flight);
                 return flight;
             }

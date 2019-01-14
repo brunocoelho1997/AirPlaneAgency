@@ -8,7 +8,6 @@ package logic.TripsManagement;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,7 +36,7 @@ import logic.UsersManagement.TUser;
     , @NamedQuery(name = "TPurchase.findByDone", query = "SELECT t FROM TPurchase t WHERE t.done = :done")})
 public class TPurchase implements Serializable {
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "purchaseid")
+    @OneToMany(mappedBy = "purchaseid")
     private Collection<TSeat> tSeatCollection;
 
     private static final long serialVersionUID = 1L;

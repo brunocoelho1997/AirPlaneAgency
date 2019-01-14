@@ -11,7 +11,7 @@ import logic.LogTypes;
 /** Class for utility methods */
 public class Utils {
     
-    private static final String PURCHASE_TRIP_LOG_MESSAGE = "purchased trip";
+    private static final String FINISH_PURCHASE_LOG_MESSAGE = "finished purchase";
     private static final String CREATE_TRIP_LOG_MESSAGE = "created trip";
     private static final String FINISH_TRIP_LOG_MESSAGE = "finished trip";
     
@@ -26,8 +26,8 @@ public class Utils {
     
     public static String getActionTextFromLogType(String logType) {
         switch (logType) {
-            case LogTypes.PURCHASE_TRIP:
-                return PURCHASE_TRIP_LOG_MESSAGE;
+            case LogTypes.FINISH_PURCHASE:
+                return FINISH_PURCHASE_LOG_MESSAGE;
                 
             case LogTypes.CREATE_TRIP:
                 return CREATE_TRIP_LOG_MESSAGE;

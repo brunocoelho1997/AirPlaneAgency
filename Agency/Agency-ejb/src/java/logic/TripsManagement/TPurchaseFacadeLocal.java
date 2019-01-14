@@ -7,6 +7,7 @@ package logic.TripsManagement;
 
 import java.util.List;
 import javax.ejb.Local;
+import logic.UsersManagement.TUser;
 
 /**
  *
@@ -28,5 +29,8 @@ public interface TPurchaseFacadeLocal {
     List<TPurchase> findRange(int[] range);
 
     int count();
+    
+    List<TPurchase> findAllNotDonePurchasesOfUser(TUser user);
+
     
 }

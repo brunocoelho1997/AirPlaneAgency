@@ -39,12 +39,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "TTrip.findByDatetrip", query = "SELECT t FROM TTrip t WHERE t.datetrip = :datetrip")})
 public class TTrip implements Serializable {
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tripid")
-    private Collection<TTripfeedback> tTripfeedbackCollection;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tripid")
-    private Collection<TSeat> tSeatCollection;
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,15 +54,22 @@ public class TTrip implements Serializable {
     private Boolean canceled;
     @Column(name = "datetrip")
     private Integer datetrip;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tripid")
+    private Collection<TSeat> tSeatCollection;
     @JoinColumn(name = "airlineid", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private TAirline airlineid;
-    @JoinColumn(name = "placeid", referencedColumnName = "id")
+    @JoinColumn(name = "fromplaceid", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private TPlace placeid;
+    private TPlace fromplaceid;
+    @JoinColumn(name = "toplaceid", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private TPlace toplaceid;
     @JoinColumn(name = "planeid", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private TPlane planeid;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tripid")
+    private Collection<TTripfeedback> tTripfeedbackCollection;
 
     public TTrip() {
     }
@@ -117,6 +118,15 @@ public class TTrip implements Serializable {
         this.datetrip = datetrip;
     }
 
+    @XmlTransient
+    public Collection<TSeat> getTSeatCollection() {
+        return tSeatCollection;
+    }
+
+    public void setTSeatCollection(Collection<TSeat> tSeatCollection) {
+        this.tSeatCollection = tSeatCollection;
+    }
+
     public TAirline getAirlineid() {
         return airlineid;
     }
@@ -125,12 +135,20 @@ public class TTrip implements Serializable {
         this.airlineid = airlineid;
     }
 
-    public TPlace getPlaceid() {
-        return placeid;
+    public TPlace getFromplaceid() {
+        return fromplaceid;
     }
 
-    public void setPlaceid(TPlace placeid) {
-        this.placeid = placeid;
+    public void setFromplaceid(TPlace fromplaceid) {
+        this.fromplaceid = fromplaceid;
+    }
+
+    public TPlace getToplaceid() {
+        return toplaceid;
+    }
+
+    public void setToplaceid(TPlace toplaceid) {
+        this.toplaceid = toplaceid;
     }
 
     public TPlane getPlaneid() {
@@ -139,6 +157,15 @@ public class TTrip implements Serializable {
 
     public void setPlaneid(TPlane planeid) {
         this.planeid = planeid;
+    }
+
+    @XmlTransient
+    public Collection<TTripfeedback> getTTripfeedbackCollection() {
+        return tTripfeedbackCollection;
+    }
+
+    public void setTTripfeedbackCollection(Collection<TTripfeedback> tTripfeedbackCollection) {
+        this.tTripfeedbackCollection = tTripfeedbackCollection;
     }
 
     @Override
@@ -164,24 +191,6 @@ public class TTrip implements Serializable {
     @Override
     public String toString() {
         return "logic.TripsManagement.TTrip[ id=" + id + " ]";
-    }
-
-    @XmlTransient
-    public Collection<TSeat> getTSeatCollection() {
-        return tSeatCollection;
-    }
-
-    public void setTSeatCollection(Collection<TSeat> tSeatCollection) {
-        this.tSeatCollection = tSeatCollection;
-    }
-
-    @XmlTransient
-    public Collection<TTripfeedback> getTTripfeedbackCollection() {
-        return tTripfeedbackCollection;
-    }
-
-    public void setTTripfeedbackCollection(Collection<TTripfeedback> tTripfeedbackCollection) {
-        this.tTripfeedbackCollection = tTripfeedbackCollection;
     }
     
 }

@@ -21,7 +21,6 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import logic.TripsManagement.TPurchase;
-import logic.TripsManagement.TSeat;
 
 /**
  *
@@ -41,8 +40,6 @@ import logic.TripsManagement.TSeat;
     , @NamedQuery(name = "TUser.findByAccepted", query = "SELECT t FROM TUser t WHERE t.accepted = :accepted")})
 public class TUser implements Serializable {
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userid")
-    private Collection<TSeat> tSeatCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userid")
     private Collection<TPurchase> tPurchaseCollection;
 
@@ -165,15 +162,6 @@ public class TUser implements Serializable {
     }
 
     @XmlTransient
-    public Collection<TSeat> getTSeatCollection() {
-        return tSeatCollection;
-    }
-
-    public void setTSeatCollection(Collection<TSeat> tSeatCollection) {
-        this.tSeatCollection = tSeatCollection;
-    }
-
-    @XmlTransient
     public Collection<TPurchase> getTPurchaseCollection() {
         return tPurchaseCollection;
     }
@@ -181,4 +169,5 @@ public class TUser implements Serializable {
     public void setTPurchaseCollection(Collection<TPurchase> tPurchaseCollection) {
         this.tPurchaseCollection = tPurchaseCollection;
     }
+    
 }

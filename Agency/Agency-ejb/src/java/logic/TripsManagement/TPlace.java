@@ -36,12 +36,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "TPlace.findByAddress", query = "SELECT t FROM TPlace t WHERE t.address = :address")})
 public class TPlace implements Serializable {
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "placeid")
-    private Collection<TTrip> tTripCollection;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "placeid")
-    private Collection<TPlacefeedback> tPlacefeedbackCollection;
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,9 +48,14 @@ public class TPlace implements Serializable {
     @Basic(optional = false)
     @Column(name = "city")
     private String city;
-    @Basic(optional = false)
     @Column(name = "address")
     private String address;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "placeid")
+    private Collection<TPlacefeedback> tPlacefeedbackCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "fromplaceid")
+    private Collection<TTrip> tTripCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "toplaceid")
+    private Collection<TTrip> tTripCollection1;
 
     public TPlace() {
     }
@@ -65,11 +64,10 @@ public class TPlace implements Serializable {
         this.id = id;
     }
 
-    public TPlace(Integer id, String country, String city, String address) {
+    public TPlace(Integer id, String country, String city) {
         this.id = id;
         this.country = country;
         this.city = city;
-        this.address = address;
     }
 
     public Integer getId() {
@@ -104,6 +102,33 @@ public class TPlace implements Serializable {
         this.address = address;
     }
 
+    @XmlTransient
+    public Collection<TPlacefeedback> getTPlacefeedbackCollection() {
+        return tPlacefeedbackCollection;
+    }
+
+    public void setTPlacefeedbackCollection(Collection<TPlacefeedback> tPlacefeedbackCollection) {
+        this.tPlacefeedbackCollection = tPlacefeedbackCollection;
+    }
+
+    @XmlTransient
+    public Collection<TTrip> getTTripCollection() {
+        return tTripCollection;
+    }
+
+    public void setTTripCollection(Collection<TTrip> tTripCollection) {
+        this.tTripCollection = tTripCollection;
+    }
+
+    @XmlTransient
+    public Collection<TTrip> getTTripCollection1() {
+        return tTripCollection1;
+    }
+
+    public void setTTripCollection1(Collection<TTrip> tTripCollection1) {
+        this.tTripCollection1 = tTripCollection1;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -127,24 +152,6 @@ public class TPlace implements Serializable {
     @Override
     public String toString() {
         return "logic.TripsManagement.TPlace[ id=" + id + " ]";
-    }
-
-    @XmlTransient
-    public Collection<TPlacefeedback> getTPlacefeedbackCollection() {
-        return tPlacefeedbackCollection;
-    }
-
-    public void setTPlacefeedbackCollection(Collection<TPlacefeedback> tPlacefeedbackCollection) {
-        this.tPlacefeedbackCollection = tPlacefeedbackCollection;
-    }
-
-    @XmlTransient
-    public Collection<TTrip> getTTripCollection() {
-        return tTripCollection;
-    }
-
-    public void setTTripCollection(Collection<TTrip> tTripCollection) {
-        this.tTripCollection = tTripCollection;
     }
     
 }

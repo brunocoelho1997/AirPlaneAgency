@@ -96,7 +96,7 @@ public class DTOFactory {
         {
             tripFeedBackList.add(getTTripfeedbackDTOFromTTripfeedback(tripfeedback));
         }             
-        return new TTripDTO(trip.getId(), trip.getPrice(), trip.getDone(), trip.getCanceled(), trip.getDatetrip(),getTAirlineDTOFromTAirline(trip.getAirlineid()), getTPlaceDTOFromTPlace(trip.getPlaceid()), getTPlaneDTOFromTPlane(trip.getPlaneid()), tripFeedBackList);
+        return new TTripDTO(trip.getId(), trip.getPrice(), trip.getDone(), trip.getCanceled(), trip.getDatetrip(),getTAirlineDTOFromTAirline(trip.getAirlineid()), getTPlaceDTOFromTPlace(trip.getFromplaceid()), getTPlaceDTOFromTPlace(trip.getToplaceid()), getTPlaneDTOFromTPlane(trip.getPlaneid()), tripFeedBackList);
     }
     
     public static TSeatDTO getTSeatDTOFromTSeat(TSeat seat){

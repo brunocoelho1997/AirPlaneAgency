@@ -461,8 +461,11 @@ public class TripsManager implements TripsManagerLocal {
     public boolean addTrip(TTripDTO tripDTO, String username) throws NoPermissionException {
         userManager.verifyPermission(username, Config.OPERATOR);
         
-        TPlace place = placeFacade.find(tripDTO.getPlaceDTO().getId());     
-        if(place == null)
+        TPlace fromPlace = placeFacade.find(tripDTO.getFromPlaceDTO().getId());     
+        if(fromPlace == null)
+            return false;
+        TPlace toPlace = placeFacade.find(tripDTO.getToPlaceDTO().getId());     
+        if(toPlace == null)
             return false;
         
         TAirline airline = airlineFacade.find(tripDTO.getAirlineDTO().getId());
@@ -477,7 +480,8 @@ public class TripsManager implements TripsManagerLocal {
             return false;
         
         TTrip trip = new TTrip();
-        trip.setPlaceid(place);
+        trip.setFromplaceid(fromPlace);
+        trip.setToplaceid(toPlace);
         trip.setAirlineid(airline);
         trip.setPlaneid(plane);
         trip.setDone(tripDTO.getDone());
@@ -508,8 +512,11 @@ public class TripsManager implements TripsManagerLocal {
         if(!trip.getTSeatCollection().isEmpty()) //se a viagem ja tem lugares comprados mandar excecao
             throw new NoPermissionException(Config.MSG_NO_PERMISSION_CHANGE_TRIP);
         
-        TPlace place = placeFacade.find(tripDTO.getPlaceDTO().getId());     
-        if(place == null)
+        TPlace fromPlace = placeFacade.find(tripDTO.getFromPlaceDTO().getId());     
+        if(fromPlace == null)
+            return false;
+        TPlace toPlace = placeFacade.find(tripDTO.getToPlaceDTO().getId());     
+        if(toPlace == null)
             return false;
         
         TAirline airline = airlineFacade.find(tripDTO.getAirlineDTO().getId());
@@ -523,7 +530,8 @@ public class TripsManager implements TripsManagerLocal {
         if(!validateTripDTO(tripDTO))
             return false;
         
-        trip.setPlaceid(place);
+        trip.setFromplaceid(fromPlace);
+        trip.setToplaceid(toPlace);
         trip.setAirlineid(airline);
         trip.setPlaneid(plane);
         trip.setDone(tripDTO.getDone());
@@ -581,7 +589,7 @@ public class TripsManager implements TripsManagerLocal {
         if(!trip.getTSeatCollection().isEmpty())
         {
             for(TSeat seatTmp : trip.getTSeatCollection()){
-                TUser userTmp = seatTmp.getUserid();
+                TUser userTmp = seatTmp.getPurchaseid().getUserid();
                 
                 //only refund the money if isn't a auctioned seat (if is a auctioned seat, may not have a user (if the seat did not have a bid))
                 if(userTmp != null && !seatTmp.getAuctioned())
@@ -770,7 +778,7 @@ public class TripsManager implements TripsManagerLocal {
     }
 
     @Override
-    public List<TPurchaseDTO> findAllPurchasesOfUser(String username) throws NoPermissionException {
+    public List<TPurchaseDTO> findAllMyPurchases(String username) throws NoPermissionException {
         userManager.verifyPermission(username, Config.CLIENT);
 
         TUser user = userManager.getTUserByUsername(username);
@@ -807,11 +815,15 @@ public class TripsManager implements TripsManagerLocal {
         //purchase---------------- get the atual purchase - the only which is undone
         TPurchase purchase = null;
         
-        for(TPurchase purchaseTmp : user.getTPurchaseCollection()){
-            if(!purchaseTmp.getDone())
+        for(TPurchase purchaseTmp : purchaseFacade.findAllNotDonePurchasesOfUser(user)){
+            
+            for(TSeat seat : purchaseTmp.getTSeatCollection())
             {
-                purchase = purchaseTmp;
-                break;
+                if(!seat.getAuctioned())
+                {
+                    purchase = purchaseTmp;
+                    break;
+                }
             }
         }
         
@@ -877,18 +889,16 @@ public class TripsManager implements TripsManagerLocal {
             seat.setLuggage(seatDTO.getLuggage());
             seat.setPrice(trip.getPrice());
             seat.setTripid(trip);
-            seat.setUserid(user);
             seat.setPurchaseid(purchase);
 
             seat = seatFacade.createAndGetEntity(seat);
 
             purchase.getTSeatCollection().add(seat);
-            user.getTSeatCollection().add(seat);
             
             trip.getTSeatCollection().add(seat);
         }
         
-        logsManager.sendLogMessage(username, LogTypes.PURCHASE_TRIP, timerManager.getDate());
+        logsManager.sendLogMessage(username, LogTypes.FINISH_PURCHASE, timerManager.getDate());
         
         purchaseFacade.edit(purchase);
         userManager.editTUser(user);
@@ -1000,7 +1010,6 @@ public class TripsManager implements TripsManagerLocal {
         userManager.verifyPermission(username, Config.CLIENT);
         
         TTrip trip = null;
-        List<TSeat> seatsToRemove = new ArrayList();
        
         TPurchase purchase = purchaseFacade.find(purchaseDTO.getId());
         if(purchase == null)
@@ -1011,27 +1020,12 @@ public class TripsManager implements TripsManagerLocal {
         if(!purchase.getUserid().equals(user))
             return false;
         
-        for(TSeat seatTmp : purchase.getTSeatCollection()){
-            if(seatTmp.getTripid().equals(trip))
-            {
-                
-                seatsToRemove.add(seatTmp);
-                
-                seatFacade.remove(seatTmp);
-                
-            }
-        }
-        /*
-        if(!removedSeats)
-            return false;
-           
         
-         for(TSeat seatTmp : seatsToRemove)     
-            purchase.getTSeatCollection().remove(seatTmp);
-        */
-       
-            
-        purchaseFacade.remove(purchase);
+        for(TSeat seatTmp : purchase.getTSeatCollection())        
+            seatFacade.remove(seatTmp);
+        
+        
+        //purchaseFacade.remove(purchase);
         
         user.getTPurchaseCollection().remove(purchase);
         userManager.editTUser(user);
@@ -1149,7 +1143,51 @@ public class TripsManager implements TripsManagerLocal {
         return ( (user.getBalance() - total) > 0 ? true : false );
     }
 
-    
+    @Override
+    public boolean removeDonePurchase(TPurchaseDTO purchaseDTO, String username) throws NoPermissionException {
+        
+        userManager.verifyPermission(username, Config.CLIENT);
+        
+        double totalToRefund = 0;
+        TTrip trip = null;
+        List<TSeat> seatsToRemove = new ArrayList();
+       
+        TPurchase purchase = purchaseFacade.find(purchaseDTO.getId());
+        if(purchase == null)
+            return false;
+        
+        TUser user = userManager.getTUserByUsername(username);
+        //if the purchase belongs to the user who is editing
+        if(!purchase.getUserid().equals(user))
+            return false;
+        
+        if(!purchase.getDone())
+            return false;
+        
+        for(TSeat seatTmp : purchase.getTSeatCollection()){
+            if(seatTmp.getTripid().equals(trip))
+            {         
+                
+                if(seatTmp.getAuctioned())
+                    totalToRefund +=seatTmp.getPrice();
+                else
+                    totalToRefund += seatTmp.getTripid().getPrice();
+                
+                seatsToRemove.add(seatTmp);   
+                seatFacade.remove(seatTmp);
+                
+            }
+        }
+        
+        purchaseFacade.remove(purchase);
+        
+        
+        user.getTPurchaseCollection().remove(purchase);
+        userManager.editTUser(user);
+        
+        return true;
+        
+    }
     //-------------------------------------------------------------------------------------------------------------------
     //auctioned seats
     @Override
@@ -1217,7 +1255,18 @@ public class TripsManager implements TripsManagerLocal {
             greatestAuctionedSeat.setLuggage(seatDTO.getLuggage());
         greatestAuctionedSeat.setPrice(seatDTO.getPrice());
         greatestAuctionedSeat.setTripid(trip);
-        greatestAuctionedSeat.setUserid(user);
+        
+        if(greatestAuctionedSeat.getPurchaseid() != null)
+            purchaseFacade.remove(greatestAuctionedSeat.getPurchaseid());
+        
+        
+        TPurchase purchase = new TPurchase();
+        purchase.setDone(false);
+        purchase.setUserid(user);
+        purchase.setTSeatCollection(new ArrayList());
+        purchase.getTSeatCollection().add(greatestAuctionedSeat);
+        purchaseFacade.create(purchase);
+        greatestAuctionedSeat.setPurchaseid(purchase);
         
         seatFacade.edit(greatestAuctionedSeat);
         
