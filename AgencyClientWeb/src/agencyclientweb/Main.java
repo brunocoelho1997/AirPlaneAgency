@@ -5,6 +5,7 @@
  */
 package agencyclientweb;
 
+import java.util.List;
 import java.util.Scanner;
 import logic.websearch.Flight;
 
@@ -43,8 +44,13 @@ public class Main {
         }
 
         ClientRS client = new ClientRS();
-        Flight flight = client.getFlight(Flight.class, inputs[1]);
-        System.out.println("flight=" + flight);
+        List<Flight> flights = client.getFlights(inputs[1]);
+        
+        System.out.println("\n" + flights.size() + " flighs found:");
+        for (Flight flight : flights) {
+            System.out.println(flight);
+        }
+        
+        System.out.println("");
     }
-    
 }

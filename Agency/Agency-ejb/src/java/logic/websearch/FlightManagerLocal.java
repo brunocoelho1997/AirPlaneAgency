@@ -5,11 +5,12 @@
  */
 package logic.websearch;
 
+import java.util.List;
 import javax.ejb.Local;
 
 @Local
 public interface FlightManagerLocal {
     
-    Flight getFlight(String origin);
+    List<Flight> getFlights(String origin);
     
 }

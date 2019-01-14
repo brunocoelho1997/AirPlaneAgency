@@ -5,12 +5,14 @@
  */
 package logic;
 
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import logic.websearch.Flight;
 import logic.websearch.FlightManagerLocal;
@@ -28,11 +30,13 @@ public class FlightResource {
     public FlightResource() {
         // Do nothing
     }
-
+    
     @GET
     @Path("{origin}")
     @Produces(MediaType.APPLICATION_XML)
-    public Flight getFlight(@PathParam("origin") String origin) {
-        return flightManager.getFlight(origin);
+    public GenericEntity<List<Flight>> getFlights(@PathParam("origin") String origin) {
+        List<Flight> flights = flightManager.getFlights(origin);
+        GenericEntity<List<Flight>> list = new GenericEntity<List<Flight>>(flights) {};
+        return list;
     }
 }

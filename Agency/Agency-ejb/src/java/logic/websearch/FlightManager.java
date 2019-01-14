@@ -5,6 +5,8 @@
  */
 package logic.websearch;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import logic.TPlaceDTO;
@@ -21,23 +23,23 @@ public class FlightManager implements FlightManagerLocal {
     public FlightManager() {
         // Do nothing
     }
-
+    
     @Override
-    public Flight getFlight(String origin) {
+    public List<Flight> getFlights(String origin) {
         System.out.println("[FlightManager] getFlight. origin=" + origin);
         
+        List<Flight> flightsList = new ArrayList<>();
         for (TTripDTO trip : tripsManager.findAllTrips()) {
-            TPlaceDTO fromPlace = trip.getFromPlaceDTO();
-            TPlaceDTO toPlaceDTO = trip.getToPlaceDTO();
+            TPlaceDTO place = trip.getFromPlaceDTO();
             
-            if (origin.compareToIgnoreCase(fromPlace.getCity()) == 0) {
-                Flight flight = new Flight(0, 0, fromPlace.getCity(), toPlaceDTO.getCity());
+            if (origin.compareToIgnoreCase(place.getCity()) == 0) {
+                Flight flight = new Flight(0, 0, place.getCity(), null);
                 System.out.println("[FlightManager] getFlight. return=" + flight);
-                return flight;
+                flightsList.add(flight);
             }
         }
         
-        System.out.println("[FlightManager] getFlight. no results found");
-        return null;
+        System.out.println("[FlightManager] getFlight. results found=" + flightsList.size());
+        return flightsList;
     }
 }
