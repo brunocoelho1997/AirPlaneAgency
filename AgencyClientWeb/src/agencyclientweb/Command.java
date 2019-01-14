@@ -7,7 +7,9 @@ package agencyclientweb;
 
 public class Command {
     
-    static final String GET_BY_PLACE = "getbyplace";
+    static final String GET_BY_ORIGIN = "origin";
+    static final String GET_BY_DESTINY = "destiny";
+    static final String GET_CUSTOM = "custom";
     static final String EXIT = "exit";
     
 }
