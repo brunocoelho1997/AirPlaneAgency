@@ -32,7 +32,16 @@ public class FlightResource {
     }
     
     @GET
-    @Path("{origin}")
+    @Path("/listall")
+    @Produces(MediaType.APPLICATION_XML)
+    public GenericEntity<List<Flight>> getAllFlights() {
+        List<Flight> flights = flightManager.getAllFlights();
+        GenericEntity<List<Flight>> list = new GenericEntity<List<Flight>>(flights) {};
+        return list;
+    }
+
+    @GET
+    @Path("/list/{origin}")
     @Produces(MediaType.APPLICATION_XML)
     public GenericEntity<List<Flight>> getFlights(@PathParam("origin") String origin) {
         List<Flight> flights = flightManager.getFlights(origin);

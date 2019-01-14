@@ -11,6 +11,8 @@ import javax.ejb.Local;
 @Local
 public interface FlightManagerLocal {
     
+    List<Flight> getAllFlights();
+    
     List<Flight> getFlights(String origin);
     
 }

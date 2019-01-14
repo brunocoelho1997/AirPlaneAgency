@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Flight {
 
     @XmlElement
-    private int price;
+    private Double price;
     
     @XmlElement
     private int emptySeats;
@@ -27,14 +27,14 @@ public class Flight {
         // Do nothing
     }
     
-    public Flight(int price, int emptySeats, String origin, String destiny) {
+    public Flight(Double price, int emptySeats, String origin, String destiny) {
         this.price = price;
         this.emptySeats = emptySeats;
         this.origin = origin;
         this.destiny = destiny;
     }
 
-    public int getPrice() {
+    public Double getPrice() {
         return price;
     }
 

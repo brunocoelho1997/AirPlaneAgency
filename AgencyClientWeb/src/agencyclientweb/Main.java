@@ -11,7 +11,11 @@ import logic.websearch.Flight;
 
 public class Main {
     
+    private static ClientRS sClient;
+    
     public static void main(String[] args) {
+        sClient = new ClientRS();
+        
         doListenCommands();
     }
     
@@ -38,13 +42,14 @@ public class Main {
 
     private static void processGetByPlace(String input) {
         String[] inputs = input.split(" ");
+        
+        List<Flight> flights;
         if (inputs.length == 1) {
-            System.out.println("Missing second argument [place]");
-            return;
+            flights = sClient.getAllFlights();
+            
+        } else {
+            flights = sClient.getFlights(inputs[1]);
         }
-
-        ClientRS client = new ClientRS();
-        List<Flight> flights = client.getFlights(inputs[1]);
         
         System.out.println("\n" + flights.size() + " flighs found:");
         for (Flight flight : flights) {

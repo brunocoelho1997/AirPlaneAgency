@@ -25,17 +25,32 @@ public class FlightManager implements FlightManagerLocal {
     }
     
     @Override
-    public List<Flight> getFlights(String origin) {
-        System.out.println("[FlightManager] getFlight. origin=" + origin);
-        
+    public List<Flight> getAllFlights() {
+        System.out.println("[FlightManager] getAllFlights");
+                
         List<Flight> flightsList = new ArrayList<>();
         for (TTripDTO trip : tripsManager.findAllTrips()) {
-            TPlaceDTO place = trip.getFromPlaceDTO();
-            
-            if (origin.compareToIgnoreCase(place.getCity()) == 0) {
-                Flight flight = new Flight(0, 0, place.getCity(), null);
-                System.out.println("[FlightManager] getFlight. return=" + flight);
-                flightsList.add(flight);
+            if (FlightUtils.isTripActive(trip)) {
+                flightsList.add(FlightUtils.createFlightFromTrip(trip));
+            }
+        }
+        
+        System.out.println("[FlightManager] getFlight. results found=" + flightsList.size());
+        return flightsList;
+    }
+    
+    @Override
+    public List<Flight> getFlights(String origin) {
+        System.out.println("[FlightManager] getFlight. origin=" + origin);
+                
+        List<Flight> flightsList = new ArrayList<>();
+        for (TTripDTO trip : tripsManager.findAllTrips()) {
+            if (FlightUtils.isTripActive(trip)) {
+                TPlaceDTO from = trip.getFromPlaceDTO();
+                
+                if (from.getCity().compareToIgnoreCase(origin) == 0) {
+                    flightsList.add(FlightUtils.createFlightFromTrip(trip));
+                }
             }
         }
         

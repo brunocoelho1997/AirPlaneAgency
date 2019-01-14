@@ -39,6 +39,12 @@ public class ClientRS {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
     
+    public List<Flight> getAllFlights() throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path("/listall");
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(new GenericType<List<Flight>> () {});
+    }
+    
     public List<Flight> getFlights(String origin) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{origin}));
