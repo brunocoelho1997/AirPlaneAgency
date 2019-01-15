@@ -1283,7 +1283,7 @@ public class Main {
         
         System.out.println("Atual purchase (undone): " + purchaseDTO);
         
-        System.out.println("The purchase: " + purchaseDTO + "? Will cost X€. Do you want finish? [1/0]");
+        System.out.println("The purchase: " + purchaseDTO + "\n Will cost X€. Do you want finish? [1/0]");
         op = Integer.parseInt(sc.nextLine());
 
         if(op == 0)
