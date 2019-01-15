@@ -8,6 +8,7 @@ package logic.UsersManagement;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import logic.TripsManagement.AbstractFacade;
 
 /**
  *

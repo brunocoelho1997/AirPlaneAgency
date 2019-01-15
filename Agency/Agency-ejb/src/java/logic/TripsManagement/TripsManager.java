@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
+import javax.transaction.Transactional;
 import logic.Config;
 import logic.DTOFactory;
 import logic.LogTypes;
@@ -355,8 +356,6 @@ public class TripsManager implements TripsManagerLocal {
         placeFeedback.setUserid(user);
         placeFeedback.setScore(feedbackDTO.getScore());
         
-        placeFeedbackFacade.create(placeFeedback);
-        
         place.getTPlacefeedbackCollection().add(placeFeedback);
         placeFacade.edit(place);
         
@@ -416,7 +415,7 @@ public class TripsManager implements TripsManagerLocal {
         if(placeFeedback == null)
             return false;
         
-        TPlace place = placeFeedback.getPlaceid();
+        TPlace place = placeFacade.find(placeFeedback.getPlaceid().getId());
         
         if(place == null)
             return false;
@@ -424,6 +423,7 @@ public class TripsManager implements TripsManagerLocal {
         //se o comentario for de um user diferente do que esta a alterar manda excecao
         if(!placeFeedback.getUserid().getUsername().equals(username))
             throw new NoPermissionException(Config.MSG_NO_PERMISSION_FEEDBACK);
+        
         
         placeFeedbackFacade.remove(placeFeedback);
         
@@ -1021,14 +1021,15 @@ public class TripsManager implements TripsManagerLocal {
             return false;
         
         
+        
+        user.getTPurchaseCollection().remove(purchase);
+        userManager.editTUser(user);
+        
         for(TSeat seatTmp : purchase.getTSeatCollection())        
             seatFacade.remove(seatTmp);
         
         
-        //purchaseFacade.remove(purchase);
-        
-        user.getTPurchaseCollection().remove(purchase);
-        userManager.editTUser(user);
+        purchaseFacade.remove(purchase);
         
         return true;
         
@@ -1150,7 +1151,6 @@ public class TripsManager implements TripsManagerLocal {
         
         double totalToRefund = 0;
         TTrip trip = null;
-        List<TSeat> seatsToRemove = new ArrayList();
        
         TPurchase purchase = purchaseFacade.find(purchaseDTO.getId());
         if(purchase == null)
@@ -1164,27 +1164,22 @@ public class TripsManager implements TripsManagerLocal {
         if(!purchase.getDone())
             return false;
         
-        for(TSeat seatTmp : purchase.getTSeatCollection()){
-            if(seatTmp.getTripid().equals(trip))
-            {         
-                
-                if(seatTmp.getAuctioned())
+        user.getTPurchaseCollection().remove(purchase);
+        userManager.editTUser(user);
+        
+        for(TSeat seatTmp : purchase.getTSeatCollection())        
+        {
+            if(seatTmp.getAuctioned())
                     totalToRefund +=seatTmp.getPrice();
                 else
                     totalToRefund += seatTmp.getTripid().getPrice();
-                
-                seatsToRemove.add(seatTmp);   
+                 
                 seatFacade.remove(seatTmp);
-                
-            }
         }
         
         purchaseFacade.remove(purchase);
         
-        
-        user.getTPurchaseCollection().remove(purchase);
-        userManager.editTUser(user);
-        
+        user.setBalance(user.getBalance() + totalToRefund);
         return true;
         
     }
