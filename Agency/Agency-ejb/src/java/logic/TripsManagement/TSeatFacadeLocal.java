@@ -40,4 +40,6 @@ public interface TSeatFacadeLocal {
     
     List<TSeat> findAuctionedSeatsOfUser(TUser user);
 
+    List<TSeat> findAuctioningSeatsOfUser(TUser user);
+
 }
