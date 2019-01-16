@@ -27,13 +27,17 @@ public class AgencyManager implements AgencyManagerRemote {
 
     //users
     @Override
-    public boolean signIn(String username, String password) {
-        boolean result = usersManagerLocal.signIn(username, password);
+    public SignInValue signIn(String username, String password) {
+        SignInValue result = usersManagerLocal.signIn(username, password);
+        
         //if the user logged with success username var has is username, otherwise username var is null or empty
-        if(result)
+        if (result == SignInValue.SUCCESS) {
             this.username = username;
+        }
+        
         return result;
     }
+    
     @Override
     public boolean signUp(TUserDTO userDTO) {
         return usersManagerLocal.signUp(userDTO);

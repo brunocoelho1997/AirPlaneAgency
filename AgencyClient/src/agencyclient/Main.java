@@ -10,6 +10,7 @@ import logic.AgencyManagerRemote;
 import logic.Config;
 import logic.Log;
 import logic.NoPermissionException;
+import logic.SignInValue;
 import logic.TAirlineDTO;
 import logic.TPlaceDTO;
 import logic.TPlaceFeedbackDTO;
@@ -219,18 +220,16 @@ public class Main {
     private static void processSignIn(){
         Scanner sc = new Scanner(System.in);
         String username, password;
-        boolean result;
         
         System.out.println("Username:");
         username = sc.nextLine();
         System.out.println("Password:");
         password = sc.nextLine();
 
-        result = sAgencyManager.signIn(username, password);
-        if(!result)
-            System.out.println("Username or Password wrong.");
-        else
-            System.out.println("Welcome to the Agency, " + username + ".");
+        SignInValue result = sAgencyManager.signIn(username, password);
+        
+        String resultStr = Utils.getSignUpValueString(result, username);
+        System.out.println(resultStr);
     }
     
     private static void processSignUp(){
@@ -261,7 +260,7 @@ public class Main {
         if(!result)
             System.out.println("Username already exists or passwords are different.");
         else
-            System.out.println("Sign up with sucess! Now you can sign in, " + userDTO.getUsername() + ".");
+            System.out.println("Sign up with sucess! Now you can sign in, after operator approval " + userDTO.getUsername() + ".");
     }
     
     private static void processLogout(){

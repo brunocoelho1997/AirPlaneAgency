@@ -7,7 +7,7 @@ import javax.ejb.Remote;
 public interface AgencyManagerRemote {
     
     //users
-    boolean signIn(String username, String password);
+    SignInValue signIn(String username, String password);
     boolean signUp(TUserDTO userDTO);
     boolean logout();
     boolean acceptUser(TUserDTO userDTO);

@@ -7,6 +7,7 @@ package agencyclient;
 
 import logic.Log;
 import logic.LogTypes;
+import logic.SignInValue;
 
 /** Class for utility methods */
 public class Utils {
@@ -14,6 +15,27 @@ public class Utils {
     private static final String FINISH_PURCHASE_LOG_MESSAGE = "finished purchase";
     private static final String CREATE_TRIP_LOG_MESSAGE = "created trip";
     private static final String FINISH_TRIP_LOG_MESSAGE = "finished trip";
+    
+    // signup
+    
+    public static String getSignUpValueString(SignInValue value, String username) {
+        switch (value) {
+            case SUCCESS:
+                return "Welcome to the Agency, " + username + ".";
+                
+            case NOT_FOUND:
+                return "No account found with this username.";
+                
+            case NOT_ACCEPTED:
+                return "Account is stil in validation process.";
+                
+            case WRONG_CREDENTIALS:
+                return "Username or Password wrong.";
+                
+            default:
+                throw new IllegalStateException("Unexpected value found:" + value);
+        }
+    }
     
     // logs
     

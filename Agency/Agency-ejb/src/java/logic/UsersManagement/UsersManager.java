@@ -13,6 +13,7 @@ import javax.ejb.Singleton;
 import logic.Config;
 import logic.DTOFactory;
 import logic.NoPermissionException;
+import logic.SignInValue;
 import logic.TUserDTO;
 
 /**
@@ -31,16 +32,16 @@ public class UsersManager implements UsersManagerLocal {
     }
     
     @Override
-    public boolean signIn(String username, String password) {
+    public SignInValue signIn(String username, String password) {
         TUser user = getTUserByUsername(username);
         
         if(user == null)
-            return false;
+            return SignInValue.NOT_FOUND;
         
         if(!user.getPassword().equals(password))
-            return false;
+            return SignInValue.WRONG_CREDENTIALS;
         
-        return true;
+        return user.getAccepted() ? SignInValue.SUCCESS : SignInValue.NOT_ACCEPTED;
     }
     
     @Override
@@ -131,7 +132,6 @@ public class UsersManager implements UsersManagerLocal {
     
     //Auxiliary methoths
 
-    //TODO: este metodo nao esta' a ser chamado. Tinha no construtor e bugava
     private void verifyIfAdminExist() {
         if(getTUserByUsername("admin")==null)
         {

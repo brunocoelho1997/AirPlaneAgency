@@ -8,6 +8,7 @@ package logic.UsersManagement;
 import java.util.List;
 import javax.ejb.Local;
 import logic.NoPermissionException;
+import logic.SignInValue;
 import logic.TUserDTO;
 
 /**
@@ -16,7 +17,7 @@ import logic.TUserDTO;
  */
 @Local
 public interface UsersManagerLocal {
-    boolean signIn(String username, String password);
+    SignInValue signIn(String username, String password);
     boolean signUp(TUserDTO userDTO);
     boolean acceptTUser(TUserDTO userDTO, String username);
     boolean editTUser(TUser userTmp);
