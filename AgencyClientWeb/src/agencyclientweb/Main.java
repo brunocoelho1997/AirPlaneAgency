@@ -11,7 +11,7 @@ import logic.websearch.Flight;
 
 public class Main {
     
-    private static int INVALID_VALUE = -1;
+    private static final int INVALID_VALUE = -1;
     private static ClientRS sClient;
     
     public static void main(String[] args) {
@@ -31,6 +31,10 @@ public class Main {
             String command = input.split(" ")[0];
 
             switch (command) {
+                case Command.GET_ALL:
+                    processGetAll();
+                    break;
+                    
                 case Command.GET_BY_ORIGIN:
                     processGetByOrigin(input);
                     break;
@@ -47,7 +51,18 @@ public class Main {
                     return;
             }
         }
-    }           
+    }
+    
+    
+    private static void processGetAll() {
+        List<Flight> flights = sClient.getAllFlights();
+        System.out.println("\n" + flights.size() + " flighs found:");
+        for (Flight flight : flights) {
+            System.out.println(flight);
+        }
+        
+        System.out.println("");
+    }
 
     private static void processGetByOrigin(String input) {
         String[] inputs = input.split(" ");
@@ -60,12 +75,7 @@ public class Main {
             flights = sClient.getFlights(inputs[1]);
         }
         
-        System.out.println("\n" + flights.size() + " flighs found:");
-        for (Flight flight : flights) {
-            System.out.println(flight);
-        }
-        
-        System.out.println("");
+        printFlightsInfo(flights);
     }
     
     private static void processGetByDestiny(String input) {
@@ -79,12 +89,7 @@ public class Main {
             flights = sClient.getFlights(inputs[1]);
         }
         
-        System.out.println("\n" + flights.size() + " flighs found!");
-        for (Flight flight : flights) {
-            System.out.println(flight);
-        }
-        
-        System.out.println("");
+        printFlightsInfo(flights);
     }
 
     private static void processGetCustom() {
@@ -131,5 +136,14 @@ public class Main {
         }
         
         return INVALID_VALUE;
+    }
+    
+    private static void printFlightsInfo(List<Flight> flights) {
+        System.out.println("\n" + flights.size() + " flighs found!");
+        for (Flight flight : flights) {
+            System.out.println(flight);
+        }
+        
+        System.out.println("");
     }
 }
