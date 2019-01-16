@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
-import javax.transaction.Transactional;
 import logic.Config;
 import logic.DTOFactory;
 import logic.LogTypes;
@@ -148,7 +147,7 @@ public class TripsManager implements TripsManagerLocal {
     {
         if(planeDTO.getPlaneName()== null || planeDTO.getPlaneName().isEmpty())
             return false;
-        if(planeDTO.getPlaneLimit()<0)
+        if(planeDTO.getPlaneLimit() <= 0)
             return false;
             
         return true;
