@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package logic;
 
 import java.util.List;
@@ -8,6 +13,10 @@ import logic.TimerManagement.TimerManagerLocal;
 import logic.TripsManagement.TripsManagerLocal;
 import logic.UsersManagement.UsersManagerLocal;
 
+/**
+ *
+ * @author bruno
+ */
 @Stateful
 public class AgencyManager implements AgencyManagerRemote {
 
@@ -331,19 +340,8 @@ public class AgencyManager implements AgencyManagerRemote {
     }
 
     @Override
-    public boolean removeMyBid(TSeatDTO seatDTO) throws NoPermissionException {
-        return tripsManagerLocal.removeMyBid(seatDTO, username);
-    }
-
-    @Override
-    public boolean removeBid(TSeatDTO seatDTO) throws NoPermissionException {
-        return tripsManagerLocal.removeBid(seatDTO, username);
-    }
-
-    @Override
     public TSeatDTO findAuctionedSeat(int id) throws NoPermissionException {
         return tripsManagerLocal.findAuctionedSeat(id, username);
     }
 
-    
 }

@@ -185,7 +185,7 @@ public class Main {
                     case Command.FINISHACTUALPURCHASE:
                         processFinishActualPurchase();
                         break;
-                    case Command.FINDALLAUCTIONEDSEATS:
+                    case Command.FINDAUCTIONEDSEATS:
                         processFindAllAuctionedSeats();
                         break;
                     case Command.BIDAUCTIONEDSEAT:
@@ -194,14 +194,6 @@ public class Main {
                     case Command.FINDMYBIDS:
                         processGetMyBids();
                         break;
-                    case Command.REMOVEMYBID:
-                        processRemoveMyBid();
-                        break;
-                    case Command.REMOVEBID:
-                        processRemoveBid();
-                        break;
-                    
-    
                     default:
                         System.out.println("Command not found. Type help to get a command list.");
                         break;
@@ -1467,11 +1459,9 @@ public class Main {
         
         //auctioned seats
         System.out.println("\n-------Actioned Seats--------");
-        System.out.println(Command.FINDALLAUCTIONEDSEATS+ " - Find all actioned seats in the system");
+        System.out.println(Command.FINDAUCTIONEDSEATS+ " - Find all actioned seats in the system");
         System.out.println(Command.BIDAUCTIONEDSEAT+ " - Bid auctioned seat in the system");
         System.out.println(Command.FINDMYBIDS+ " - Find all my bids in the system");
-        System.out.println(Command.REMOVEMYBID+ " - Remove my bids in the system");
-        System.out.println(Command.REMOVEBID+ " - Remove bids in the system");
 
         System.out.println("----------------");
     }

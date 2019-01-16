@@ -1,11 +1,19 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package logic;
 
 import java.util.List;
 import javax.ejb.Remote;
 
+/**
+ *
+ * @author bruno
+ */
 @Remote
 public interface AgencyManagerRemote {
-    
     //users
     SignInValue signIn(String username, String password);
     boolean signUp(TUserDTO userDTO);
@@ -84,6 +92,5 @@ public interface AgencyManagerRemote {
     TSeatDTO findAuctionedSeat(int id) throws NoPermissionException;
     List<TSeatDTO> getMyBids() throws NoPermissionException;
     boolean bidAuctionedSeat(TSeatDTO seatDTO) throws NoPermissionException;
-    boolean removeMyBid(TSeatDTO seatDTO) throws NoPermissionException;
-    boolean removeBid(TSeatDTO seatDTO) throws NoPermissionException;
+
 }

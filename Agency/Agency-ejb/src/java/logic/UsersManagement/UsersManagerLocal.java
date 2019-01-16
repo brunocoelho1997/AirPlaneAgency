@@ -27,4 +27,5 @@ public interface UsersManagerLocal {
     List<TUserDTO> findAllUsers();
 
     void verifyPermission(String username, int permissionType) throws NoPermissionException;
+
 }

@@ -1284,45 +1284,6 @@ public class TripsManager implements TripsManagerLocal {
         
     }
 
-    @Override
-    public boolean removeMyBid(TSeatDTO seatDTO, String username) throws NoPermissionException {
-        userManager.verifyPermission(username, Config.CLIENT);
-        
-        TPurchase purchase;
-        
-        TUser user = userManager.getTUserByUsername(username);
-        
-        if(user == null)
-            return false;
-        
-        TSeat seat = seatFacade.find(seatDTO.getId());
-        if(seat == null)
-            return false;
-        
-        for(TSeat seatTmp : seatFacade.findAuctionedSeatsOfUser(user))
-        {
-            if(seatTmp.equals(seat))
-            {
-                purchase = seatTmp.getPurchaseid();
-                
-                user.getTPurchaseCollection().remove(purchase);
-                userManager.editTUser(user);
-                
-                seatFacade.remove(seatTmp);
-                
-                purchaseFacade.remove(purchase);
-                return true;
-            }
-        }
-        
-        return false;
-    }
-
-    @Override
-    public boolean removeBid(TSeatDTO seatDTO, String username) throws NoPermissionException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     private boolean validateAuctionedSeat(TSeatDTO seatDTO) {
         if(seatDTO == null)
             return false;
