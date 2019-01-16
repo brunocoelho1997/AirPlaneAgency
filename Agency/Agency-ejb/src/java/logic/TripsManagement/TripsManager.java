@@ -1245,45 +1245,41 @@ public class TripsManager implements TripsManagerLocal {
             return false;
         
         //verify if user already has a purchase for this auctioned seat
+        /*
+        
+        
         for(TSeat auctionedSeatsOfUser : seatFacade.findAuctionedSeatsOfUser(user)){
             if(auctionedSeatsOfUser.getTripid().equals(trip)){
                 purchaseTmp = auctionedSeatsOfUser.getPurchaseid();
             }
-        }
-        //if the user never bid for this auctioned seat we must create a purchase
-        if(purchaseTmp == null){
+        }*/
+        
+
+        //if anyone never bid for this auctioned seat we must create a purchase        
+        if(greatestAuctionedSeat.getPurchaseid() == null){
             purchaseTmp = new TPurchase();
             purchaseTmp.setDone(false);
-            purchaseTmp.setUserid(user);
             purchaseTmp.setTSeatCollection(new ArrayList());
             purchaseTmp.getTSeatCollection().add(greatestAuctionedSeat);
         }
+        else
+            purchaseTmp = greatestAuctionedSeat.getPurchaseid();
         
         if(seatDTO.getLuggage()!= null)
             greatestAuctionedSeat.setLuggage(seatDTO.getLuggage());
         greatestAuctionedSeat.setPrice(seatDTO.getPrice());
         greatestAuctionedSeat.setPurchaseid(purchaseTmp);
-        
+        purchaseTmp.setUserid(user);
+
         seatFacade.edit(greatestAuctionedSeat);
-        
-        //se tiver purchase o greateastauctioned seat devera apotar para essa... caso contrario devera ser criada uma purchase nova e o greateastauctioned dever appontar para essa
-        
         
         user.getTPurchaseCollection().add(purchaseTmp);
         userManager.editTUser(user);
         
-        /*
-        
-        Se.um user fizer bid num AUCTIONED seat... Irá criar uma purchase nova com o AUCTIONED seat .. caso estar já tenha uma purchase com este AUCTIONED seat só deverá ser alterado o valor da bid
-        Quando for para eliminar uma bid basta eliminar a maior
-        
-        */
-        
-        
         return true;
         
     }
-
+        
     private boolean validateAuctionedSeat(TSeatDTO seatDTO) {
         if(seatDTO == null)
             return false;
