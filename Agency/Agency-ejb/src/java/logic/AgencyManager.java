@@ -295,6 +295,11 @@ public class AgencyManager implements AgencyManagerRemote {
     }
 
     @Override
+    public boolean changeNumberOfPersonsOfActualPurchase(TPurchaseDTO purchaseDTO) throws NoPermissionException {
+        return tripsManagerLocal.changeNumberOfPersonsOfActualPurchase(purchaseDTO, username);
+    }
+    
+    @Override
     public boolean removeActualPurchase(TPurchaseDTO purchaseDTO) throws NoPermissionException {
         return tripsManagerLocal.removeActualPurchase(purchaseDTO, username);
     }
@@ -343,5 +348,7 @@ public class AgencyManager implements AgencyManagerRemote {
     public TSeatDTO findAuctionedSeat(int id) throws NoPermissionException {
         return tripsManagerLocal.findAuctionedSeat(id, username);
     }
+
+    
 
 }

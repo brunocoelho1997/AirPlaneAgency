@@ -59,6 +59,8 @@ public interface TripsManagerLocal {
     boolean removeTrip(TTripDTO tripDTO, String username) throws NoPermissionException;
     boolean cancelTrip(TTripDTO tripDTO, String username) throws NoPermissionException;
     boolean setTripDone(TTripDTO tripDTO, String username) throws NoPermissionException;
+    void processEndOfTrips(int actualDate);
+    
     
     //trip feedback
     TTripFeedbackDTO findTripfeedback(int id);
@@ -72,6 +74,7 @@ public interface TripsManagerLocal {
     TPurchaseDTO findPurchase(int id, String username) throws NoPermissionException;
     TPurchaseDTO getActualPurchase(String username) throws NoPermissionException;
     boolean buySeatsToTrip(TTripDTO tripDTO, List<TSeatDTO> seatDTOList, String username) throws NoPermissionException;
+    boolean changeNumberOfPersonsOfActualPurchase(TPurchaseDTO purchaseDTO, String username) throws NoPermissionException;
     boolean editActualPurchase(TPurchaseDTO purchaseDTO, String username) throws NoPermissionException;
     boolean removeSeatsOfActualPurchase(TPurchaseDTO purchaseDTO, TTripDTO tripDTO, String username) throws NoPermissionException;
     boolean removeActualPurchase(TPurchaseDTO purchaseDTO, String username) throws NoPermissionException;

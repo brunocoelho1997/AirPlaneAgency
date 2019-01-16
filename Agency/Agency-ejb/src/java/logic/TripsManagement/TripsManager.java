@@ -629,6 +629,67 @@ public class TripsManager implements TripsManagerLocal {
         return true;
     }
 
+    @Override
+    public void processEndOfTrips(int actualDate) {
+        List<TTrip> tripList = tripFacade.findAllNotDoneAndNotCanceled();
+        List<TSeat> auctionedSeats = null;
+        TPurchase purchase = null;
+        
+        for(TTrip trip : tripList)
+        {
+            if(trip.getDatetrip().equals(actualDate))
+            {
+                trip.setDone(true);
+                
+                tripFacade.edit(trip);
+                
+                System.out.println("Setted the trip as done.");
+                
+                //process auctioned seats
+                auctionedSeats = seatFacade.findAuctionedSeatsOfTrip(trip);
+                if(auctionedSeats == null)
+                    return;
+                for(TSeat auctionedSeat : auctionedSeats){
+                    
+                    if(auctionedSeat.getPurchaseid() == null)
+                        continue;
+                    
+                    TUser user = auctionedSeat.getPurchaseid().getUserid();
+                    
+                    if(user != null)
+                    {
+                        purchase = auctionedSeat.getPurchaseid();
+                        
+                        //if user has money to pay...
+                        if(user.getBalance() > auctionedSeat.getPrice()){
+                            user.setBalance(user.getBalance() - auctionedSeat.getPrice());
+                            
+                            //need to define the purchase as done.
+                            purchase.setDone(true);
+                            purchaseFacade.edit(purchase);
+                            
+                            System.out.println("Removed the money from the user who did the bid.");
+                        }
+                        else
+                        {
+                            //if the user doesn't have money...
+                            auctionedSeat.setPrice(0.0);
+                            seatFacade.edit(auctionedSeat);
+                         
+                            /*
+                            purchase.setTSeatCollection(null);
+                            purchaseFacade.remove(purchase);
+                            */
+                            
+                            user.getTPurchaseCollection().remove(auctionedSeat.getPurchaseid());
+                            System.out.println("User doesn't have money to pay the seat which was bid.");
+                        }
+                        userManager.editTUser(user);
+                    }
+                }
+            }
+        }
+    }
     
     //-------------------------------------------------------------------------------------------------------------------
     //trip feedback
@@ -890,6 +951,72 @@ public class TripsManager implements TripsManagerLocal {
             seat.setTripid(trip);
             seat.setPurchaseid(purchase);
 
+            seat = seatFacade.createAndGetEntity(seat);
+
+            purchase.getTSeatCollection().add(seat);
+            
+            trip.getTSeatCollection().add(seat);
+        }
+        
+        logsManager.sendLogMessage(username, LogTypes.FINISH_PURCHASE, timerManager.getDate());
+        
+        purchaseFacade.edit(purchase);
+        userManager.editTUser(user);
+        tripFacade.edit(trip);
+        
+        return true;
+    }
+    
+    @Override
+    public boolean changeNumberOfPersonsOfActualPurchase(TPurchaseDTO purchaseDTO, String username) throws NoPermissionException {
+        TTrip trip = null;
+        userManager.verifyPermission(username, Config.CLIENT);
+        
+        TUser user = userManager.getTUserByUsername(username);
+        if(user == null)
+            return false;
+        
+        //purchase---------------- get the atual purchase - the only which is undone
+        TPurchase purchase = null;
+        
+        for(TPurchase purchaseTmp : user.getTPurchaseCollection()){
+            if(!purchaseTmp.getDone())
+            {
+                purchase = purchaseTmp;
+                break;
+            }
+        }
+        
+        if(purchase == null)
+            return false;
+        
+        //validate all seats...
+        for(TSeatDTO seatDTO : purchaseDTO.gettSeatCollection())
+        {
+            if(!validateTSeatDTO(seatDTO))
+                return false;
+        }
+        
+        
+        //clear all tseats of purchase....
+        for(TSeat seatTmp : purchase.getTSeatCollection())        
+            seatFacade.remove(seatTmp);
+        
+        
+        
+        for(TSeatDTO seatDTO : purchaseDTO.gettSeatCollection())
+        {
+            //create seat----------------
+            TSeat seat = new TSeat();
+            seat.setAuctioned(seatDTO.getAuctioned());
+            seat.setLuggage(seatDTO.getLuggage());
+            seat.setPurchaseid(purchase);
+
+            trip = tripFacade.find(seatDTO.getTripDTO().getId());
+            seat.setPrice(trip.getPrice());
+            seat.setTripid(trip);
+            
+            
             seat = seatFacade.createAndGetEntity(seat);
 
             purchase.getTSeatCollection().add(seat);
@@ -1217,8 +1344,9 @@ public class TripsManager implements TripsManagerLocal {
         List<TSeatDTO> auctionedSeats = new ArrayList();
         TUser user = userManager.getTUserByUsername(username);
         
-        for(TSeat seatTmp : seatFacade.findAuctionedSeatsOfUser(user))
+        for(TSeat seatTmp : seatFacade.findAuctioningSeatsOfUser(user))
             auctionedSeats.add(DTOFactory.getTSeatDTOFromTSeat(seatTmp));
+        
         return auctionedSeats;
     }
 
@@ -1244,17 +1372,6 @@ public class TripsManager implements TripsManagerLocal {
         if(greatestAuctionedSeat != null && (seatDTO.getPrice() < greatestAuctionedSeat.getPrice()))
             return false;
         
-        //verify if user already has a purchase for this auctioned seat
-        /*
-        
-        
-        for(TSeat auctionedSeatsOfUser : seatFacade.findAuctionedSeatsOfUser(user)){
-            if(auctionedSeatsOfUser.getTripid().equals(trip)){
-                purchaseTmp = auctionedSeatsOfUser.getPurchaseid();
-            }
-        }*/
-        
-
         //if anyone never bid for this auctioned seat we must create a purchase        
         if(greatestAuctionedSeat.getPurchaseid() == null){
             purchaseTmp = new TPurchase();
@@ -1321,4 +1438,7 @@ public class TripsManager implements TripsManagerLocal {
         int planeLimit = trip.getPlaneid().getPlanelimit();
         return planeLimit - seatFacade.findBoughtSeatsOfTrip(trip).size();
     }
+    
+
+    
 }

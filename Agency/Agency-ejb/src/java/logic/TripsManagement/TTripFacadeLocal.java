@@ -28,5 +28,6 @@ public interface TTripFacadeLocal {
     List<TTrip> findRange(int[] range);
 
     int count();
-    
+ 
+    List<TTrip> findAllNotDoneAndNotCanceled();
 }
