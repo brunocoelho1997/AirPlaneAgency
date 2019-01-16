@@ -7,12 +7,14 @@ package logic.TimerManagement;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.ejb.Timeout;
 import javax.ejb.Timer;
 import javax.ejb.TimerService;
 import logic.Config;
+import logic.TripsManagement.TripsManagerLocal;
 
 /**
  *
@@ -22,6 +24,8 @@ import logic.Config;
 @Startup
 public class TimerManager implements TimerManagerLocal {
 
+    @EJB
+    private TripsManagerLocal tripsManager; 
     @Resource
     private TimerService timerService;
     
@@ -39,6 +43,7 @@ public class TimerManager implements TimerManagerLocal {
     @Timeout
     public void incrementDate(Timer timer) {
         date++;
+        tripsManager.processEndOfTrips(date);
     }
 
     @Override

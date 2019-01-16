@@ -32,5 +32,27 @@ public class TTripFacade extends AbstractFacade<TTrip> implements TTripFacadeLoc
     public TTripFacade() {
         super(TTrip.class);
     }
+
+    @Override
+    public List<TTrip> findAllNotDoneAndNotCanceled() {
+        CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        
+        Root<TTrip> trip = cq.from(TTrip.class);
+        
+        
+        /* is showing all seats which pertence that trip or all seats that purchase is done... and need to be a AND and not  OR
+        cq.where(cb.equal(seat.get(TSeat_.tripid).get(TTrip_.id), trip.getId()));      
+        cq.where(cb.equal(seat.get(TSeat_.purchaseid).get(TPurchase_.done), true));
+        */
+        
+        cq.where(cb.and(cb.equal(trip.get(TTrip_.canceled), false), cb.equal(trip.get(TTrip_.done), false)));
+
+        Query q = getEntityManager().createQuery(cq);
+        
+        //q.setParameter("done", true);
+        
+        return q.getResultList();
+    }
     
 }

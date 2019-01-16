@@ -629,6 +629,43 @@ public class TripsManager implements TripsManagerLocal {
         return true;
     }
 
+    @Override
+    public void processEndOfTrips(int actualDate) {
+        List<TTrip> tripList = tripFacade.findAllNotDoneAndNotCanceled();
+        List<TSeat> auctionedSeats = null;
+        
+        for(TTrip trip : tripList)
+        {
+            if(trip.getDatetrip().equals(actualDate))
+            {
+                trip.setDone(true);
+                
+                //process auctioned seats
+                auctionedSeats = seatFacade.findAuctionedSeatsOfTrip(trip);
+                for(TSeat auctionedSeat : auctionedSeats){
+                    
+                    TUser user = auctionedSeat.getPurchaseid().getUserid();
+                    
+                    if(user != null)
+                    {
+                        //if user has money to pay...
+                        if(user.getBalance() > auctionedSeat.getPrice()){
+                            user.setBalance(user.getBalance() - auctionedSeat.getPrice());
+                            
+                        }
+                        else
+                        {
+                            //if the user doesn't have money...
+                            user.getTPurchaseCollection().remove(auctionedSeat.getPurchaseid());
+                        }
+                        userManager.editTUser(user);
+                    }
+                }
+                
+                tripFacade.edit(trip);
+            }
+        }
+    }
     
     //-------------------------------------------------------------------------------------------------------------------
     //trip feedback
@@ -890,6 +927,72 @@ public class TripsManager implements TripsManagerLocal {
             seat.setTripid(trip);
             seat.setPurchaseid(purchase);
 
+            seat = seatFacade.createAndGetEntity(seat);
+
+            purchase.getTSeatCollection().add(seat);
+            
+            trip.getTSeatCollection().add(seat);
+        }
+        
+        logsManager.sendLogMessage(username, LogTypes.FINISH_PURCHASE, timerManager.getDate());
+        
+        purchaseFacade.edit(purchase);
+        userManager.editTUser(user);
+        tripFacade.edit(trip);
+        
+        return true;
+    }
+    
+    @Override
+    public boolean changeNumberOfPersonsOfActualPurchase(TPurchaseDTO purchaseDTO, String username) throws NoPermissionException {
+        TTrip trip = null;
+        userManager.verifyPermission(username, Config.CLIENT);
+        
+        TUser user = userManager.getTUserByUsername(username);
+        if(user == null)
+            return false;
+        
+        //purchase---------------- get the atual purchase - the only which is undone
+        TPurchase purchase = null;
+        
+        for(TPurchase purchaseTmp : user.getTPurchaseCollection()){
+            if(!purchaseTmp.getDone())
+            {
+                purchase = purchaseTmp;
+                break;
+            }
+        }
+        
+        if(purchase == null)
+            return false;
+        
+        //validate all seats...
+        for(TSeatDTO seatDTO : purchaseDTO.gettSeatCollection())
+        {
+            if(!validateTSeatDTO(seatDTO))
+                return false;
+        }
+        
+        
+        //clear all tseats of purchase....
+        for(TSeat seatTmp : purchase.getTSeatCollection())        
+            seatFacade.remove(seatTmp);
+        
+        
+        
+        for(TSeatDTO seatDTO : purchaseDTO.gettSeatCollection())
+        {
+            //create seat----------------
+            TSeat seat = new TSeat();
+            seat.setAuctioned(seatDTO.getAuctioned());
+            seat.setLuggage(seatDTO.getLuggage());
+            seat.setPurchaseid(purchase);
+
+            trip = tripFacade.find(seatDTO.getTripDTO().getId());
+            seat.setPrice(trip.getPrice());
+            seat.setTripid(trip);
+            
+            
             seat = seatFacade.createAndGetEntity(seat);
 
             purchase.getTSeatCollection().add(seat);
@@ -1308,4 +1411,8 @@ public class TripsManager implements TripsManagerLocal {
         
         return greatestActionedSeat;
     }
+
+    
+
+    
 }
