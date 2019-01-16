@@ -224,7 +224,7 @@ public class Config {
     public static final String MSG_NO_PERMISSION_MONEY = "No permissions to buy the seat/seats to the trip. The user doesn't have money.";
     public static final String MSG_NO_PERMISSION_TRIP_DONE = "No permissions to finish the purchase because one trip is already done.";
     public static final String MSG_NO_PERMISSION_PLANE_LIMIT_EXCEDED = "No permissions to finish the purchase because a plane already fullfit";
-
+    public static final String MSG_NO_PERMISSION_TRIED_BUY_AUCTIONEDSEAT = "No permissions to finish the purchase because the user tried to buy auctioned seat.";
     
             
     public static final long DEFAULT_TIMER= 60;

@@ -139,6 +139,10 @@ public class TripsManager implements TripsManagerLocal {
         
         if(tplane == null)
             return false;
+        
+        if(!tplane.getTTripCollection().isEmpty())
+            return false;
+        
         planeFacade.remove(tplane);
         return true;
     }
@@ -223,6 +227,10 @@ public class TripsManager implements TripsManagerLocal {
         
         if(tairline == null)
             return false;
+        
+        if(!tairline.getTTripCollection().isEmpty())
+            return false;
+        
         airlineFacade.remove(tairline);
         return true;
     }
@@ -311,6 +319,13 @@ public class TripsManager implements TripsManagerLocal {
         
         if(place == null)
             return false;
+        
+        if(!place.getTTripCollection().isEmpty())
+            return false;
+        
+        if(!place.getTTripCollection1().isEmpty())
+            return false;
+        
         placeFacade.remove(place);
         return true;
     }
@@ -567,6 +582,9 @@ public class TripsManager implements TripsManagerLocal {
         if(trip == null)
             return false;
         
+        if(trip.getDone())
+            return false;
+        
         trip.setCanceled(true);
         
         //when we cancel a trip we need to refund the users who bought seats
@@ -626,6 +644,9 @@ public class TripsManager implements TripsManagerLocal {
         if(tripDTO.getPrice()<0)
             return false;
         
+        if(tripDTO.getDatetrip() <= timerManager.getDate())
+            return false;
+        
         return true;
     }
 
@@ -637,7 +658,7 @@ public class TripsManager implements TripsManagerLocal {
         
         for(TTrip trip : tripList)
         {
-            if(trip.getDatetrip().equals(actualDate))
+            if(trip.getDatetrip() >= actualDate)
             {
                 trip.setDone(true);
                 
@@ -1181,8 +1202,12 @@ public class TripsManager implements TripsManagerLocal {
         //verifying if some trip already done
         for(TSeat seatTmp : purchase.getTSeatCollection())
         {
-            if(seatTmp.getTripid().getDone())
+            if(seatTmp.getTripid().getDone() || seatTmp.getTripid().getCanceled())
                 throw new NoPermissionException(Config.MSG_NO_PERMISSION_TRIP_DONE);
+            
+            if(seatTmp.getAuctioned())
+                throw new NoPermissionException(Config.MSG_NO_PERMISSION_TRIED_BUY_AUCTIONEDSEAT);
+
         }
         
         //verifying if planes has space for all seats:
@@ -1434,11 +1459,11 @@ public class TripsManager implements TripsManagerLocal {
             System.out.println("[TripsManager] getAvailableSeats. no trip found!");
             return 0;
         }
-        
+    
         int planeLimit = trip.getPlaneid().getPlanelimit();
         return planeLimit - seatFacade.findBoughtSeatsOfTrip(trip).size();
     }
-    
 
+    
     
 }

@@ -301,18 +301,18 @@ public class Main {
     
     private static void processDepositToAccount() {
         Scanner sc = new Scanner(System.in);
-        float amoung;
+        float amount;
         boolean result;
         
-        System.out.println("Amoung:");
-        amoung = Float.parseFloat(sc.nextLine());
+        System.out.println("Amount:");
+        amount = Float.parseFloat(sc.nextLine());
         
-        result = sAgencyManager.depositToAccount(amoung);
+        result = sAgencyManager.depositToAccount(amount);
         
         if(!result)
             System.out.println("An error has occurred.");
         else
-            System.out.println("The amoung has been accepted with success.");
+            System.out.println("The amount has been accepted with success.");
 
     }
     private static void processUsersFindAll(){
@@ -1383,7 +1383,7 @@ public class Main {
         System.out.println(Command.SIGNIN + " - Sign in");
         System.out.println(Command.SIGNUP + " - Sign up");
         System.out.println(Command.LOGOUT + " - Logout");
-        System.out.println(Command.DEPOSITTOACCOUNT + " - Deposit amoung in user account");
+        System.out.println(Command.DEPOSITTOACCOUNT + " - Deposit amount in user account");
         System.out.println(Command.FINDALLUSERS + " - Find all Users");
         System.out.println("asguest - Enter as guest");
         System.out.println(Command.EXIT + " - Exit");
