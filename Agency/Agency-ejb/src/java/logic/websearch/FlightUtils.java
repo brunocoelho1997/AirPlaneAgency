@@ -14,15 +14,28 @@ public class FlightUtils {
         // Do nothing.
     }
     
-    public static Flight createFlightFromTrip(TTripDTO trip) {
+    public static Flight createFlightFromTrip(TTripDTO trip, int emptySeats) {
         TPlaceDTO origin = trip.getFromPlaceDTO();
-        TPlaceDTO destiny = trip.getFromPlaceDTO();
+        TPlaceDTO destiny = trip.getToPlaceDTO();
         
-        Flight flight = new Flight(trip.getPrice(), 0, origin.getCity(), destiny.getCity());
-        return flight;
+        return new Flight(trip.getPrice(), emptySeats, origin.getCity(), destiny.getCity());
     }
     
     public static boolean isTripActive(TTripDTO trip) {
         return !trip.getDone() && !trip.getCanceled();
+    }
+    
+    public static boolean matchesOrigin(String criteria, TTripDTO trip) {
+        TPlaceDTO place = trip.getFromPlaceDTO();
+        return criteria.compareToIgnoreCase(place.getCity()) == 0;
+    }
+    
+    public static boolean matchesDestiny(String criteria, TTripDTO trip) {
+        TPlaceDTO place = trip.getToPlaceDTO();
+        return criteria.compareToIgnoreCase(place.getCity()) == 0;
+    }
+    
+    public static boolean validateParam(String param) {
+        return param != null && !param.trim().isEmpty();
     }
 }

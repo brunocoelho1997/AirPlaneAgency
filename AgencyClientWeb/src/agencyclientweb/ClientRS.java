@@ -12,16 +12,6 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import logic.websearch.Flight;
 
-/**
- * Jersey REST client generated for REST resource:FlightResource [flight]<br>
- * USAGE:
- * <pre>
- *        ClientRS client = new ClientRS();
- *        Object response = client.XXX(...);
- *        // do whatever with response
- *        client.close();
- * </pre>
-W */
 public class ClientRS {
 
     private WebTarget webTarget;
@@ -33,21 +23,20 @@ public class ClientRS {
         webTarget = client.target(BASE_URI).path("flight");
     }
     
-    public <T> T getFlight(Class<T> responseType, String origin) throws ClientErrorException {
-        WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{origin}));
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
-    }
-    
     public List<Flight> getAllFlights() throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path("/listall");
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(new GenericType<List<Flight>> () {});
     }
     
-    public List<Flight> getFlights(String origin) throws ClientErrorException {
+    public List<Flight> getFlights(String origin, String destiny) throws ClientErrorException {
         WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{origin}));
+        
+        resource = resource
+                .path("/list")
+                .queryParam("origin", origin)
+                .queryParam("destiny", destiny);
+        
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(new GenericType<List<Flight>> () {});
     }
 

@@ -11,6 +11,7 @@ public class Command {
     static final String GET_BY_ORIGIN = "origin";
     static final String GET_BY_DESTINY = "destiny";
     static final String GET_CUSTOM = "custom";
+    static final String HELP = "help";
     static final String EXIT = "exit";
     
 }

@@ -84,5 +84,6 @@ public interface TripsManagerLocal {
     TSeatDTO findAuctionedSeat(int id, String username) throws NoPermissionException;
     List<TSeatDTO> getMyBids(String username) throws NoPermissionException;
     boolean bidAuctionedSeat(TSeatDTO seatDTO, String username) throws NoPermissionException;
-
+    
+    int getAvailableSeats(TTripDTO trip);
 }

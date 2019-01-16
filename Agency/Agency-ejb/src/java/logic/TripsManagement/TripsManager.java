@@ -1308,4 +1308,17 @@ public class TripsManager implements TripsManagerLocal {
         
         return greatestActionedSeat;
     }
+
+    @Override
+    public int getAvailableSeats(TTripDTO tripDTO) {
+        System.out.println("[TripsManager] getAvailableSeats. trip=" + tripDTO);
+        TTrip trip = tripFacade.find(tripDTO.getId());
+        if (trip == null) {
+            System.out.println("[TripsManager] getAvailableSeats. no trip found!");
+            return 0;
+        }
+        
+        int planeLimit = trip.getPlaneid().getPlanelimit();
+        return planeLimit - seatFacade.findBoughtSeatsOfTrip(trip).size();
+    }
 }

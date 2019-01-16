@@ -11,7 +11,7 @@ import javax.ejb.Stateless;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import logic.websearch.Flight;
@@ -41,10 +41,11 @@ public class FlightResource {
     }
 
     @GET
-    @Path("{origin}")
+    @Path("/list")
     @Produces(MediaType.APPLICATION_XML)
-    public GenericEntity<List<Flight>> getFlights(@PathParam("origin") String origin) {
-        List<Flight> flights = flightManager.getFlights(origin);
+    public GenericEntity<List<Flight>> getFlights(@QueryParam("origin") String origin, @QueryParam("destiny") String destiny) {
+        System.out.println("[FlightResource] origin=" + origin + ", destiny=" + destiny);
+        List<Flight> flights = flightManager.getFlights(origin, destiny);
         GenericEntity<List<Flight>> list = new GenericEntity<List<Flight>>(flights) {};
         return list;
     }

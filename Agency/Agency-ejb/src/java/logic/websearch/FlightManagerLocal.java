@@ -13,6 +13,6 @@ public interface FlightManagerLocal {
     
     List<Flight> getAllFlights();
     
-    List<Flight> getFlights(String origin);
+    List<Flight> getFlights(String origin, String destiny);
     
 }

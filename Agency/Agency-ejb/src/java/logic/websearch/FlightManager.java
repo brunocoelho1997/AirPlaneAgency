@@ -9,10 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
-import logic.TPlaceDTO;
 import logic.TTripDTO;
 import logic.TripsManagement.TripsManagerLocal;
-
 
 @Singleton
 public class FlightManager implements FlightManagerLocal {
@@ -31,7 +29,8 @@ public class FlightManager implements FlightManagerLocal {
         List<Flight> flightsList = new ArrayList<>();
         for (TTripDTO trip : tripsManager.findAllTrips()) {
             if (FlightUtils.isTripActive(trip)) {
-                flightsList.add(FlightUtils.createFlightFromTrip(trip));
+                int emptySeats = tripsManager.getAvailableSeats(trip);
+                flightsList.add(FlightUtils.createFlightFromTrip(trip, emptySeats));
             }
         }
         
@@ -40,17 +39,30 @@ public class FlightManager implements FlightManagerLocal {
     }
     
     @Override
-    public List<Flight> getFlights(String origin) {
-        System.out.println("[FlightManager] getFlight. origin=" + origin);
+    public List<Flight> getFlights(String origin, String destiny) {
+        System.out.println("[FlightManager] getFlight. origin=" + origin + ", destiny=" + destiny);
+        
+        boolean compareOrigin = FlightUtils.validateParam(origin);
+        boolean compareDestiny = FlightUtils.validateParam(destiny);
                 
         List<Flight> flightsList = new ArrayList<>();
         for (TTripDTO trip : tripsManager.findAllTrips()) {
             if (FlightUtils.isTripActive(trip)) {
-                TPlaceDTO from = trip.getFromPlaceDTO();
                 
-                if (from.getCity().compareToIgnoreCase(origin) == 0) {
-                    flightsList.add(FlightUtils.createFlightFromTrip(trip));
+                if (compareOrigin) {
+                    if (!FlightUtils.matchesOrigin(origin, trip)) {
+                        continue;
+                    }
                 }
+                
+                if (compareDestiny) {
+                    if (!FlightUtils.matchesDestiny(destiny, trip)) {
+                        continue;
+                    }
+                }
+                
+                int emptySeats = tripsManager.getAvailableSeats(trip);
+                flightsList.add(FlightUtils.createFlightFromTrip(trip, emptySeats));
             }
         }
         
