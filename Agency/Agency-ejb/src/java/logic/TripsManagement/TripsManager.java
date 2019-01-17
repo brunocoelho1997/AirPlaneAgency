@@ -939,6 +939,17 @@ public class TripsManager implements TripsManagerLocal {
         if(trip.getCanceled() || trip.getDone())
             return false;
         
+        int boughtSeats = seatFacade.findBoughtSeatsOfTrip(trip).size();
+            
+        int auctionedSeatsNumber = (int) (trip.getPlaneid().getPlanelimit() * 0.1);
+        int freeSeatsCount = trip.getPlaneid().getPlanelimit() - boughtSeats - auctionedSeatsNumber;
+        
+        System.out.println("[TripsManager] buySeatsToTrip. seats=" + seatDTOList.size() +
+                ", bought=" + boughtSeats + ", total=" + trip.getPlaneid().getPlanelimit());
+        if (seatDTOList.size() > freeSeatsCount) {
+            return false;
+        }
+        
         //purchase----------------
         TPurchase purchase = null;
         
