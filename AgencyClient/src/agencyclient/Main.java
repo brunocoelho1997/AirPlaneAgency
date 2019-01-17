@@ -144,10 +144,10 @@ public class Main {
                         processRemoveTripFeedback();
                         break;
                     case Command.SETACTUALDATE:
-                        processSetAtualDate();
+                        processSetActualDate();
                         break;
                     case Command.GETACTUALDATE:
-                        processGetAtualDate();
+                        processGetActualDate();
                         break;
                     case Command.SETDURATIONTIMER:
                         processSetDurationTimer();
@@ -1046,15 +1046,15 @@ public class Main {
     //----------------------------------------------------
     //date
     
-    private static void processGetAtualDate(){
-        System.out.println("Atual Date: " + sAgencyManager.getDate());
+    private static void processGetActualDate(){
+        System.out.println("Actual Date: " + sAgencyManager.getDate());
     }
-    private static void processSetAtualDate(){
+    private static void processSetActualDate(){
         Scanner sc = new Scanner(System.in);
         int date;
         boolean result;
         
-        System.out.println("Atual date pretended:");
+        System.out.println("Actual date pretended:");
         date = Integer.parseInt(sc.nextLine());
         
         
@@ -1062,7 +1062,7 @@ public class Main {
         if(!result)
             System.out.println("A problem occurred. The system didn't setted the new date.");
         else
-            System.out.println("Atual date edited with success!"); 
+            System.out.println("Actual date edited with success!"); 
         
     }
     private static void processSetDurationTimer(){
@@ -1161,7 +1161,7 @@ public class Main {
             return;
         }
         
-        System.out.println("Atual purchase (undone): " + purchaseDTO);
+        System.out.println("Actual purchase (undone): " + purchaseDTO);
     }
     
     private static void processEditActualPurchase() throws NoPermissionException {
@@ -1177,11 +1177,11 @@ public class Main {
             return;
         }
         
-        System.out.println("Atual purchase (undone): " + purchaseDTO);
+        System.out.println("Actual purchase (undone): " + purchaseDTO);
         
         for(TSeatDTO seatDTO : purchaseDTO.gettSeatCollection())
         {
-            System.out.println("Atual seat: " + seatDTO);
+            System.out.println("Actual seat: " + seatDTO);
             System.out.println("New luggage :");
             seatDTO.setLuggage(sc.nextLine());
         }
@@ -1209,7 +1209,7 @@ public class Main {
             return;
         }
         
-        System.out.println("Atual purchase (undone): " + purchaseDTO);
+        System.out.println("Actual purchase (undone): " + purchaseDTO);
         
         System.out.println("Trip Id to remove of purchase:");
         tripid = Integer.parseInt(sc.nextLine());
@@ -1243,7 +1243,7 @@ public class Main {
             return;
         }
         
-        System.out.println("Atual purchase (undone): " + purchaseDTO);
+        System.out.println("Actual purchase (undone): " + purchaseDTO);
         
         System.out.println("Do you want remove the purchase: " + purchaseDTO + "? [1/0]");
         op = Integer.parseInt(sc.nextLine());
@@ -1272,7 +1272,7 @@ public class Main {
             return;
         }
         
-        System.out.println("Atual purchase (undone): " + purchaseDTO);
+        System.out.println("Actual purchase (undone): " + purchaseDTO);
         
         System.out.println("The purchase: " + purchaseDTO + "\n Will cost X€. Do you want finish? [1/0]");
         op = Integer.parseInt(sc.nextLine());
@@ -1433,8 +1433,8 @@ public class Main {
         
         //time
         System.out.println("\n-------Time--------");
-        System.out.println(Command.GETACTUALDATE+ " - Get atual time of the system");
-        System.out.println(Command.SETACTUALDATE+ " - Set atual time of the system");
+        System.out.println(Command.GETACTUALDATE+ " - Get actual time of the system");
+        System.out.println(Command.SETACTUALDATE+ " - Set actual time of the system");
         System.out.println(Command.SETDURATIONTIMER + " - Set (in minuts) the increment of time");
         System.out.println(Command.GETTIMERINFORMATION + " - Get information of the timer");
         
