@@ -7,6 +7,7 @@ package logic.TripsManagement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import logic.Config;
@@ -482,6 +483,10 @@ public class TripsManager implements TripsManagerLocal {
         if(toPlace == null)
             return false;
         
+        if (Objects.equals(fromPlace.getId(), toPlace.getId())) {
+            return false;
+        }
+        
         TAirline airline = airlineFacade.find(tripDTO.getAirlineDTO().getId());
         if(airline == null)
             return false;
@@ -653,12 +658,12 @@ public class TripsManager implements TripsManagerLocal {
     @Override
     public void processEndOfTrips(int actualDate) {
         List<TTrip> tripList = tripFacade.findAllNotDoneAndNotCanceled();
-        List<TSeat> auctionedSeats = null;
-        TPurchase purchase = null;
+        List<TSeat> auctionedSeats;
+        TPurchase purchase;
         
         for(TTrip trip : tripList)
         {
-            if(trip.getDatetrip() >= actualDate)
+            if(trip.getDatetrip() <= actualDate)
             {
                 trip.setDone(true);
                 

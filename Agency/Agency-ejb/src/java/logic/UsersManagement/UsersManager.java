@@ -155,7 +155,6 @@ public class UsersManager implements UsersManagerLocal {
     
     @Override
     public void verifyPermission(String username, int permissionType) throws NoPermissionException{
-        
         String errorMessage = (Config.CLIENT == permissionType? Config.MSG_NO_PERMISSION: Config.MSG_NO_PERMISSION_OPERATOR);
         
         if(username == null || username.isEmpty())
@@ -170,7 +169,7 @@ public class UsersManager implements UsersManagerLocal {
             throw new NoPermissionException(errorMessage);       
 
         //se for um cliente e a permissao exigida for do tipo de cliente permite... caso contrario nao deixa (os operadores podem fazer tudo, portanto nao fiz validacao para os operadores)
-        if(userDTO.getUsertype() == Config.CLIENT && permissionType != Config.CLIENT)
+        if(userDTO.getUsertype() != permissionType)
             throw new NoPermissionException(errorMessage);       
     }
 }
