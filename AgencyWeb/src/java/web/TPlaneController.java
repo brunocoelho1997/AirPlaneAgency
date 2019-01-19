@@ -5,6 +5,8 @@ import web.util.PaginationHelper;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -15,31 +17,32 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+import logic.NoPermissionException;
+import logic.TPlaneDTO;
+import logic.TripsManagement.TripsManagerLocal;
 
 @Named("tPlaneController")
 @SessionScoped
 public class TPlaneController implements Serializable {
 
-    private TPlane current;
+    private TPlaneDTO current;
     private DataModel items = null;
-    @EJB
-    private web.TPlaneFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
+    
+    @EJB
+    private TripsManagerLocal tripsManager;
 
     public TPlaneController() {
+        // Do nothing
     }
 
-    public TPlane getSelected() {
+    public TPlaneDTO getSelected() {
         if (current == null) {
-            current = new TPlane();
+            current = new TPlaneDTO();
             selectedItemIndex = -1;
         }
         return current;
-    }
-
-    private TPlaneFacade getFacade() {
-        return ejbFacade;
     }
 
     public PaginationHelper getPagination() {
@@ -48,12 +51,26 @@ public class TPlaneController implements Serializable {
 
                 @Override
                 public int getItemsCount() {
-                    return getFacade().count();
+                    try {
+                        return tripsManager.findAllPlanes("admin").size();
+                        
+                    } catch (NoPermissionException ex) {
+                        Logger.getLogger(TPlaneController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                    return 0;
                 }
 
                 @Override
                 public DataModel createPageDataModel() {
-                    return new ListDataModel(getFacade().findRange(new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()}));
+                    try {
+                        return new ListDataModel(tripsManager.findPlanesByRange("admin", getPageFirstItem(), getPageFirstItem() + getPageSize()));
+                        
+                    } catch (NoPermissionException ex) {
+                        Logger.getLogger(TPlaneController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                    return null;
                 }
             };
         }
@@ -66,47 +83,49 @@ public class TPlaneController implements Serializable {
     }
 
     public String prepareView() {
-        current = (TPlane) getItems().getRowData();
+        current = (TPlaneDTO) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "View";
     }
 
     public String prepareCreate() {
-        current = new TPlane();
+        current = new TPlaneDTO();
         selectedItemIndex = -1;
         return "Create";
     }
 
     public String create() {
         try {
-            getFacade().create(current);
+            tripsManager.addPlane(current, "admin");
             JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("TPlaneCreated"));
             return prepareCreate();
-        } catch (Exception e) {
+            
+        } catch (NoPermissionException e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             return null;
         }
     }
 
     public String prepareEdit() {
-        current = (TPlane) getItems().getRowData();
+        current = (TPlaneDTO) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "Edit";
     }
 
     public String update() {
         try {
-            getFacade().edit(current);
+            tripsManager.editPlane(current, "admin");
             JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("TPlaneUpdated"));
             return "View";
-        } catch (Exception e) {
+            
+        } catch (NoPermissionException e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             return null;
         }
     }
 
     public String destroy() {
-        current = (TPlane) getItems().getRowData();
+        current = (TPlaneDTO) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
@@ -120,6 +139,7 @@ public class TPlaneController implements Serializable {
         updateCurrentItem();
         if (selectedItemIndex >= 0) {
             return "View";
+
         } else {
             // all items were removed - go back to list
             recreateModel();
@@ -129,26 +149,35 @@ public class TPlaneController implements Serializable {
 
     private void performDestroy() {
         try {
-            getFacade().remove(current);
+            tripsManager.removePlane(current, "admin");
             JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("TPlaneDeleted"));
-        } catch (Exception e) {
+
+        } catch (NoPermissionException e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
         }
     }
 
     private void updateCurrentItem() {
-        int count = getFacade().count();
-        if (selectedItemIndex >= count) {
-            // selected index cannot be bigger than number of items:
-            selectedItemIndex = count - 1;
-            // go to previous page if last page disappeared:
-            if (pagination.getPageFirstItem() >= count) {
-                pagination.previousPage();
+        try {
+            int count = tripsManager.findAllPlanes("admin").size();
+            
+            if (selectedItemIndex >= count) {
+                // selected index cannot be bigger than number of items:
+                selectedItemIndex = count - 1;
+                // go to previous page if last page disappeared:
+                if (pagination.getPageFirstItem() >= count) {
+                    pagination.previousPage();
+                }
             }
+            
+            if (selectedItemIndex >= 0) {
+                current = tripsManager.findPlanesByRange("admin", selectedItemIndex, selectedItemIndex + 1).get(0);
+            }
+            
+        } catch (NoPermissionException ex) {
+            Logger.getLogger(TPlaneController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if (selectedItemIndex >= 0) {
-            current = getFacade().findRange(new int[]{selectedItemIndex, selectedItemIndex + 1}).get(0);
-        }
+        
     }
 
     public DataModel getItems() {
@@ -179,18 +208,39 @@ public class TPlaneController implements Serializable {
     }
 
     public SelectItem[] getItemsAvailableSelectMany() {
-        return JsfUtil.getSelectItems(ejbFacade.findAll(), false);
+        try {
+            return JsfUtil.getSelectItems(tripsManager.findAllPlanes("admin"), false);
+
+        } catch (NoPermissionException ex) {
+            Logger.getLogger(TPlaneController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
     }
 
     public SelectItem[] getItemsAvailableSelectOne() {
-        return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
+        try {
+            return JsfUtil.getSelectItems(tripsManager.findAllPlanes("admin"), true);
+            
+        } catch (NoPermissionException ex) {
+            Logger.getLogger(TPlaneController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
     }
 
-    public TPlane getTPlane(java.lang.Integer id) {
-        return ejbFacade.find(id);
+    public TPlaneDTO getTPlane(java.lang.Integer id) {
+        try {
+            return tripsManager.findPlane(id, "admin");
+            
+        } catch (NoPermissionException ex) {
+            Logger.getLogger(TPlaneController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
     }
 
-    @FacesConverter(forClass = TPlane.class)
+    @FacesConverter(forClass = TPlaneDTO.class)
     public static class TPlaneControllerConverter implements Converter {
 
         @Override
@@ -220,11 +270,11 @@ public class TPlaneController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof TPlane) {
-                TPlane o = (TPlane) object;
+            if (object instanceof TPlaneDTO) {
+                TPlaneDTO o = (TPlaneDTO) object;
                 return getStringKey(o.getId());
             } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + TPlane.class.getName());
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + TPlaneDTO.class.getName());
             }
         }
 

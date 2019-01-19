@@ -3,13 +3,36 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
     <h:head>
-        <title>Facelet Title</title>
+        <title>Trip Agency</title>
         <h:outputStylesheet name="css/jsfcrud.css"/>
     </h:head>
+    
     <h:body>
-        Hello from Facelets
-        <br />
-        <h:link outcome="/tPlane/List" value="Show All Plane Items"/>
+        <h:outputText value="#{bundle.SignInMessage}"/>
+        <br/><br/>
+        <h:outputText value="#{bundle.Username}"/><br/>
+        <h:inputText id="signInInput" /><br/><br/>
+        <h:outputText value="#{bundle.Password}"/><br/>
+        <h:inputText id="signInPassword" /><br/><br/>
+        <h:button id="btnSignIn" value="#{bundle.SignIn}"/>
+        
+        <br/><br/><br/><br/>
+        
+        <h:outputText value="#{bundle.SignUpMessage}"/>
+        <br/><br/>
+        <h:outputText value="#{bundle.Name}"/><br/>
+        <h:inputText id="signUpName" /><br/><br/>
+        <h:outputText value="#{bundle.Username}"/><br/>
+        <h:inputText id="signInUsername" /><br/><br/>
+        <h:outputText value="#{bundle.Password}"/><br/>
+        <h:inputText id="signUpPassword" /><br/><br/>
+        <h:outputText value="#{bundle.ConfirmPassword}"/><br/>
+        <h:inputText id="signUpConfirmPassword" /><br/><br/>
+        <h:button id="btnSignUp" value="#{bundle.SignUp}"/>
+        
+        <br/><br/><br/><br/>
+        
+        <h:link outcome="/plane/List" value="Show All Plane Items"/>
     </h:body>
 
 </html>

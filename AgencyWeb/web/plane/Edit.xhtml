@@ -18,9 +18,9 @@
                     <h:outputLabel value="#{bundle.EditTPlaneLabel_id}" for="id" />
                     <h:inputText id="id" value="#{tPlaneController.selected.id}" title="#{bundle.EditTPlaneTitle_id}" required="true" requiredMessage="#{bundle.EditTPlaneRequiredMessage_id}"/>
                     <h:outputLabel value="#{bundle.EditTPlaneLabel_planename}" for="planename" />
-                    <h:inputText id="planename" value="#{tPlaneController.selected.planename}" title="#{bundle.EditTPlaneTitle_planename}" required="true" requiredMessage="#{bundle.EditTPlaneRequiredMessage_planename}"/>
+                    <h:inputText id="planename" value="#{tPlaneController.selected.planeName}" title="#{bundle.EditTPlaneTitle_planename}" required="true" requiredMessage="#{bundle.EditTPlaneRequiredMessage_planename}"/>
                     <h:outputLabel value="#{bundle.EditTPlaneLabel_planelimit}" for="planelimit" />
-                    <h:inputText id="planelimit" value="#{tPlaneController.selected.planelimit}" title="#{bundle.EditTPlaneTitle_planelimit}" required="true" requiredMessage="#{bundle.EditTPlaneRequiredMessage_planelimit}"/>
+                    <h:inputText id="planelimit" value="#{tPlaneController.selected.planeLimit}" title="#{bundle.EditTPlaneTitle_planelimit}" required="true" requiredMessage="#{bundle.EditTPlaneRequiredMessage_planelimit}"/>
                 </h:panelGrid>
                 <h:commandLink action="#{tPlaneController.update}" value="#{bundle.EditTPlaneSaveLink}"/>
                 <br />
