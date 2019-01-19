@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.EditTPlaneTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.EditTPlaneLabel_id}" for="id" />
+                    <h:inputText id="id" value="#{tPlaneController.selected.id}" title="#{bundle.EditTPlaneTitle_id}" required="true" requiredMessage="#{bundle.EditTPlaneRequiredMessage_id}"/>
+                    <h:outputLabel value="#{bundle.EditTPlaneLabel_planename}" for="planename" />
+                    <h:inputText id="planename" value="#{tPlaneController.selected.planename}" title="#{bundle.EditTPlaneTitle_planename}" required="true" requiredMessage="#{bundle.EditTPlaneRequiredMessage_planename}"/>
+                    <h:outputLabel value="#{bundle.EditTPlaneLabel_planelimit}" for="planelimit" />
+                    <h:inputText id="planelimit" value="#{tPlaneController.selected.planelimit}" title="#{bundle.EditTPlaneTitle_planelimit}" required="true" requiredMessage="#{bundle.EditTPlaneRequiredMessage_planelimit}"/>
+                </h:panelGrid>
+                <h:commandLink action="#{tPlaneController.update}" value="#{bundle.EditTPlaneSaveLink}"/>
+                <br />
+                <br />
+                <h:link outcome="View" value="#{bundle.EditTPlaneViewLink}"/>
+                <br />
+                <h:commandLink action="#{tPlaneController.prepareList}" value="#{bundle.EditTPlaneShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.EditTPlaneIndexLink}" />
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>
