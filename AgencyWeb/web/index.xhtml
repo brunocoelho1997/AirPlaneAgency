@@ -15,7 +15,7 @@
         <h:inputText id="signInInput" /><br/><br/>
         <h:outputText value="#{bundle.Password}"/><br/>
         <h:inputSecret id="signInPassword" /><br/><br/>
-        <h:button id="btnSignIn" value="#{bundle.SignIn}"/>
+        <h:commandButton id="btnSignIn" action="#{welcomeController.signIn}" value="#{bundle.SignIn}"/>
         
         <br/><br/><br/><br/>
         
