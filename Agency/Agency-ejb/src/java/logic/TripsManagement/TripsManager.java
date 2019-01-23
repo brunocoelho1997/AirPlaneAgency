@@ -80,6 +80,18 @@ public class TripsManager implements TripsManagerLocal {
         }
         return tPlaneDTOList;
     }
+    
+    @Override
+    public List<TPlaneDTO> findPlanesByRange(String username, int begin, int index) throws NoPermissionException {
+        userManager.verifyPermission(username, Config.OPERATOR);
+        
+        List<TPlaneDTO> tPlaneDTOList = new ArrayList<>();
+        for (TPlane tplane : planeFacade.findRange(new int[]{begin, index})) {   
+            tPlaneDTOList.add(DTOFactory.getTPlaneDTOFromTPlane(tplane));
+        }
+        
+        return tPlaneDTOList;
+    }
 
     @Override
     public TPlaneDTO findPlane(int id, String username) throws NoPermissionException {
