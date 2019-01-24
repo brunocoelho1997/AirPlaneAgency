@@ -60,9 +60,8 @@ public class SessionController implements Serializable {
     public void setUser(String user) {
         this.user = user;
     }
-
-    //validate login
-    public String validateUsernamePassword() {
+    
+    public String processSignIn() {
         //session source: https://stackoverflow.com/questions/3841361/jsf-http-session-login
         
         FacesContext context = FacesContext.getCurrentInstance();
@@ -81,18 +80,20 @@ public class SessionController implements Serializable {
         {
             String errorMsg = Utils.getSignUpValueString(value, user);
             
-            
             FacesContext.getCurrentInstance().addMessage(
-                                null,
+                                "myForm:errorMessage",
                                 new FacesMessage(FacesMessage.SEVERITY_ERROR,
                                                 errorMsg,
-                                                "Please enter correct username and Password"));
-            return "login";
+                                                null));
+            return "signin";
         }
     }
 
+    public String processSignUp() {
+        return "signin";
+    }
     
-    public String logout() {
+    public String processLogout() {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "index?faces-redirect=true";
     }
@@ -111,7 +112,7 @@ public class SessionController implements Serializable {
 		   = (ConfigurableNavigationHandler) 
 			fc.getApplication().getNavigationHandler();
 		
-		nav.performNavigation("/login");
+		nav.performNavigation("/signin");
         }
         	
     }	
@@ -130,7 +131,7 @@ public class SessionController implements Serializable {
 		   = (ConfigurableNavigationHandler) 
 			fc.getApplication().getNavigationHandler();
 		
-		nav.performNavigation("/login");
+		nav.performNavigation("/signin");
         }	
     }
 }
