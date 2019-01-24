@@ -54,5 +54,23 @@ public class TTripFacade extends AbstractFacade<TTrip> implements TTripFacadeLoc
         
         return q.getResultList();
     }
+
+    @Override
+    public List<TTrip> findLast(int maxResults, String column) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        
+        CriteriaQuery cq = cb.createQuery();
+        Root<TTrip> root = cq.from(TTrip.class);
+        cq.select(root);
+        
+        cq.where(cb.and(cb.equal(root.get(TTrip_.canceled), false), cb.equal(root.get(TTrip_.done), false)));
+
+        cq.orderBy(cb.desc(root.get(column)));    
+        
+        Query q = getEntityManager().createQuery(cq);
+        q.setMaxResults(maxResults);
+        return q.getResultList();
+    }
+    
     
 }

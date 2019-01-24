@@ -75,7 +75,7 @@ public class Command {
     public static final String FINDAUCTIONEDSEATS = "findauctionedseats";
     public static final String BIDAUCTIONEDSEAT = "bidauctionedseat";
     public static final String FINDMYBIDS = "findmybids";
-
     
-
+    // guest commands
+    public static final String GET_CHEAP_TRIPS = "getcheaptrips";
 }

@@ -30,4 +30,6 @@ public interface TTripFacadeLocal {
     int count();
  
     List<TTrip> findAllNotDoneAndNotCanceled();
+    
+    List<TTrip> findLast(int number, String column);
 }

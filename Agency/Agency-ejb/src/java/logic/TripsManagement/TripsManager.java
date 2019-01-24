@@ -6,6 +6,7 @@
 package logic.TripsManagement;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import javax.ejb.EJB;
@@ -1492,6 +1493,17 @@ public class TripsManager implements TripsManagerLocal {
         return planeLimit - seatFacade.findBoughtSeatsOfTrip(trip).size();
     }
 
-    
-    
+    @Override
+    public List<TTripDTO> getCheapeastTrips(int count) {
+        List<TTrip> trips = tripFacade.findLast(count, "price");
+        
+        List<TTripDTO> auxTripList = new ArrayList<>();
+        for (TTrip trip : trips) {
+            auxTripList.add(DTOFactory.getTTripDTOFromTTrip(trip));
+        }
+        
+        Collections.reverse(auxTripList);
+        return auxTripList;
+    }
+
 }

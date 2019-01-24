@@ -20,10 +20,12 @@ import logic.TSeatDTO;
 import logic.TTripDTO;
 import logic.TTripFeedbackDTO;
 import logic.TUserDTO;
+import logic.GuestAgencyManagerRemote;
 
 public class Main {
     
     private static AgencyManagerRemote sAgencyManager;
+    private static GuestAgencyManagerRemote sGuestAgencyManager;
     
     public static void main(String[] args) {
         initRemoteReferences();
@@ -193,6 +195,9 @@ public class Main {
                         break;
                     case Command.FINDMYBIDS:
                         processGetMyBids();
+                        break;
+                    case Command.GET_CHEAP_TRIPS:
+                        processGetCheapTrips();
                         break;
                     default:
                         System.out.println("Command not found. Type help to get a command list.");
@@ -1365,13 +1370,12 @@ public class Main {
         for(TSeatDTO seatDTO : sAgencyManager.getMyBids())
             System.out.println(seatDTO);
     }
-
-    private static void processRemoveMyBid() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private static void processRemoveBid() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    private static void processGetCheapTrips() {
+        System.out.println("Cheapest trips:");
+        for (TTripDTO trip : sGuestAgencyManager.getCheapestTrips(5)) {
+            System.out.println(trip);
+        }
     }
     
     //----------------------------------------------------
@@ -1495,12 +1499,15 @@ public class Main {
         }
 
         String agencyManagerClassName = "java:global/Agency/Agency-ejb/AgencyManager!logic.AgencyManagerRemote";
+        String guestAgencyManagerClassName = "java:global/Agency/Agency-ejb/GuestAgencyManager!logic.GuestAgencyManagerRemote";
 
         try {
+           sGuestAgencyManager = (GuestAgencyManagerRemote) ctx.lookup(guestAgencyManagerClassName);
            sAgencyManager = (AgencyManagerRemote) ctx.lookup(agencyManagerClassName);
         
         } catch (NamingException e) {
            System.out.println(e.getMessage());
+           e.printStackTrace();
         }
     }
 

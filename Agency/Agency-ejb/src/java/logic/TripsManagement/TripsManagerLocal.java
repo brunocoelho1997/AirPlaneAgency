@@ -90,4 +90,6 @@ public interface TripsManagerLocal {
     boolean bidAuctionedSeat(TSeatDTO seatDTO, String username) throws NoPermissionException;
     
     int getAvailableSeats(TTripDTO trip);
+    
+    List<TTripDTO> getCheapeastTrips(int count);
 }
