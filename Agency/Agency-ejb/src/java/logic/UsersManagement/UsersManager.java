@@ -86,6 +86,8 @@ public class UsersManager implements UsersManagerLocal {
     
     @Override
     public TUserDTO getTUserDTO(String username) {
+        if(username == null)
+            return null;
         TUser user = getTUserByUsername(username);
         return DTOFactory.getTUserDTOFromTUser(user);
     }

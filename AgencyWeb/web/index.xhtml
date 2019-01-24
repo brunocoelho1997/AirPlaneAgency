@@ -9,6 +9,8 @@
     </h:head>
     
     <h:body>
+        
+        
         <h:outputText value="#{bundle.SignInMessage}"/>
         <br/><br/>
         <h:outputText value="#{bundle.Username}"/><br/>
@@ -36,6 +38,18 @@
         <h:button id="btnSignUp" value="#{bundle.SignUp}"/>
         
         <br/><br/><br/><br/>
+        
+        ------------------------
+        TODO: must create a stateless ejb to show all trips here
+        <br/>
+
+                
+        <h:link outcome="login" value="Login"/>
+        <br/>
+        <h:form>
+            <h:commandButton action="#{sessionController.logout}" value="Logout"></h:commandButton>
+	</h:form>
+        <br/>
         
         <h:link outcome="/plane/List" value="Show All Plane Items"/>
     </h:body>
