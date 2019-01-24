@@ -111,7 +111,7 @@ public class SessionController implements Serializable {
 		   = (ConfigurableNavigationHandler) 
 			fc.getApplication().getNavigationHandler();
 		
-		nav.performNavigation("login");
+		nav.performNavigation("/login");
         }
         	
     }	
@@ -130,7 +130,7 @@ public class SessionController implements Serializable {
 		   = (ConfigurableNavigationHandler) 
 			fc.getApplication().getNavigationHandler();
 		
-		nav.performNavigation("login");
+		nav.performNavigation("/login");
         }	
     }
 }
