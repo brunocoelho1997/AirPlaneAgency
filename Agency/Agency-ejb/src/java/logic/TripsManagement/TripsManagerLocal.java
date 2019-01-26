@@ -92,4 +92,6 @@ public interface TripsManagerLocal {
     int getAvailableSeats(TTripDTO trip);
     
     List<TTripDTO> getCheapeastTrips(int count);
+    List<TTripDTO> getActiveTripsByUser(String username);
+    int getNoOfSeatsFromTripByUser(String username, TTripDTO tripDTO);
 }

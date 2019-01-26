@@ -91,6 +91,21 @@ public class DTOFactory {
         return new TTripFeedbackDTO(feedback.getId(), feedback.getScore());
     }
     
+    public static TTrip getTTripFromTTripDTO(TTripDTO tripDTO) {
+        TTrip trip = new TTrip();
+        trip.setId(tripDTO.getId());
+        trip.setDone(tripDTO.getDone());
+        trip.setCanceled(tripDTO.getCanceled());
+        trip.setPrice(tripDTO.getPrice());
+        trip.setCanceled(false);
+        trip.setDone(false);
+        trip.setDatetrip(tripDTO.getDatetrip());
+        trip.setTSeatCollection(new ArrayList());
+        trip.setTTripfeedbackCollection(new ArrayList());
+        
+        return trip;
+    }
+    
     public static TTripDTO getTTripDTOFromTTrip(TTrip trip){
         List<TTripFeedbackDTO> tripFeedBackList = new ArrayList();
         for(TTripfeedback tripfeedback : trip.getTTripfeedbackCollection())

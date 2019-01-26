@@ -6,19 +6,18 @@
 package web.controller;
 
 import java.io.Serializable;
-import javax.annotation.ManagedBean;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
-import javax.enterprise.context.Dependent;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
-import javax.servlet.http.HttpSession;
 import logic.Config;
 import logic.SignInValue;
 import static logic.SignInValue.SUCCESS;
+import logic.TTripDTO;
 import logic.TUserDTO;
 import logic.TripsManagement.TripsManagerLocal;
 import logic.UsersManagement.UsersManagerLocal;
@@ -40,6 +39,9 @@ public class SessionController implements Serializable {
 
     @EJB
     private UsersManagerLocal userManager;
+    
+    @EJB
+    private TripsManagerLocal tripsManager;
     
     public SessionController() {
     }
@@ -133,5 +135,13 @@ public class SessionController implements Serializable {
 		
 		nav.performNavigation("/signin");
         }	
+    }
+    
+    public List<TTripDTO> getNextTrips() {        
+        return tripsManager.getActiveTripsByUser(user);
+    }
+    
+    public int getNumberOfSeats(TTripDTO trip) {
+        return tripsManager.getNoOfSeatsFromTripByUser(user, trip);
     }
 }

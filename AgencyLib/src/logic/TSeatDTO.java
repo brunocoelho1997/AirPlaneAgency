@@ -6,7 +6,6 @@
 package logic;
 
 import java.io.Serializable;
-import java.util.Collection;
 
 /**
  *
