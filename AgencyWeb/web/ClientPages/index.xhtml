@@ -12,29 +12,29 @@
     <h:body>
         Hello Client
         <br/><br/>
-        <h:outputText value="Purchases"/>
+        <h:outputText value="#{bundle.FutureTrips}"/>
         <h:dataTable value="#{sessionController.nextTrips}" var="item" border="0" cellpadding="2" cellspacing="0" rowClasses="jsfcrud_odd_row,jsfcrud_even_row" rules="all" style="border:solid 1px">
             <h:column>
                 <f:facet name="header">
-                    <h:outputText value="Date"/>
+                    <h:outputText value="#{bundle.Date}"/>
                 </f:facet>
                 <h:outputText value="#{item.datetrip}"/>
             </h:column>
             <h:column>
                 <f:facet name="header">
-                    <h:outputText value="From"/>
+                    <h:outputText value="#{bundle.From}"/>
                 </f:facet>
                 <h:outputText value="#{item.fromPlaceDTO.country}, #{item.fromPlaceDTO.city}"/>
             </h:column>
             <h:column>
                 <f:facet name="header">
-                    <h:outputText value="To"/>
+                    <h:outputText value="#{bundle.To}"/>
                 </f:facet>
                 <h:outputText value="#{item.toPlaceDTO.country}, #{item.toPlaceDTO.city}"/>
             </h:column>
             <h:column>
                 <f:facet name="header">
-                    <h:outputText value="Seats"/>
+                    <h:outputText value="#{bundle.NoOfSeats}"/>
                 </f:facet>
                 <h:outputText value="#{sessionController.getNumberOfSeats(item)}"/>
             </h:column>
