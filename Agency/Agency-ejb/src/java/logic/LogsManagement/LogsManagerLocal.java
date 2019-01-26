@@ -15,6 +15,14 @@ public interface LogsManagerLocal {
     
     void sendLogMessage(String username, String msg, int date) throws NoPermissionException;
     
-    List<Log> getLogs(String username) throws NoPermissionException;
+    List<Log> getAllLogs() throws NoPermissionException;
+    
+    List<Log> getLogs(int lines, String username) throws NoPermissionException;
+    
+    List<Log> getLogs(int count) throws NoPermissionException;
+    
+    boolean addLog(Log log);
+    
+    void removeLogs(String username) throws NoPermissionException;
     
 }

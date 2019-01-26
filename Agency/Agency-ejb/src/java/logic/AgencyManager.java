@@ -263,8 +263,13 @@ public class AgencyManager implements AgencyManagerRemote {
     //---------------------
     // logs
     @Override
-    public List<Log> getLogs() throws NoPermissionException {
-        return logsManagerLocal.getLogs(username);
+    public List<Log> getLogs(int lines) throws NoPermissionException {
+        return logsManagerLocal.getLogs(lines, username);
+    }
+    
+    @Override	
+    public void removeLogs() throws NoPermissionException {	
+        logsManagerLocal.removeLogs(username);	
     }
 
     //---------------------

@@ -9,18 +9,18 @@ import java.io.Serializable;
 
 public class Log implements Serializable {
     
-    private final TUserDTO user;
+    private final String username;
     private final String msg;
     private final int date;
     
-    public Log(TUserDTO user, String msg, int date) {
-        this.user = user;
+    public Log(String username, String msg, int date) {
+        this.username = username;
         this.msg = msg;
         this.date = date;
     }
 
-    public TUserDTO getUser() {
-        return user;
+    public String getUsername() {
+        return username;
     }
 
     public String getMsg() {
@@ -34,8 +34,8 @@ public class Log implements Serializable {
     @Override
     public String toString() {
         return "Log {" +
-                "user=" + user + 
-                "msg=" + msg +
-                "date=" + date + "}";
+                "username=" + username + 
+                ", msg=" + msg +
+                ", date=" + date + "}";
     }
 }

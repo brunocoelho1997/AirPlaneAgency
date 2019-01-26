@@ -72,7 +72,8 @@ public interface AgencyManagerRemote {
     String getTimerInformation();
 
     // logs
-    List<Log> getLogs() throws NoPermissionException;
+    List<Log> getLogs(int lines) throws NoPermissionException;
+    void removeLogs() throws NoPermissionException;
     
     //purchase
     List<TPurchaseDTO> findAllPurchases() throws NoPermissionException;

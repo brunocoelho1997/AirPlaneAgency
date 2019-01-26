@@ -198,6 +198,20 @@ create table t_tripfeedback(
     constraint fk2 foreign key (userid) references t_user (id)
 );
 
+- log
+drop sequence if exists log_seq;
+
+create sequence log_seq;
+
+drop table if exists t_log;
+
+create table t_log(
+    id int primary key default nextval('log_seq'),
+    msg varchar(30) not null,
+    username varchar(30) not null,
+    datelog int not null
+);
+
 --------------------------------------------------------------------
 
 LOGS

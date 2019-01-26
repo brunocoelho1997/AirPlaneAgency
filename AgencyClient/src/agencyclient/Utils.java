@@ -41,7 +41,7 @@ public class Utils {
     
     public static String getFormattedLogMessage(Log log) {
         String date = "[" + log.getDate() + "] | ";
-        String user = "user=" + log.getUser().getUsername() + " | ";
+        String user = "username=" + log.getUsername() + " | ";
         String action = "action=" + getActionTextFromLogType(log.getMsg());
         return date + user + action;
     }

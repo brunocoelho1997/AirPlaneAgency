@@ -7,6 +7,7 @@ package logic;
 
 import java.util.ArrayList;
 import java.util.List;
+import logic.LogsManagement.TLog;
 import logic.TripsManagement.TAirline;
 import logic.TripsManagement.TPlace;
 import logic.TripsManagement.TPlacefeedback;
@@ -113,5 +114,17 @@ public class DTOFactory {
             seatDTOList.add(getTSeatDTOFromTSeat(seat));
         }
         return new TPurchaseDTO(purchase.getId(), purchase.getDone(), seatDTOList);
+    }
+    
+    public static Log getTLogDTOFromTLog(TLog log) {
+        return new Log(log.getUsername(), log.getMsg(), log.getDatelog());
+    }
+    
+    public static TLog getTLogFromTLogDTO(Log log) {        
+        TLog newLog = new TLog();
+        newLog.setMsg(log.getMsg());
+        newLog.setUsername(log.getUsername());
+        newLog.setDatelog(log.getDate());
+        return newLog;
     }
 }

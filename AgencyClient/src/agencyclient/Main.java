@@ -158,8 +158,11 @@ public class Main {
                         processGetTimerInformation();
                         break;
                     case Command.GET_LOGS:
-                        processGetLogs();
-                        break;                    
+                        processGetLogs(input);
+                        break;
+                    case Command.REMOVE_LOGS:
+                        processRemoveLogs();
+                        break;       
                     case Command.FINDALLPURCHASES:
                         processFindAllPurchases();
                         break;
@@ -1091,15 +1094,35 @@ public class Main {
     
     // logs
     
-    private static void processGetLogs() throws NoPermissionException {
-        List<Log> logs = sAgencyManager.getLogs();
-        
+    private static void processGetLogs(String input) throws NoPermissionException {
+        String[] inputs = input.split(" ");
+        if (inputs.length == 1) {	
+            printLogs(0);	
+            return;	
+        }	
+
+         try {	
+            int numberOfLines = Integer.parseInt(inputs[1]);	
+            printLogs(numberOfLines);	
+
+         } catch(NumberFormatException e) {	
+            System.out.println("Wrong number format: " + inputs[1]);	
+        }	
+    }	
+
+     private static void processRemoveLogs() throws NoPermissionException {	
+        sAgencyManager.removeLogs();	
+        System.out.println("Logs removed");	
+    }
+     
+     private static void printLogs(int lines) throws NoPermissionException {	
+        List<Log> logs = sAgencyManager.getLogs(lines);
         System.out.println("\nLOGS (" + logs.size() + " logs):");
         for (Log log : logs) {
             System.out.println(Utils.getFormattedLogMessage(log));
         }
-    }
-    
+     }
+                
     //----------------------------------------------------
     //purchases
     private static void processFindAllPurchases() throws NoPermissionException{
@@ -1444,7 +1467,8 @@ public class Main {
         
         //logs
         System.out.println("\n-------Logs--------");
-        System.out.println(Command.GET_LOGS + " - Get logs");
+        System.out.println(Command.GET_LOGS + " - Get logs. Syntax: getlogs [n] (n: number of lines - optional)");
+        System.out.println(Command.REMOVE_LOGS + " - Remove all logs");
         
         //Purchases
         System.out.println("\n-------Purchases--------");

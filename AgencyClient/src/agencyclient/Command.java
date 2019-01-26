@@ -59,6 +59,7 @@ public class Command {
     
     // logs
     public static final String GET_LOGS = "getlogs";
+    public static final String REMOVE_LOGS = "rmvlogs";
     
     //purchases
     public static final String FINDALLPURCHASES = "findallpurchases";
