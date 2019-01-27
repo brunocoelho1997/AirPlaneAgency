@@ -28,7 +28,7 @@ public class WelcomeController implements Serializable {
         // TODO not working. Also, validation missing
         return "main";
     }
-
+    
     public List<TTripDTO> getCheapestTrips() {
         List<TTripDTO> trips = tripsManager.getCheapeastTrips(5);
         for (TTripDTO trip : trips) {

@@ -7,7 +7,6 @@ package logic;
 
 import java.util.List;
 import javax.ejb.Remote;
-import logic.TTripDTO;
 
 @Remote
 public interface GuestAgencyManagerRemote {

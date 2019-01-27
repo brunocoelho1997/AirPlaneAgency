@@ -1505,5 +1505,41 @@ public class TripsManager implements TripsManagerLocal {
         Collections.reverse(auxTripList);
         return auxTripList;
     }
-
+    
+    @Override
+    public List<TTripDTO> getActiveTripsByUser(String username) {
+        List<TTrip> trips = tripFacade.findAllNotDoneAndNotCanceled();
+        
+        List<TTripDTO> userTrips = new ArrayList<>();
+        for (TTrip trip : trips) {
+            if (hasBoughSeatsOnTrip(username, seatFacade.findBoughtSeatsOfTrip(trip))) {
+                userTrips.add(DTOFactory.getTTripDTOFromTTrip(trip));
+            }
+        }
+        
+        return userTrips;
+    }
+    
+    @Override
+    public int getNoOfSeatsFromTripByUser(String username, TTripDTO tripDTO) {
+        TTrip trip = DTOFactory.getTTripFromTTripDTO(tripDTO);
+        List<TSeat> userSeats = seatFacade.findBoughtSeatsOfTrip(trip);
+        
+        return getNoOfSeatsFromTripByUser(username, userSeats);
+    }
+    
+    private int getNoOfSeatsFromTripByUser(String username, List<TSeat> seats) {
+        int count = 0;
+        for (TSeat seat : seats) {
+            if (username.equals(seat.getPurchaseid().getUserid().getUsername())) {
+                count++;
+            }
+        }
+        
+        return count;
+    }
+    
+    private boolean hasBoughSeatsOnTrip(String username, List<TSeat> seats) {
+        return getNoOfSeatsFromTripByUser(username, seats) > 0;
+    }
 }

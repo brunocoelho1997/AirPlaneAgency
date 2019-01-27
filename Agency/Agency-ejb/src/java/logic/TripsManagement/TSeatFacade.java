@@ -128,5 +128,5 @@ public class TSeatFacade extends AbstractFacade<TSeat> implements TSeatFacadeLoc
         Query q = getEntityManager().createQuery(cq);
         return q.getResultList();
     }
-    
-}
+
+    }
