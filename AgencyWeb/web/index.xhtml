@@ -2,57 +2,106 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
-        <title>Trip Agency</title>
-        <h:outputStylesheet name="css/jsfcrud.css"/>
+        
     </h:head>
-    
-    <h:body>
-        
-        
-        <h:outputText value="#{bundle.SignInMessage}"/>
-        <br/><br/>
-        <h:outputText value="#{bundle.Username}"/><br/>
-        <h:inputText id="signInInput" /><br/><br/>
-        <h:outputText value="#{bundle.Password}"/><br/>
-        <h:inputSecret id="signInPassword" /><br/><br/>
-        <h:commandButton id="btnSignIn" action="#{welcomeController.signIn}" value="#{bundle.SignIn}"/>
-        
-        <br/><br/><br/><br/>
-        
-        <h:outputText value="#{bundle.SignUpMessage}"/>
-        <br/><br/>
-        <h:outputText value="#{bundle.Name}"/><br/>
-        <h:inputText id="signUpName" /><br/><br/>
-        <h:outputText value="#{bundle.Username}"/><br/>
-        <h:inputText id="signInUsername" /><br/><br/>
-        <h:outputText value="#{bundle.Password}"/><br/>
-        <h:inputSecret id="signUpPassword" /><br/><br/>
-        <h:outputText value="#{bundle.ConfirmPassword}"/><br/>
-        <h:inputSecret id="signUpConfirmPassword" >
-            <f:validator validatorId="passwordValidator"/>
-        </h:inputSecret>
-        
-        <br/><br/>
-        <h:button id="btnSignUp" value="#{bundle.SignUp}"/>
-        
-        <br/><br/><br/><br/>
-        
-        ------------------------
-        TODO: must create a stateless ejb to show all trips here
-        <br/>
 
-                
-        <h:link outcome="signin" value="Login"/>
-        <br/>
-        <h:form>
-            <h:commandButton action="#{sessionController.processLogout}" value="Logout"></h:commandButton>
-	</h:form>
-        <br/>
-        
-        <h:link outcome="/plane/List" value="Show All Plane Items"/>
+    <h:body id="page-top">
+        <ui:composition template = "template.xhtml">
+            
+            <ui:define name = "title"> #{bundle.HomePage} </ui:define>
+            
+            <ui:define name = "content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-2"></div>
+                        <div class="col-8">
+                            <h3>
+                                #{bundle.CheapestTrips}
+                            </h3>
+                            <h:dataTable class ="table" value="#{welcomeController.cheapestTrips}" var="item" cellpadding="2" rules="all">
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.Price}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.price}"/>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.Airline}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.airlineDTO.airlineName}"/>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.Plane}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.planeDTO.planeName}"/>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.Limit}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.planeDTO.planeLimit}"/>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.AvailableSeats}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{welcomeController.getAvailableSeats(item)}"/>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.From}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.fromPlaceDTO.country}, #{item.fromPlaceDTO.city}"/>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.To}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.toPlaceDTO.country}, #{item.toPlaceDTO.city}"/>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.Date}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.datetrip}"/>
+                                </h:column>
+                            </h:dataTable>
+                            
+                            <hr/>
+                            
+                            <h3>
+                                #{bundle.SignUpMessage}
+                            </h3>
+                            <div align="center">
+                                <h:form id="myform">
+                                    
+                                    <h:outputText value="#{bundle.Name}"/><br/>
+                                    <h:inputText value="#{sessionController.clientName}"/><br/>
+                                    <h:outputText value="#{bundle.Username}"/><br/>
+                                    <h:inputText value="#{sessionController.username}"/><br/>
+
+                                    <h:outputText value="#{bundle.Password}"/><br/>
+                                    <h:inputText value="#{sessionController.password}"/><br/>
+
+                                    <h:outputText value="#{bundle.ConfirmPassword}"/><br/>
+                                    <h:inputText value="#{sessionController.passwordConfirmation}"/><br/>
+
+                                    <br/><br/>
+                                    
+                                    <h:commandButton class ="btn btn-success" action="#{sessionController.processSignUp}" value="#{bundle.SignUp}"></h:commandButton>
+                                </h:form>
+                            </div>   
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                </div>
+
+            </ui:define>
+         </ui:composition>
     </h:body>
-
 </html>
-

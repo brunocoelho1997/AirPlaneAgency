@@ -35,9 +35,12 @@ public class SessionController implements Serializable {
 
     private static final long serialVersionUID = 1094801825228386363L;
 	
-    private String pwd;
-    private String user;
-
+    private String password;
+    private String passwordConfirmation;
+    private String username;
+    private String clientName;
+    private Boolean isLogged;
+    
     @EJB
     private UsersManagerLocal userManager;
     
@@ -45,36 +48,65 @@ public class SessionController implements Serializable {
     }
     
     
-    public String getPwd() {
-        return pwd;
-    }
-
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-    
     public String processSignIn() {
         //session source: https://stackoverflow.com/questions/3841361/jsf-http-session-login
         
         FacesContext context = FacesContext.getCurrentInstance();
-        SignInValue value = userManager.signIn(user, pwd);
+        SignInValue value = userManager.signIn(username, password);
         
         if(value.equals(SUCCESS)){
             
-            context.getExternalContext().getSessionMap().put("user", user);
+            context.getExternalContext().getSessionMap().put("user", username);
+            
+            this.isLogged = true;
+            
+            if(userManager.getTUserDTO(username).getUsertype() == Config.CLIENT)
+                return "indexClient?faces-redirect=true";
+            else
+                return "indexOperator?faces-redirect=true";
+        }
+        else
+        {
+            String errorMsg = Utils.getSignUpValueString(value, username);
+            
+            FacesContext.getCurrentInstance().addMessage(
+                                "myForm:errorMessage",
+                                new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                errorMsg,
+                                                null));
+            return "signin";
+        }
+    }
+
+    public String processSignUp() {
+        
+        TUserDTO userDTO = new TUserDTO();
+        userDTO.setClientName(clientName);
+        userDTO.setUsername(username);
+        
+        userDTO.setPassword(password);
+        
+        
+        
+        
+        //need to confirm if the password is equals to passwordConfirmation
+        //if user can signup return to index and send a message that user need be accepted to signin
+        //if user can't signup return to index and send a message that user has wrong (to the same page... how?)
+        
+        
+        /*
+            SignInValue value = userManager.signUp()
+        
+        if(value.equals(SUCCESS)){
+            
+            
+            
+            this.isLogged = true;
             
             if(userManager.getTUserDTO(user).getUsertype() == Config.CLIENT)
-                return "ClientPages/index?faces-redirect=true";
+                return "indexClient?faces-redirect=true";
             else
-                return "OperatorPages/index?faces-redirect=true";
+                return "indexOperator?faces-redirect=true";
         }
         else
         {
@@ -87,10 +119,9 @@ public class SessionController implements Serializable {
                                                 null));
             return "signin";
         }
-    }
+        */
+        return "index?faces-redirect=true";
 
-    public String processSignUp() {
-        return "signin";
     }
     
     public String processLogout() {
@@ -98,7 +129,7 @@ public class SessionController implements Serializable {
         return "index?faces-redirect=true";
     }
     
-    public void isOperator(ComponentSystemEvent event){
+    public void validateOperatorPermissions(ComponentSystemEvent event){
 				
 	FacesContext fc = FacesContext.getCurrentInstance();
 	
@@ -117,7 +148,7 @@ public class SessionController implements Serializable {
         	
     }	
     
-    public void isClient(ComponentSystemEvent event){
+    public void validateClientPermissions(ComponentSystemEvent event){
 				
 	FacesContext fc = FacesContext.getCurrentInstance();
 	
@@ -134,4 +165,80 @@ public class SessionController implements Serializable {
 		nav.performNavigation("/signin");
         }	
     }
+    
+    public boolean isOperator(ComponentSystemEvent event){
+				
+	FacesContext fc = FacesContext.getCurrentInstance();
+	
+        String username = (String) fc.getExternalContext().getSessionMap().get("user");
+        
+        TUserDTO userDTO = userManager.getTUserDTO(username);
+        
+        if(userDTO == null && userDTO.getUsertype() == Config.OPERATOR)
+        {
+            return true;
+        }
+        return false;
+    }
+    public boolean isClient(ComponentSystemEvent event){
+				
+	FacesContext fc = FacesContext.getCurrentInstance();
+	
+        String username = (String) fc.getExternalContext().getSessionMap().get("user");
+        
+        TUserDTO userDTO = userManager.getTUserDTO(username);
+        
+        if(userDTO == null && userDTO.getUsertype() == Config.CLIENT)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    
+    //getters and setters
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPasswordConfirmation() {
+        return passwordConfirmation;
+    }
+
+    public void setPasswordConfirmation(String passwordConfirmation) {
+        this.passwordConfirmation = passwordConfirmation;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
+    }
+
+    public Boolean getIsLogged() {
+        return isLogged;
+    }
+
+    public void setIsLogged(Boolean isLogged) {
+        this.isLogged = isLogged;
+    }
+    
+    
+    
+    
 }
