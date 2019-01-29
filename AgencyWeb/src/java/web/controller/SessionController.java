@@ -7,6 +7,7 @@ package web.controller;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.ResourceBundle;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -81,48 +82,58 @@ public class SessionController implements Serializable {
     }
 
     public String processSignUp() {
+        String message;
+        boolean result;
         
         TUserDTO userDTO = new TUserDTO();
         userDTO.setClientName(clientName);
         userDTO.setUsername(username);
-        
         userDTO.setPassword(password);
+        userDTO.setUsertype(Config.CLIENT);
         
-        
-        
-        
-        //need to confirm if the password is equals to passwordConfirmation
-        //if user can signup return to index and send a message that user need be accepted to signin
-        //if user can't signup return to index and send a message that user has wrong (to the same page... how?)
-        
-        
-        /*
-            SignInValue value = userManager.signUp()
-        
-        if(value.equals(SUCCESS)){
+        FacesContext context = FacesContext.getCurrentInstance();
+        ResourceBundle bundle = context.getApplication().getResourceBundle(context, "Bundle.properties");
             
-            
-            
-            this.isLogged = true;
-            
-            if(userManager.getTUserDTO(user).getUsertype() == Config.CLIENT)
-                return "indexClient?faces-redirect=true";
-            else
-                return "indexOperator?faces-redirect=true";
-        }
-        else
+        if(!password.equals(passwordConfirmation))
         {
-            String errorMsg = Utils.getSignUpValueString(value, user);
+            //TODO: improve this message. Need to get this from Bundle.properties
+            //message = bundle.getString("ConfirmPasswordError");
+            
+            
+            message = "The password and the password confirmation are different.";
             
             FacesContext.getCurrentInstance().addMessage(
                                 "myForm:errorMessage",
                                 new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                                errorMsg,
+                                                message,
+                                                null));
+            return "signup";
+        }
+        
+        result = userManager.signUp(userDTO);
+        
+        if(!result)
+        {
+            message = "Username already exists or passwords are different.";
+            FacesContext.getCurrentInstance().addMessage(
+                                "myForm:errorMessage",
+                                new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                message,
+                                                null));
+            return "signup";
+
+        }
+        else
+        {
+            message = "Sign up with sucess! Now you can sign in, after operator approval " + userDTO.getUsername() + ".";
+            FacesContext.getCurrentInstance().addMessage(
+                                "myForm:errorMessage",
+                                new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                message,
                                                 null));
             return "signin";
         }
-        */
-        return "index?faces-redirect=true";
+        
 
     }
     
