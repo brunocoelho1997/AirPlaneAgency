@@ -24,11 +24,6 @@ public class WelcomeController implements Serializable {
         // Do nothing
     }
     
-    public String signIn() {
-        // TODO not working. Also, validation missing
-        return "main";
-    }
-    
     public List<TTripDTO> getCheapestTrips() {
         List<TTripDTO> trips = tripsManager.getCheapeastTrips(5);
         for (TTripDTO trip : trips) {

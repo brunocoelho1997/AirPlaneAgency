@@ -36,7 +36,7 @@
     <h:body id="page-top">
         <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-        <a class="navbar-brand mr-1" href="index.html">Agency - PD</a>
+        <h:link class="navbar-brand mr-1" value="#{bundle.Title}" outcome = "index" />
 
         <!-- Navbar Search -->
         <div class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
@@ -75,23 +75,14 @@
                 <h:panelGroup rendered="#{sessionController.isLogged}">
 
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html">
-                            <i class="fas fa-fw fa-tachometer-alt"></i>
-                            <span>Dashboard</span>
-                        </a>
+                        <h:link class="nav-link" value="#{bundle.HomePage}" outcome = "index" />
                     </li>
                     
                     <li class="nav-item">
-                        <a class="nav-link" href="charts.html">
-                            <i class="fas fa-fw fa-chart-area"></i>
-                            <span>Charts</span>
-                        </a>
+                        <h:link class="nav-link" value="#{bundle.TripsPage}" outcome = "indexTrips" />
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="tables.html">
-                            <i class="fas fa-fw fa-table"></i>
-                            <span>Tables</span>
-                        </a>
+                        <h:link class="nav-link" value="#{bundle.PurchasesPage}" outcome = "indexPurchases" />
                     </li>
                 </h:panelGroup>
                 <h:panelGroup rendered="#{not sessionController.isLogged}">

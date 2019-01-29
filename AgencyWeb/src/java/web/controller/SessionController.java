@@ -133,8 +133,6 @@ public class SessionController implements Serializable {
                                                 null));
             return "signin";
         }
-        
-
     }
     
     public String processLogout() {
