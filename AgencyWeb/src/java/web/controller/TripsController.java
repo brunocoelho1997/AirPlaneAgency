@@ -11,7 +11,6 @@ import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import logic.TPlaceDTO;
-import logic.TTripDTO;
 import logic.TripsManagement.TripsManagerLocal;
 
 /**
@@ -48,8 +47,5 @@ public class TripsController implements Serializable {
     public void setUsername(String username) {
         this.username = username;
     }
-    
-    
-    
     
 }

@@ -6,6 +6,8 @@
 package web.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.ejb.EJB;
@@ -16,8 +18,11 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import logic.Config;
+import logic.NoPermissionException;
 import logic.SignInValue;
 import static logic.SignInValue.SUCCESS;
+import logic.TPurchaseDTO;
+import logic.TSeatDTO;
 import logic.TTripDTO;
 import logic.TUserDTO;
 import logic.TripsManagement.TripsManagerLocal;
@@ -228,6 +233,18 @@ public class SessionController implements Serializable {
     }
     
     
-    
+    public Collection<TSeatDTO> getPurchases() {
+        try {
+            TPurchaseDTO purchase = tripsManager.getActualPurchase(username);
+            
+            if (purchase == null) {
+                return new ArrayList<>();
+            }
+            
+            return purchase.gettSeatCollection();
+        } catch (NoPermissionException ex) {
+            return new ArrayList<>();
+        }
+    }
     
 }
