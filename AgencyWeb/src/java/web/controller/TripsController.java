@@ -32,7 +32,7 @@ public class TripsController implements Serializable {
         // Do nothing
     }
     
-    public List<TPlaceDTO> findAllPlaces(){
+    public List<TPlaceDTO> getAllPlaces(){
         List<TPlaceDTO> places = tripsManager.findAllPlaces(username);
         for (TPlaceDTO place : places) {
             System.out.println(place);
