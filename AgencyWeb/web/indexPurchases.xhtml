@@ -21,8 +21,47 @@
                     <div class="row">
                         <div class="col-2"></div>
                         <div class="col-8">
-                            TODO: All features about purchases. The operator and client will have access this page.. but client will see his actual purchase and the done purchases... 
-                            and operator will see all purchases (done and undone) of all clients 
+                            <h3>
+                                #{bundle.ActualPurchase}
+                            </h3>
+                            <h:dataTable class ="table" value="#{sessionController.purchases}" var="item" cellpadding="2" rules="all">
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.Date}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.tripDTO.datetrip}"/>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.Airline}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.tripDTO.airlineDTO.airlineName}"/>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.From}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.tripDTO.fromPlaceDTO.country}, #{item.tripDTO.fromPlaceDTO.city}"/>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.To}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.tripDTO.toPlaceDTO.country}, #{item.tripDTO.toPlaceDTO.city}"/>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.Price}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.price}"/>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.Luggage}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.luggage}"/>
+                                </h:column>
+                            </h:dataTable>
                         </div>
                         <div class="col-2"></div>
                     </div>

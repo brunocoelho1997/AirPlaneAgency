@@ -12,7 +12,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import logic.TTripDTO;
 import logic.TripsManagement.TripsManagerLocal;
-
+    
 @Named("welcomeController")
 @SessionScoped
 public class WelcomeController implements Serializable {
