@@ -23,42 +23,52 @@
                             <div align="center">
                                 <h:form id="myform">
                                     
-                                    <h:inputHidden value="#{sessionController.username}"/><br/>
-
-                                   
-
-                                    <ui:repeat value="#{tripsController.findAllPlaces}" var="item">
-                                        <h:outputText value="#{item.city}"/>
-                                        <h:outputText value="#{item.address}"/>
-                                        
-                                    </ui:repeat>
+                                    <h:outputText value="#{bundle.Airline}" />
+                                    <h:selectOneMenu value="#{tripsController.tripDTOTemp.airlineDTO}" converter="tairlineDTOConverter">
+                                        <f:selectItems value="#{tripsController.allAirlines}" var="airline"
+                                            itemValue="#{airline}"
+                                            itemLabel="#{airline.airlineName}"/>
+                                    </h:selectOneMenu>
+                                    <br/><br/>
                                     
                                     
-                                    <h:dataTable class ="table" value="#{tripsController.findAllPlaces}" var="item" cellpadding="2" rules="all">
-                                        <h:column>
-                                            <f:facet name="header">
-                                                <h:outputText value="#{bundle.Price}"/>
-                                            </f:facet>
-                                            <h:outputText value="#{item.address}"/>
-                                        </h:column>
-                                    </h:dataTable>
+                                    <h:outputText value="#{bundle.From}" /> 
+                                    <h:selectOneMenu value="#{tripsController.tripDTOTemp.fromPlaceDTO}" converter="tplaceDTOConverter">
+                                        <f:selectItems value="#{tripsController.allPlaces}" var="place"
+                                            itemValue="#{place}"
+                                            itemLabel="#{place.country} , #{place.city}"/>
+                                    </h:selectOneMenu>
+                                    <br/><br/>
+                                    
+                                    <h:outputText value="#{bundle.To}" />
+                                    <h:selectOneMenu value="#{tripsController.tripDTOTemp.toPlaceDTO}" converter="tplaceDTOConverter">
+                                        <f:selectItems value="#{tripsController.allPlaces}" var="place"
+                                            itemValue="#{place}"
+                                            itemLabel="#{place.country} , #{place.city}"/>
+                                    </h:selectOneMenu>
+                                    <br/><br/>
                                     
                                     
-                                    <h:outputText value="#{bundle.Username}" /><br/>
-                                    <h:inputText id="username" value="#{sessionController.username}"></h:inputText><br/>
-                                    <br></br>
-
-                                    <h:outputText value="#{bundle.Password}" /><br/>
-                                    <h:inputSecret id="password" value="#{sessionController.password}"></h:inputSecret><br/>
-
-                                    <br/>
-
+                                    <h:outputText value="#{bundle.Plane}" />
+                                    <h:selectOneMenu value="#{tripsController.tripDTOTemp.planeDTO}" converter="tplaneDTOConverter">
+                                        <f:selectItems value="#{tripsController.allPlanes}" var="plane"
+                                            itemValue="#{plane}"
+                                            itemLabel="#{plane.planeName}"/>
+                                    </h:selectOneMenu>
+                                    <br/><br/>
+                                    
+                                    <h:outputText value="#{bundle.Price}" />
+                                    <h:inputText value="#{tripsController.tripDTOTemp.price}"/>
+                                    <br/><br/>
+                                    
+                                    <h:outputText value="#{bundle.Date}" />
+                                    <h:inputText value="#{tripsController.tripDTOTemp.datetrip}"/>
+                                    <br/><br/>
+                                    
                                     <h:messages />
 
-                                    <h:commandButton class ="btn btn-success" action="#{sessionController.processSignIn}" value="#{bundle.SignIn}"/>  
-                                    <br /> <br />
-                                    <h:button class ="btn btn-success" outcome="signup" value="#{bundle.SignUp}"/>
-
+                                    <h:commandButton class ="btn btn-success" action="#{tripsController.processAddTrip()}" value="#{bundle.AddTrip}"/>
+                                    
                                 </h:form>
                             </div>
                         </div>

@@ -659,11 +659,12 @@ public class TripsManager implements TripsManagerLocal {
         if(tripDTO == null)
             return false;
         
-        if(tripDTO.getPrice()<0)
+        if(tripDTO.getPrice() == null || tripDTO.getPrice()<0)
             return false;
         
-        if(tripDTO.getDatetrip() <= timerManager.getDate())
+        if(tripDTO.getDatetrip() == null || tripDTO.getDatetrip() <= timerManager.getDate())
             return false;
+        
         
         return true;
     }

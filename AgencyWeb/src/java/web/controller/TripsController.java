@@ -7,11 +7,21 @@ package web.controller;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.el.ValueExpression;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import logic.Config;
+import logic.NoPermissionException;
+import logic.TAirlineDTO;
 import logic.TPlaceDTO;
+import logic.TPlaneDTO;
+import logic.TTripDTO;
 import logic.TripsManagement.TripsManagerLocal;
+import web.util.Utils;
 
 /**
  *
@@ -25,8 +35,25 @@ public class TripsController implements Serializable {
     TripsManagerLocal tripsManager; 
     
     private String username;
-
+    
+    private TTripDTO tripDTOTemp = new TTripDTO();
         
+    
+    @PostConstruct
+    private void init() {
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        
+        ValueExpression vex =
+                ctx.getApplication().getExpressionFactory()
+                        .createValueExpression(ctx.getELContext(),
+                                "#{sessionController}", SessionController.class);
+
+        SessionController sessionController = (SessionController)vex.getValue(ctx.getELContext());
+        this.username = sessionController.getUsername();
+        
+        //System.out.println("\n\n\n\n USERNAME ON POSTCONTRUCT: " + username);
+    }
+    
     public TripsController() {
         // Do nothing
     }
@@ -39,6 +66,64 @@ public class TripsController implements Serializable {
         
         return places;
     }
+    
+    public TPlaceDTO findPlace(int id){
+        TPlaceDTO place = tripsManager.findPlace(id);
+        return place;
+    }
+    
+    public TAirlineDTO findAirline(int id) throws NoPermissionException{
+        TAirlineDTO airline = tripsManager.findAirline(id, username);
+        return airline;
+    }
+    
+    public List<TAirlineDTO> getAllAirlines() throws NoPermissionException{
+        List<TAirlineDTO> airlines = tripsManager.findAllAirlines(username);
+        return airlines;
+    }
+    
+    public TPlaneDTO findPlane(int id) throws NoPermissionException{
+        TPlaneDTO plane = tripsManager.findPlane(id, username);
+        return plane;
+    }
+    
+    public List<TPlaneDTO> getAllPlanes() throws NoPermissionException{
+        List<TPlaneDTO> planes = tripsManager.findAllPlanes(username);
+        return planes;
+    }
+    
+    public String processAddTrip() {
+        String message;
+        boolean result;
+        //System.out.println("\n\n\n\n USERNAME: " + username);
+        System.out.println("\n\n\n\n TRIP: " + tripDTOTemp);
+
+        try {
+            result = tripsManager.addTrip(tripDTOTemp, username);
+            
+            
+            if(!result)
+            {
+                message = "error TODO improve this message";
+                Utils.throwErrorMessage(message);
+                return "addTrip";
+
+            }
+            else
+            {
+                message = "Sign up with sucess! Now you can sign in, after operator approval " + tripDTOTemp + ".";
+                Utils.throwErrorMessage(message);
+                tripDTOTemp = new TTripDTO();
+                return "indexTrips";
+            }
+        
+        } catch (NoPermissionException ex) {
+            message = "Error occoured: " + ex;
+            Utils.throwErrorMessage(message);
+            return "addTrip";
+        }
+        
+    }
 
     public String getUsername() {
         return username;
@@ -47,5 +132,14 @@ public class TripsController implements Serializable {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public TTripDTO getTripDTOTemp() {
+        return tripDTOTemp;
+    }
+
+    public void setTripDTOTemp(TTripDTO tripDTOTemp) {
+        this.tripDTOTemp = tripDTOTemp;
+    }
+    
     
 }

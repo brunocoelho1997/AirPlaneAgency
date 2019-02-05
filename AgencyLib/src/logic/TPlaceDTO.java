@@ -7,6 +7,7 @@ package logic;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  *
@@ -71,6 +72,48 @@ public class TPlaceDTO implements Serializable{
         this.tPlacefeedbackDTOCollection = tPlacefeedbackDTOCollection;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.id);
+        hash = 37 * hash + Objects.hashCode(this.country);
+        hash = 37 * hash + Objects.hashCode(this.city);
+        hash = 37 * hash + Objects.hashCode(this.address);
+        hash = 37 * hash + Objects.hashCode(this.tPlacefeedbackDTOCollection);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final TPlaceDTO other = (TPlaceDTO) obj;
+        if (!Objects.equals(this.country, other.country)) {
+            return false;
+        }
+        if (!Objects.equals(this.city, other.city)) {
+            return false;
+        }
+        if (!Objects.equals(this.address, other.address)) {
+            return false;
+        }
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        if (!Objects.equals(this.tPlacefeedbackDTOCollection, other.tPlacefeedbackDTOCollection)) {
+            return false;
+        }
+        return true;
+    }
+
+    
     @Override
     public String toString() {
         return "TPlaceDTO{" + "id=" + id + ", country=" + country + ", city=" + city + ", address=" + address + ", tPlacefeedbackDTOCollection=" + tPlacefeedbackDTOCollection + '}';

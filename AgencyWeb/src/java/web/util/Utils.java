@@ -5,6 +5,8 @@
  */
 package web.util;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import logic.SignInValue;
 
 public class Utils {
@@ -27,5 +29,13 @@ public class Utils {
             default:
                 throw new IllegalStateException("Unexpected value found:" + value);
         }
+    }
+    
+    public static void throwErrorMessage(String msg){
+        
+        FacesContext.getCurrentInstance().addMessage(null,
+                                            new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                            msg,
+                                                            null));
     }
 }

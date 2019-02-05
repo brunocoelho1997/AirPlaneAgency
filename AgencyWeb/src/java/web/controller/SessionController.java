@@ -77,11 +77,8 @@ public class SessionController implements Serializable {
         {
             String errorMsg = Utils.getSignUpValueString(value, username);
             
-            FacesContext.getCurrentInstance().addMessage(
-                                "myForm:errorMessage",
-                                new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                                errorMsg,
-                                                null));
+            Utils.throwErrorMessage(errorMsg);
+
             return "signin";
         }
     }
@@ -107,11 +104,7 @@ public class SessionController implements Serializable {
             
             message = "The password and the password confirmation are different.";
             
-            FacesContext.getCurrentInstance().addMessage(
-                                "myForm:errorMessage",
-                                new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                                message,
-                                                null));
+            Utils.throwErrorMessage(message);
             return "signup";
         }
         
@@ -120,22 +113,14 @@ public class SessionController implements Serializable {
         if(!result)
         {
             message = "Username already exists or passwords are different.";
-            FacesContext.getCurrentInstance().addMessage(
-                                "myForm:errorMessage",
-                                new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                                message,
-                                                null));
+            Utils.throwErrorMessage(message);
             return "signup";
 
         }
         else
         {
             message = "Sign up with sucess! Now you can sign in, after operator approval " + userDTO.getUsername() + ".";
-            FacesContext.getCurrentInstance().addMessage(
-                                "myForm:errorMessage",
-                                new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                                message,
-                                                null));
+            Utils.throwErrorMessage(message);
             return "signin";
         }
     }
