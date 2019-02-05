@@ -54,6 +54,7 @@ public interface TripsManagerLocal {
     
     //trip
     List<TTripDTO> findAllTrips();
+    List<TTripDTO> findAllUndoneTrips();
     TTripDTO findTrip(int id);
     boolean addTrip(TTripDTO tripDTO, String username) throws NoPermissionException;
     boolean editTrip(TTripDTO tripDTO, String username) throws NoPermissionException;

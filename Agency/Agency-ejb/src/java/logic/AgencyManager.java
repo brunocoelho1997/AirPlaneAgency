@@ -85,6 +85,10 @@ public class AgencyManager implements AgencyManagerRemote {
         return tripsManagerLocal.findAllPlanes(username);
     }
     
+    public List<TTripDTO> findAllUndoneTrips(){
+        return tripsManagerLocal.findAllUndoneTrips();
+    }
+    
     @Override
     public TPlaneDTO findPlane(int id) throws NoPermissionException {
         return tripsManagerLocal.findPlane(id, username);

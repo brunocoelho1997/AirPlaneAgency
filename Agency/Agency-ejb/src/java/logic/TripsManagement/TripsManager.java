@@ -476,6 +476,17 @@ public class TripsManager implements TripsManagerLocal {
     }
 
     @Override
+    public List<TTripDTO> findAllUndoneTrips() {
+        List<TTripDTO> tTripDTOList = new ArrayList<>();
+        for(TTrip trip : tripFacade.findAll())
+        {
+            if(!trip.getDone())
+                tTripDTOList.add(DTOFactory.getTTripDTOFromTTrip(trip));
+        }
+        return tTripDTOList;
+    }
+    
+    @Override
     public TTripDTO findTrip(int id) {
         TTrip trip = tripFacade.find(id);
         

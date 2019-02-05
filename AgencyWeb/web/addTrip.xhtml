@@ -11,11 +11,12 @@
     <h:body id="page-top">
         <ui:composition template = "template.xhtml">
             
-            <ui:define name = "title"> #{bundle.SignInMessage} </ui:define>
+            <ui:define name = "title"> #{bundle.AddTrip} </ui:define>
                             
             <ui:define name = "content">				
                 
-        
+                <f:event listener="#{sessionController.validateIfOperatorUser}" type="preRenderView" />
+
                 <div class="container">
                     <div class="row">
                         <div class="col-2"></div>

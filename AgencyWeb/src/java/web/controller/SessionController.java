@@ -68,10 +68,7 @@ public class SessionController implements Serializable {
             
             this.isLogged = true;
             
-            if(userManager.getTUserDTO(username).getUsertype() == Config.CLIENT)
-                return "indexClient?faces-redirect=true";
-            else
-                return "indexOperator?faces-redirect=true";
+            return "index?faces-redirect=true";
         }
         else
         {
@@ -130,7 +127,26 @@ public class SessionController implements Serializable {
         return "index?faces-redirect=true";
     }
     
-    public void validateOperatorPermissions(ComponentSystemEvent event){
+    public void validateIfLoggedUser(ComponentSystemEvent event){
+				
+	FacesContext fc = FacesContext.getCurrentInstance();
+	
+        String username = (String) fc.getExternalContext().getSessionMap().get("user");
+        
+        TUserDTO userDTO = userManager.getTUserDTO(username);
+        
+        if(userDTO == null)
+        {
+            ConfigurableNavigationHandler nav 
+		   = (ConfigurableNavigationHandler) 
+			fc.getApplication().getNavigationHandler();
+		
+		nav.performNavigation("/signin");
+        }	
+    }	
+    
+    //pages like: addTrip just belong to operators...
+    public void validateIfOperatorUser(ComponentSystemEvent event){
 				
 	FacesContext fc = FacesContext.getCurrentInstance();
 	
@@ -148,24 +164,6 @@ public class SessionController implements Serializable {
         }
         	
     }	
-    
-    public void validateClientPermissions(ComponentSystemEvent event){
-				
-	FacesContext fc = FacesContext.getCurrentInstance();
-	
-        String username = (String) fc.getExternalContext().getSessionMap().get("user");
-        
-        TUserDTO userDTO = userManager.getTUserDTO(username);
-        
-        if(userDTO == null || userDTO.getUsertype() != Config.CLIENT)
-        {
-            ConfigurableNavigationHandler nav 
-		   = (ConfigurableNavigationHandler) 
-			fc.getApplication().getNavigationHandler();
-		
-		nav.performNavigation("/signin");
-        }	
-    }
     
     public List<TTripDTO> getNextTrips() {        
         return tripsManager.getActiveTripsByUser(username);
@@ -217,7 +215,10 @@ public class SessionController implements Serializable {
         this.isLogged = isLogged;
     }
     
-    
+    public Boolean getIsOperator()
+    {
+        return (userManager.getTUserDTO(username).getUsertype() == Config.OPERATOR) ? true : false;
+    }
     public Collection<TSeatDTO> getPurchases() {
         try {
             TPurchaseDTO purchase = tripsManager.getActualPurchase(username);

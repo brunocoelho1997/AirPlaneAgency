@@ -8,7 +8,6 @@
         <title>Facelet Title</title>
     </h:head>
     
-    <f:event listener="#{sessionController.validateOperatorPermissions}" type="preRenderView" />
     
     <h:body id="page-top">
         <ui:composition template = "template.xhtml">
@@ -17,16 +16,95 @@
                             
             <ui:define name = "content">				
                 
+                <f:event listener="#{sessionController.validateIfLoggedUser}" type="preRenderView" />
         
                 <div class="container">
                     <div class="row">
                         <div class="col-2"></div>
-                        <div class="col-8">
-                            TOOD: All features about trips. Operator and client will have access this page.. but operator may add and remove trips.
-                        </div>
+                        <div class="col-8"></div>
                         <div class="col-2" align="right">
-                            <h:button class ="btn btn-success" outcome="addTrip" value="#{bundle.AddTrip}"/>
+                            <h:button class ="btn btn-success" outcome="addTrip" value="#{bundle.AddTrip}" rendered="#{sessionController.isOperator}"/>
                         </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-1"></div>
+                        <div class="col-10">
+                            <h3>
+                                #{bundle.AllTrips}
+                            </h3>
+                            <h:form id="myform">
+                                <h:dataTable class ="table" value="#{tripsController.allTrips}" var="item" cellpadding="2" rules="all">
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.Price}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.price}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.Airline}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.airlineDTO.airlineName}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.Plane}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.planeDTO.planeName}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.Limit}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.planeDTO.planeLimit}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.AvailableSeats}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{welcomeController.getAvailableSeats(item)}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.From}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.fromPlaceDTO.country}, #{item.fromPlaceDTO.city}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.To}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.toPlaceDTO.country}, #{item.toPlaceDTO.city}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.Date}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.datetrip}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.Done}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.done}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.Cancelled}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.canceled}"/>
+                                    </h:column>
+                                    
+                                    <h:column rendered="#{sessionController.isOperator}">
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.CancelTrip}"/>
+                                        </f:facet>
+                                        <h:commandButton class ="btn btn-warning" action="#{tripsController.processCancelTrip(item)}" value="#{bundle.CancelTrip}" rendered="#{not item.canceled and not item.done}"/>  
+                                    </h:column>
+                                </h:dataTable>
+                            </h:form>
+                        </div>
+                        <div class="col-1"></div>
                     </div>
                 </div>
 

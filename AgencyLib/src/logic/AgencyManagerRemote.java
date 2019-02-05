@@ -52,6 +52,7 @@ public interface AgencyManagerRemote {
 
     //trip
     List<TTripDTO> findAllTrips();
+    List<TTripDTO> findAllUndoneTrips();
     TTripDTO findTrip(int id);
     boolean addTrip(TTripDTO tripDTO) throws NoPermissionException;
     boolean editTrip(TTripDTO tripDTO) throws NoPermissionException;

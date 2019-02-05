@@ -21,6 +21,7 @@ import logic.TPlaceDTO;
 import logic.TPlaneDTO;
 import logic.TTripDTO;
 import logic.TripsManagement.TripsManagerLocal;
+import org.apache.taglibs.standard.tag.el.fmt.BundleTag;
 import web.util.Utils;
 
 /**
@@ -56,6 +57,11 @@ public class TripsController implements Serializable {
     
     public TripsController() {
         // Do nothing
+    }
+    
+    public List<TTripDTO> getAllTrips() throws NoPermissionException{
+        List<TTripDTO> trips = tripsManager.findAllTrips();
+        return trips;
     }
     
     public List<TPlaceDTO> getAllPlaces(){
@@ -96,7 +102,7 @@ public class TripsController implements Serializable {
         String message;
         boolean result;
         //System.out.println("\n\n\n\n USERNAME: " + username);
-        System.out.println("\n\n\n\n TRIP: " + tripDTOTemp);
+        //System.out.println("\n\n\n\n TRIP: " + tripDTOTemp);
 
         try {
             result = tripsManager.addTrip(tripDTOTemp, username);
@@ -123,6 +129,12 @@ public class TripsController implements Serializable {
             return "addTrip";
         }
         
+    }
+    
+    public String processCancelTrip(TTripDTO trip) throws NoPermissionException {
+	    
+        tripsManager.cancelTrip(trip, username);
+	return null;
     }
 
     public String getUsername() {
