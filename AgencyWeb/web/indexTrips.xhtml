@@ -90,7 +90,7 @@
                                     </h:column>
                                     <h:column>
                                         <f:facet name="header">
-                                            <h:outputText value="#{bundle.Cancelled}"/>
+                                            <h:outputText value="#{bundle.Canceled}"/>
                                         </f:facet>
                                         <h:outputText value="#{item.canceled}"/>
                                     </h:column>
@@ -100,6 +100,12 @@
                                             <h:outputText value="#{bundle.CancelTrip}"/>
                                         </f:facet>
                                         <h:commandButton class ="btn btn-warning" action="#{tripsController.processCancelTrip(item)}" value="#{bundle.CancelTrip}" rendered="#{not item.canceled and not item.done}"/>  
+                                    </h:column>
+                                    <h:column rendered="#{not sessionController.isOperator}">
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.BuySeats}"/>
+                                        </f:facet>
+                                        <h:commandButton class ="btn btn-warning" action="#{tripsController.buySeatsToTrip(item)}" value="#{bundle.BuySeats}" rendered="#{not item.canceled and not item.done}"/>  
                                     </h:column>
                                 </h:dataTable>
                             </h:form>

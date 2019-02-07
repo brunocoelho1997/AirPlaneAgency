@@ -31,7 +31,7 @@ public class Utils {
         }
     }
     
-    public static void throwErrorMessage(String msg){
+    public static void throwMessage(String msg){
         
         FacesContext.getCurrentInstance().addMessage(null,
                                             new FacesMessage(FacesMessage.SEVERITY_ERROR,

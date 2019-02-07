@@ -74,7 +74,7 @@ public class SessionController implements Serializable {
         {
             String errorMsg = Utils.getSignUpValueString(value, username);
             
-            Utils.throwErrorMessage(errorMsg);
+            Utils.throwMessage(errorMsg);
 
             return "signin";
         }
@@ -101,7 +101,7 @@ public class SessionController implements Serializable {
             
             message = "The password and the password confirmation are different.";
             
-            Utils.throwErrorMessage(message);
+            Utils.throwMessage(message);
             return "signup";
         }
         
@@ -110,14 +110,14 @@ public class SessionController implements Serializable {
         if(!result)
         {
             message = "Username already exists or passwords are different.";
-            Utils.throwErrorMessage(message);
+            Utils.throwMessage(message);
             return "signup";
 
         }
         else
         {
             message = "Sign up with sucess! Now you can sign in, after operator approval " + userDTO.getUsername() + ".";
-            Utils.throwErrorMessage(message);
+            Utils.throwMessage(message);
             return "signin";
         }
     }
@@ -219,17 +219,37 @@ public class SessionController implements Serializable {
     {
         return (userManager.getTUserDTO(username).getUsertype() == Config.OPERATOR) ? true : false;
     }
-    public Collection<TSeatDTO> getPurchases() {
+    public Collection<TSeatDTO> getAtualPurchase() {
+        
         try {
             TPurchaseDTO purchase = tripsManager.getActualPurchase(username);
-            
+
             if (purchase == null) {
                 return new ArrayList<>();
             }
-            
+
             return purchase.gettSeatCollection();
         } catch (NoPermissionException ex) {
             return new ArrayList<>();
+        }
+    
+    }
+    public List<TPurchaseDTO> getAllMyPurchases() {
+        try {
+            List<TPurchaseDTO> purchases = tripsManager.findAllMyPurchases(username);
+            
+            return purchases;
+        } catch (NoPermissionException ex) {
+            return new ArrayList();
+        }
+    }
+    public List<TPurchaseDTO> getAllPurchases() {
+        try {
+            List<TPurchaseDTO> purchases = tripsManager.findAllPurchases(username);
+            
+            return purchases;
+        } catch (NoPermissionException ex) {
+            return new ArrayList();
         }
     }
     
