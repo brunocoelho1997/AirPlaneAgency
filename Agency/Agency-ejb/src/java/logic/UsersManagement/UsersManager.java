@@ -121,6 +121,16 @@ public class UsersManager implements UsersManagerLocal {
     }
     
     @Override
+    public Double getBalance(String username) {
+        TUser user = getTUserByUsername(username);
+        
+        if(user == null)
+            return 0.0;
+        
+        return user.getBalance();
+    }
+    
+    @Override
     public List<TUserDTO> findAllUsers() {
         List<TUserDTO> userList = new ArrayList();
         
@@ -174,4 +184,6 @@ public class UsersManager implements UsersManagerLocal {
         if(userDTO.getUsertype() != permissionType)
             throw new NoPermissionException(errorMessage);       
     }
+
+    
 }

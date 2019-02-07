@@ -21,14 +21,27 @@
                 <f:event listener="#{sessionController.validateIfLoggedUser}" type="preRenderView" />
 
                 <div class="container">
+                    
+                    <h:form>
+                        <div class="row">
+                            <div class="col-2"></div>
+                            <div class="col-8">
+                                <h:messages />
+                            </div>
+                            <div class="col-2" align="right">
+                                <h:commandButton class ="btn btn-success" action="#{sessionController.finishActualPurchase}" value="#{bundle.FinishActualPurchase}" rendered="#{not sessionController.isOperator}"/>
+                            </div>
+                        </div>
+                    </h:form>
                     <div class="row">
                         <div class="col-1"></div>
                         <div class="col-10">
-                            
-                            TODO: probably need show the user which has each purchase... but the purchaseDTO did not has reference to user...
-                            
+                                                        
                             <!-- if is a operator -->
                             <h:panelGroup rendered="#{sessionController.isOperator}">
+                                
+                                TODO: probably need show the user which has each purchase... but the purchaseDTO did not has reference to user...
+                                                            
                                 <h3>
                                     #{bundle.AllPurchases}
                                 </h3>

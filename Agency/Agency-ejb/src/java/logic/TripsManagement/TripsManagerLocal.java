@@ -17,10 +17,6 @@ import logic.TSeatDTO;
 import logic.TTripDTO;
 import logic.TTripFeedbackDTO;
 
-/**
- *
- * @author bruno
- */
 @Local
 public interface TripsManagerLocal {
     

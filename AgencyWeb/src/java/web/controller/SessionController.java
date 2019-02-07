@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -17,6 +19,7 @@ import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
+import javax.faces.event.ValueChangeEvent;
 import logic.Config;
 import logic.NoPermissionException;
 import logic.SignInValue;
@@ -45,6 +48,7 @@ public class SessionController implements Serializable {
     private String username;
     private String clientName;
     private Boolean isLogged;
+    private float amountToDepositTemp;
     
     @EJB
     private UsersManagerLocal userManager;
@@ -252,5 +256,46 @@ public class SessionController implements Serializable {
             return new ArrayList();
         }
     }
+    
+    public String finishActualPurchase() {
+        boolean result;
+        String msg; 
+        
+        try {
+            TPurchaseDTO actualPurchase = tripsManager.getActualPurchase(username);
+            result = tripsManager.finishActualPurchase(actualPurchase, username);
+            if(!result)
+                msg = "A problem occurred. The system didn't finished the actual purchase.";
+            else
+                msg = "You finished the actual purchase.";
+
+        } catch (NoPermissionException ex) {
+            msg = "Error: " + ex.getMessage();
+        }
+        Utils.throwMessage(msg);
+
+	return null;
+    }
+    
+    public String depositToAccount(){
+        userManager.depositToAccount((float) amountToDepositTemp, username);
+        return null;
+    }
+    
+    public Double getBalance()
+    {
+        return userManager.getBalance(username);
+    }
+
+    public float getAmountToDepositTemp() {
+        return amountToDepositTemp;
+    }
+
+    public void setAmountToDepositTemp(float amountToDepositTemp) {
+        this.amountToDepositTemp = amountToDepositTemp;
+    }
+
+    
+    
     
 }

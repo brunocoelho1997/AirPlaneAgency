@@ -143,8 +143,6 @@ public class TripsController implements Serializable {
     public String buySeatsToTrip(TTripDTO trip) throws NoPermissionException {
 	    
         this.tripDTOTemp = trip;
-        seatsToTrip = new ArrayList();
-
 	return "buySeatsToTrip";
     }
     

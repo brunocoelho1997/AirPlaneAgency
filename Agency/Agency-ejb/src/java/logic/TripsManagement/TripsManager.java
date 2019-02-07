@@ -28,10 +28,6 @@ import logic.TimerManagement.TimerManagerLocal;
 import logic.UsersManagement.TUser;
 import logic.UsersManagement.UsersManagerLocal;
 
-/**
- *
- * @author bruno
- */
 @Singleton
 public class TripsManager implements TripsManagerLocal {
 
@@ -1007,6 +1003,10 @@ public class TripsManager implements TripsManagerLocal {
         {
             //create seat----------------
             TSeat seat = new TSeat();
+            
+            if(seatDTO.getAuctioned() == null)
+                seatDTO.setAuctioned(false);
+            
             seat.setAuctioned(seatDTO.getAuctioned());
             seat.setLuggage(seatDTO.getLuggage());
             seat.setPrice(trip.getPrice());
@@ -1145,7 +1145,6 @@ public class TripsManager implements TripsManagerLocal {
         
         if(seatDTO == null)
             return false;
-        
         return true;
     }
     

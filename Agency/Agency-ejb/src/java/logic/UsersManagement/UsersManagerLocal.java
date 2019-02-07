@@ -24,6 +24,7 @@ public interface UsersManagerLocal {
     TUserDTO getTUserDTO(String username);
     TUser getTUserByUsername(String usernameOfWantedUser);
     boolean depositToAccount(float amount,String username);
+    Double getBalance(String username);
     List<TUserDTO> findAllUsers();
 
     void verifyPermission(String username, int permissionType) throws NoPermissionException;
