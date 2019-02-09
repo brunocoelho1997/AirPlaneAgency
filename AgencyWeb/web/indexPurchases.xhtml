@@ -26,7 +26,7 @@
                                 <h:messages />
                             </div>
                             <div class="col-2" align="right">
-                                <h:commandButton class ="btn btn-success" action="#{sessionController.finishActualPurchase}" value="#{bundle.FinishActualPurchase}" rendered="#{not sessionController.isOperator}"/>
+                                <h:commandButton class ="btn btn-success" action="#{purchaseController.finishActualPurchase}" value="#{bundle.FinishActualPurchase}" rendered="#{not sessionController.isOperator}"/>
                             </div>
                         </div>
                     </h:form>
@@ -43,7 +43,7 @@
                                     #{bundle.AllPurchases}
                                 </h3>
                                 
-                                <ui:repeat value="#{sessionController.allPurchases}" var="purchase">
+                                <ui:repeat value="#{purchaseController.allPurchases}" var="purchase">
 
                                     <h:outputText value="#{bundle.PurchaseState}"/> : 
 
@@ -101,7 +101,7 @@
                                 <h3>
                                     #{bundle.ActualPurchase}
                                 </h3>
-                                <h:dataTable class ="table" value="#{sessionController.atualPurchase}" var="item" cellpadding="2" rules="all">
+                                <h:dataTable class ="table" value="#{purchaseController.atualPurchase}" var="item" cellpadding="2" rules="all">
                                     <h:column>
                                         <f:facet name="header">
                                             <h:outputText value="#{bundle.Date}"/>
@@ -144,7 +144,7 @@
                                     #{bundle.AllMyPurchases}
                                 </h3>
 
-                                <ui:repeat value="#{sessionController.allMyPurchases}" var="purchase">
+                                <ui:repeat value="#{purchaseController.allMyPurchases}" var="purchase">
 
                                     <h:outputText value="#{bundle.PurchaseState}"/> : 
 

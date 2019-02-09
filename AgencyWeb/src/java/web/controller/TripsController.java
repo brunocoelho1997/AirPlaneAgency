@@ -42,8 +42,6 @@ public class TripsController implements Serializable {
     
     private TTripDTO tripDTOTemp = new TTripDTO();
   
-    //for buying purchases
-    private List<TSeatDTO> seatsToTrip;
     
     @PostConstruct
     private void init() {
@@ -140,71 +138,7 @@ public class TripsController implements Serializable {
         
     }
     
-    public String buySeatsToTrip(TTripDTO trip) throws NoPermissionException {
-	    
-        this.tripDTOTemp = trip; 
-	return "buySeatsToTrip";
-    }
-    
-    public String refreshSeatsToTrip(ValueChangeEvent e) throws NoPermissionException {
-	seatsToTrip = new ArrayList();
-        int nSeats = Integer.parseInt(e.getNewValue().toString());
-        
-        while(nSeats > 0)
-        {
-            seatsToTrip.add(new TSeatDTO());
-            nSeats--;
-        }
-	return null;
-    }
-    
-    public List<TSeatDTO> getSeatsToTrip() throws NoPermissionException{
-        
-        return seatsToTrip;
-    }
-    
-    public String processBuySeatsToTrip() {
-        String message;
-        boolean result;
-
-        try {
-            
-            if(seatsToTrip == null || seatsToTrip.isEmpty())
-            {
-                message = "Need to select a valid number of seats.";
-                Utils.throwMessage(message);
-                return null;
-            }
-                        
-            result = tripsManager.buySeatsToTrip(tripDTOTemp, seatsToTrip, username);
-            
-            
-            if(!result)
-            {
-                message = "error TODO improve this message";
-                Utils.throwMessage(message);
-                return "buySeatsToTrip";
-
-            }
-            else
-            {
-                message = "Sign up with sucess! Now you can sign in, after operator approval " + tripDTOTemp + ".";
-                Utils.throwMessage(message);
-                tripDTOTemp = new TTripDTO();
-                seatsToTrip = new ArrayList();
-                return "indexTrips";
-            }
-        
-        } catch (NoPermissionException ex) {
-            message = "Error occoured: " + ex;
-            Utils.throwMessage(message);
-            return "indexTrips";
-        }
-        
-    }
-    
-            
-    
+       
     public String processCancelTrip(TTripDTO trip) throws NoPermissionException {
 	    
         tripsManager.cancelTrip(trip, username);

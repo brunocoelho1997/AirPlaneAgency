@@ -48,7 +48,7 @@ public class SessionController implements Serializable {
     private String username;
     private String clientName;
     private Boolean isLogged;
-    private float amountToDepositTemp;
+    
     
     @EJB
     private UsersManagerLocal userManager;
@@ -223,78 +223,7 @@ public class SessionController implements Serializable {
     {
         return (userManager.getTUserDTO(username).getUsertype() == Config.OPERATOR) ? true : false;
     }
-    public Collection<TSeatDTO> getAtualPurchase() {
-        
-        try {
-            TPurchaseDTO purchase = tripsManager.getActualPurchase(username);
-
-            if (purchase == null) {
-                return new ArrayList<>();
-            }
-
-            return purchase.gettSeatCollection();
-        } catch (NoPermissionException ex) {
-            return new ArrayList<>();
-        }
     
-    }
-    public List<TPurchaseDTO> getAllMyPurchases() {
-        try {
-            List<TPurchaseDTO> purchases = tripsManager.findAllMyPurchases(username);
-            
-            return purchases;
-        } catch (NoPermissionException ex) {
-            return new ArrayList();
-        }
-    }
-    public List<TPurchaseDTO> getAllPurchases() {
-        try {
-            List<TPurchaseDTO> purchases = tripsManager.findAllPurchases(username);
-            
-            return purchases;
-        } catch (NoPermissionException ex) {
-            return new ArrayList();
-        }
-    }
-    
-    public String finishActualPurchase() {
-        boolean result;
-        String msg; 
-        
-        try {
-            TPurchaseDTO actualPurchase = tripsManager.getActualPurchase(username);
-            result = tripsManager.finishActualPurchase(actualPurchase, username);
-            if(!result)
-                msg = "A problem occurred. The system didn't finished the actual purchase.";
-            else
-                msg = "You finished the actual purchase.";
-
-        } catch (NoPermissionException ex) {
-            msg = "Error: " + ex.getMessage();
-        }
-        Utils.throwMessage(msg);
-
-	return null;
-    }
-    
-    public String depositToAccount(){
-        userManager.depositToAccount((float) amountToDepositTemp, username);
-        return null;
-    }
-    
-    public Double getBalance()
-    {
-        return userManager.getBalance(username);
-    }
-
-    public float getAmountToDepositTemp() {
-        return amountToDepositTemp;
-    }
-
-    public void setAmountToDepositTemp(float amountToDepositTemp) {
-        this.amountToDepositTemp = amountToDepositTemp;
-    }
-
     
     
     

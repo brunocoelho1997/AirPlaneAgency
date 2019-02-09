@@ -28,7 +28,7 @@
                                  
                                     <h:outputText value="#{bundle.NumberOfSeats}"/>
                                     <br/>
-                                    <h:selectOneMenu onchange="submit()" valueChangeListener="#{tripsController.refreshSeatsToTrip}">
+                                    <h:selectOneMenu onchange="submit()" valueChangeListener="#{purchaseController.refreshSeatsToTrip}">
                                         <f:selectItem itemValue="0" itemLabel="0"/>
                                         <f:selectItem itemValue="1" itemLabel="1"/>
                                         <f:selectItem itemValue="2" itemLabel="2"/>
@@ -48,7 +48,7 @@
                                     <h:outputText value="#{bundle.Luggage}"/>
                                     <br/>
                                     <br/>
-                                    <ui:repeat value="#{tripsController.seatsToTrip}" var ="item">
+                                    <ui:repeat value="#{purchaseController.seatsToTrip}" var ="item">
                                         <h:inputTextarea value="#{item.luggage}"/>
                                         <br/>
                                         <br/>
@@ -60,7 +60,7 @@
                                     
                                     <h:messages />
 
-                                    <h:commandButton class ="btn btn-success" action="#{tripsController.processBuySeatsToTrip}" value="#{bundle.BuySeats}"/>
+                                    <h:commandButton class ="btn btn-success" action="#{purchaseController.processBuySeatsToTrip}" value="#{bundle.BuySeats}"/>
                                     
                                 </h:form>
                             </div>

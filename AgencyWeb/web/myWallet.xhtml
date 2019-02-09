@@ -27,16 +27,16 @@
                                     
                                  
                                     <h:outputText value="#{bundle.MyMoney}"/> : 
-                                    <h:outputText value="#{sessionController.balance}"/>
+                                    <h:outputText value="#{userController.balance}"/>
                                     <br/>
                                     <br/>
 
                                     <h:outputText value="#{bundle.AmountToDeposit}"/> : 
-                                    <h:inputText value="#{sessionController.amountToDepositTemp}"/>
+                                    <h:inputText value="#{userController.amountToDepositTemp}"/>
 
                                     <h:messages />
 
-                                    <h:commandButton class ="btn btn-success" action="#{sessionController.depositToAccount}" value="#{bundle.Deposit}"/>
+                                    <h:commandButton class ="btn btn-success" action="#{userController.depositToAccount}" value="#{bundle.Deposit}"/>
                                     
                                 </h:form>
                             </div>

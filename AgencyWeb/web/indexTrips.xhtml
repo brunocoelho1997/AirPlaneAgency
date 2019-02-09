@@ -105,7 +105,7 @@
                                         <f:facet name="header">
                                             <h:outputText value="#{bundle.BuySeats}"/>
                                         </f:facet>
-                                        <h:commandButton class ="btn btn-success" action="#{tripsController.buySeatsToTrip(item)}" value="#{bundle.BuySeats}" rendered="#{not item.canceled and not item.done}"/>  
+                                        <h:commandButton class ="btn btn-success" action="#{purchaseController.buySeatsToTrip(item)}" value="#{bundle.BuySeats}" rendered="#{not item.canceled and not item.done}"/>  
                                     </h:column>
                                 </h:dataTable>
                             </h:form>
