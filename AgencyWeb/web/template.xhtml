@@ -84,6 +84,10 @@
                     <li class="nav-item">
                         <h:link class="nav-link" value="#{bundle.PurchasesPage}" outcome = "indexPurchases" />
                     </li>
+                    <li class="nav-item">
+                        <h:link class="nav-link" value="#{bundle.Users}" outcome = "indexUsers" rendered="#{sessionController.isOperator}"/>
+                    </li>
+                    
                 </h:panelGroup>
                 <h:panelGroup rendered="#{not sessionController.isLogged}">
                     <li class="nav-item">

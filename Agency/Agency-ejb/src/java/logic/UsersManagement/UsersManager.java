@@ -185,5 +185,15 @@ public class UsersManager implements UsersManagerLocal {
             throw new NoPermissionException(errorMessage);       
     }
 
+    @Override
+    public TUserDTO findUser(int id) {
+        TUser user = userFacade.find(id);
+        
+        if(user == null)
+            return null;
+        
+        return DTOFactory.getTUserDTOFromTUser(user);
+    }
+
     
 }

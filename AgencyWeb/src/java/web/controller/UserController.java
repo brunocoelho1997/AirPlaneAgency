@@ -2,12 +2,16 @@
 package web.controller;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.el.ValueExpression;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import logic.NoPermissionException;
+import logic.TTripDTO;
+import logic.TUserDTO;
 import logic.UsersManagement.UsersManagerLocal;
 
 @Named("userController")
@@ -58,4 +62,16 @@ public class UserController implements Serializable {
         this.amountToDepositTemp = amountToDepositTemp;
     }
     
+    public List<TUserDTO> getAllUsers(){
+        return userManager.findAllUsers();
+    }
+    public String processAcceptUser(TUserDTO user) throws NoPermissionException {
+	    
+        userManager.acceptTUser(user, username);
+	return null;
+    }
+    
+    public TUserDTO findUser(int id) {
+        return userManager.findUser(id);
+    }
 }
