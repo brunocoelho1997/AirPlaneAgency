@@ -142,7 +142,7 @@ public class TripsController implements Serializable {
     
     public String buySeatsToTrip(TTripDTO trip) throws NoPermissionException {
 	    
-        this.tripDTOTemp = trip;
+        this.tripDTOTemp = trip; 
 	return "buySeatsToTrip";
     }
     
@@ -159,11 +159,6 @@ public class TripsController implements Serializable {
     }
     
     public List<TSeatDTO> getSeatsToTrip() throws NoPermissionException{
-        if(seatsToTrip == null || seatsToTrip.isEmpty())
-        {
-            seatsToTrip = new ArrayList();
-            seatsToTrip.add(new TSeatDTO());
-        }
         
         return seatsToTrip;
     }
@@ -173,6 +168,14 @@ public class TripsController implements Serializable {
         boolean result;
 
         try {
+            
+            if(seatsToTrip == null || seatsToTrip.isEmpty())
+            {
+                message = "Need to select a valid number of seats.";
+                Utils.throwMessage(message);
+                return null;
+            }
+                        
             result = tripsManager.buySeatsToTrip(tripDTOTemp, seatsToTrip, username);
             
             

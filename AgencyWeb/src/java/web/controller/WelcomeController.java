@@ -20,6 +20,8 @@ public class WelcomeController implements Serializable {
     @EJB
     TripsManagerLocal tripsManager; 
     
+    int isbnTemp;
+    
     public WelcomeController() {
         // Do nothing
     }
@@ -36,4 +38,14 @@ public class WelcomeController implements Serializable {
     public int getAvailableSeats(TTripDTO trip) {
         return tripsManager.getAvailableSeats(trip);
     }
+
+    public int getIsbnTemp() {
+        return isbnTemp;
+    }
+
+    public void setIsbnTemp(int isbnTemp) {
+        this.isbnTemp = isbnTemp;
+    }
+    
+    
 }

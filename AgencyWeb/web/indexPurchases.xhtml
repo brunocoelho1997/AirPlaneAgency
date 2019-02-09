@@ -9,17 +9,14 @@
         <title>Facelet Title</title>
     </h:head>
     
-    <f:event listener="#{sessionController.validateOperatorPermissions}" type="preRenderView" />
+    <f:event listener="#{sessionController.validateIfLoggedUser}" type="preRenderView" />
     
     <h:body id="page-top">
         <ui:composition template = "template.xhtml">
             
             <ui:define name = "title"> #{bundle.PurchasesPage} </ui:define>
                             
-            <ui:define name = "content">				
-                     
-                <f:event listener="#{sessionController.validateIfLoggedUser}" type="preRenderView" />
-
+            <ui:define name = "content">
                 <div class="container">
                     
                     <h:form>
