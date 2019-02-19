@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -57,8 +58,13 @@ public class SessionController implements Serializable {
     private TripsManagerLocal tripsManager;
     
     public SessionController() {
+        // do nothing
     }
     
+    @PostConstruct
+    private void init() {
+        isLogged = false;
+    }
     
     public String processSignIn() {
         //session source: https://stackoverflow.com/questions/3841361/jsf-http-session-login

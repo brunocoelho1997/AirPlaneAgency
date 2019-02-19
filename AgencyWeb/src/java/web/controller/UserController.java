@@ -13,6 +13,7 @@ import logic.NoPermissionException;
 import logic.TTripDTO;
 import logic.TUserDTO;
 import logic.UsersManagement.UsersManagerLocal;
+import web.util.Utils;
 
 @Named("userController")
 @SessionScoped
@@ -44,8 +45,14 @@ public class UserController implements Serializable {
     }
     
     public String depositToAccount(){
-        userManager.depositToAccount((float) amountToDepositTemp, username);
-        amountToDepositTemp = 0;
+        try{
+            userManager.depositToAccount((float) amountToDepositTemp, username);
+            amountToDepositTemp = 0;
+        }
+        catch(Exception ex){
+            String msg = "An error occoured.";
+            Utils.throwMessage(msg);
+        }
         return null;
     }
     

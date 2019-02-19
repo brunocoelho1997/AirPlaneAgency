@@ -21,57 +21,64 @@
                             <h3>
                                 #{bundle.CheapestTrips}
                             </h3>
-                            <h:dataTable class ="table" value="#{welcomeController.cheapestTrips}" var="item" cellpadding="2" rules="all">
-                                <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="#{bundle.Price}"/>
-                                    </f:facet>
-                                    <h:outputText value="#{item.price}"/>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="#{bundle.Airline}"/>
-                                    </f:facet>
-                                    <h:outputText value="#{item.airlineDTO.airlineName}"/>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="#{bundle.Plane}"/>
-                                    </f:facet>
-                                    <h:outputText value="#{item.planeDTO.planeName}"/>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="#{bundle.Limit}"/>
-                                    </f:facet>
-                                    <h:outputText value="#{item.planeDTO.planeLimit}"/>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="#{bundle.AvailableSeats}"/>
-                                    </f:facet>
-                                    <h:outputText value="#{welcomeController.getAvailableSeats(item)}"/>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="#{bundle.From}"/>
-                                    </f:facet>
-                                    <h:outputText value="#{item.fromPlaceDTO.country}, #{item.fromPlaceDTO.city}"/>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="#{bundle.To}"/>
-                                    </f:facet>
-                                    <h:outputText value="#{item.toPlaceDTO.country}, #{item.toPlaceDTO.city}"/>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="#{bundle.Date}"/>
-                                    </f:facet>
-                                    <h:outputText value="#{item.datetrip}"/>
-                                </h:column>
-                            </h:dataTable>
-
+                            <h:form>
+                                <h:dataTable class ="table" value="#{welcomeController.cheapestTrips}" var="item" cellpadding="2" rules="all">
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.Price}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.price}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.Airline}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.airlineDTO.airlineName}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.Plane}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.planeDTO.planeName}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.Limit}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.planeDTO.planeLimit}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.AvailableSeats}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{welcomeController.getAvailableSeats(item)}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.From}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.fromPlaceDTO.country}, #{item.fromPlaceDTO.city}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.To}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.toPlaceDTO.country}, #{item.toPlaceDTO.city}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.Date}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.datetrip}"/>
+                                    </h:column>
+                                    <h:column rendered="#{sessionController.isLogged and not sessionController.isOperator}">
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.BuySeats}"/>
+                                        </f:facet>
+                                        <h:commandButton class ="btn btn-success" action="#{purchaseController.buySeatsToTrip(item)}" value="#{bundle.BuySeats}" rendered="#{not item.canceled and not item.done}"/>  
+                                    </h:column>
+                                </h:dataTable>
+                            </h:form>
 
                             <h:panelGroup rendered="#{not sessionController.isLogged}">
                                 <hr/>
