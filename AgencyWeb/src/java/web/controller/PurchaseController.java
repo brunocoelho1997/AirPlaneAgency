@@ -92,6 +92,14 @@ public class PurchaseController implements Serializable {
         
         try {
             TPurchaseDTO actualPurchase = tripsManager.getActualPurchase(username);
+            
+            if(actualPurchase == null)
+            {
+                msg = "A problem occurred. Your actual purchase is empty.";
+                Utils.throwMessage(msg);
+                return null;
+            }
+            
             result = tripsManager.finishActualPurchase(actualPurchase, username);
             if(!result)
                 msg = "A problem occurred. The system didn't finished the actual purchase.";
@@ -104,6 +112,35 @@ public class PurchaseController implements Serializable {
         Utils.throwMessage(msg);
 
 	return null;
+    }
+    
+    public String removeActualPurchase() {
+        boolean result;
+        String msg; 
+        
+        try {
+            TPurchaseDTO actualPurchase = tripsManager.getActualPurchase(username);
+            
+            if(actualPurchase == null)
+            {
+                msg = "A problem occurred. Your actual purchase is empty.";
+                Utils.throwMessage(msg);
+                return null;
+            }
+            
+            result = tripsManager.removeActualPurchase(actualPurchase, username);
+            if(!result)
+                msg = "A problem occurred. The system didn't removed the actual purchase.";
+            else
+                msg = "You removed the actual purchase.";
+
+        } catch (NoPermissionException ex) {
+            msg = "Error: " + ex.getMessage();
+        }
+        Utils.throwMessage(msg);
+
+	return null;
+
     }
     
     public String refreshSeatsToTrip(ValueChangeEvent e) throws NoPermissionException {
